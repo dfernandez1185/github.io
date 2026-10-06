@@ -2281,9 +2281,10 @@ function openPlayer(id){
   const topics = (VID_TOPICS[id]||[]).map(t=>KBMAP[t]).filter(Boolean);
   $("#sheet").innerHTML = `<div class="spread"><span class="eyebrow">Professor Messer · ${v.ex===1?"220-1201":"220-1202"} · objective ${v.obj}</span><button class="btn small" data-act="close">Close</button></div>
     <h2>${esc(v.title)}</h2>
-    <div class="player"><iframe src="https://www.youtube-nocookie.com/embed/${v.yt}?autoplay=1&rel=0&modestbranding=1" title="${esc(v.title)}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+    <div class="player"><iframe src="https://www.youtube.com/embed/${v.yt}?autoplay=1&playsinline=1&rel=0&modestbranding=1" title="${esc(v.title)}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
     <div class="row"><label class="chip"><input type="checkbox" data-watch="${v.id}" ${S.watched[v.id]?"checked":""}><span>Watched</span></label>
       <a class="btn small" href="https://www.youtube.com/watch?v=${v.yt}" target="_blank" rel="noopener">Open on YouTube</a><a class="btn small ghost" href="${esc(v.url)}" target="_blank" rel="noopener">Notes on professormesser.com</a></div>
+    <p class="note">Seeing ads? YouTube removes them only for YouTube Premium members. If you have Premium, <a href="https://accounts.google.com/ServiceLogin?service=youtube&amp;continue=https%3A%2F%2Fwww.youtube.com%2F" target="_blank" rel="noopener">sign in to YouTube</a> once in this browser and reopen the video.</p>
     ${topics.length?`<div><span class="eyebrow">Related study notes</span><div class="linklist" style="margin-top:6px">${topics.map(t=>`<button class="btn small" data-act="note" data-id="${t.id}">${modLabel(t.m)} · ${esc(t.title)}</button>`).join("")}</div></div>`:""}`;
   $("#modal").hidden = false;
 }
