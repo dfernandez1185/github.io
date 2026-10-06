@@ -1,0 +1,33 @@
+{
+  "id": "./",
+  "name": "A+ Study Bench",
+  "short_name": "A+ Study",
+  "description": "CompTIA A+ 220-1201 and 220-1202 practice questions, exam simulator, study notes, pictures and Professor Messer videos.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f2f4f7",
+  "theme_color": "#16325e",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "orientation": "any",
+  "categories": [
+    "education"
+  ]
+}
