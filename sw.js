@@ -1,5 +1,5 @@
 // A+ Study Bench offline support. Bump VERSION when you upload a new index.html.
-const VERSION = "aplus-v8";
+const VERSION = "aplus-v11";
 const PHOTOS = "aplus-photos-v1";   // saved photos are kept across app updates
 const SHELL = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./icon-maskable-512.png", "./apple-touch-icon.png"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(VERSION).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())); });

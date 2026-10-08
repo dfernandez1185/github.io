@@ -182,6 +182,8 @@ textarea{min-height:130px;resize:vertical;line-height:1.5}
 .simctl .row{gap:6px}
 .handnote{position:absolute;left:50%;top:10px;transform:translateX(-50%);z-index:2;font-size:.88rem;padding:6px 12px;border-radius:999px;background:var(--amber-bg);color:var(--ink);box-shadow:0 2px 10px rgba(0,0,0,.2);white-space:nowrap;max-width:94%;overflow:hidden;text-overflow:ellipsis}
 .handnote[hidden]{display:none}
+.vextra{display:grid;gap:8px;margin:8px 0 4px;padding:10px 12px;border-left:3px solid var(--teal);background:var(--sunk);border-radius:8px}
+.handoff{display:grid;gap:8px}.handoff p{margin:0}
 .handchoices{flex-basis:100%;display:grid;gap:6px;padding:8px 10px;border-radius:8px;background:var(--amber-bg)}
 .simsvgwrap{position:relative;background:var(--sunk);border:1px solid var(--line);border-radius:12px;padding:6px;overflow-x:auto;-webkit-overflow-scrolling:touch}
 .benchsvg{width:100%;height:auto;display:block;touch-action:manipulation;user-select:none;-webkit-user-select:none}
@@ -11533,7 +11535,7 @@ const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">"
 const strip = h => String(h).replace(/<[^>]+>/g, " ").replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/\s+/g," ").trim();
 const norm = s => String(s).toLowerCase().replace(/[‘’]/g,"'").replace(/[“”]/g,'"');
 const shuffle = a => { a = a.slice(); for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
-const modLabel = m => { const md = MODMAP[String(m)]; return md ? (typeof m === "number" ? "Chapter "+m : "Appendix "+m) : ""; };
+const modLabel = m => { const md = MODMAP[String(m)]; return md ? (/^\d+$/.test(String(m)) ? "Chapter "+m : "Appendix "+m) : ""; };
 const modTitle = m => (MODMAP[String(m)]||{}).t || "";
 const domName = (ex,d) => ((DOMAINS[ex]||[]).find(x=>x.d===d)||{}).t || "";
 const pct = (a,b) => b ? Math.round(100*a/b) : 0;
@@ -11556,11 +11558,95 @@ function record(qid, ok){ const a = S.att[qid] || {c:0,w:0}; ok ? a.c++ : a.w++;
 
 // ---------- AI tutor (optional runtime capability) ----------
 let sampleFn = null;
-if (window.claude && typeof window.claude.use === "function") {
-  window.claude.use("sample").then(f => { sampleFn = f || null; document.body.classList.toggle("has-ai", !!sampleFn); }).catch(()=>{});
+let TUTOR_MODE = "none"; // "claude" (inside Claude), "key" (own API key, any provider), "handoff" (open the question in a chat app)
+const TUTOR_STORE = "aplus-tutor-v1";
+// In-app providers (bring your own key). Model names can be edited in settings when providers release new ones.
+const PROVIDERS = {
+  gemini:     {name:"Google Gemini", free:true, keyUrl:"https://aistudio.google.com/apikey", keyHint:"AIza…", model:"gemini-2.5-flash",
+               models:["gemini-2.5-flash","gemini-2.5-flash-lite","gemini-2.5-pro"], note:"Free tier available: create a key in Google AI Studio with any Google account. No credit card needed for the free tier (it has daily limits)."},
+  anthropic:  {name:"Anthropic Claude", keyUrl:"https://console.anthropic.com/settings/keys", keyHint:"sk-ant-…", model:"claude-sonnet-5-5",
+               models:["claude-sonnet-5-5","claude-haiku-4-5-20251001","claude-opus-5-5"], note:"Pay as you go, billed separately from a Claude subscription. Set a monthly limit in the Console."},
+  openai:     {name:"OpenAI (ChatGPT models)", keyUrl:"https://platform.openai.com/api-keys", keyHint:"sk-…", model:"gpt-5-mini",
+               models:["gpt-5-mini","gpt-5","gpt-5-nano"], note:"Pay as you go, billed separately from a ChatGPT Plus subscription. Set a usage limit in the OpenAI dashboard."},
+  openrouter: {name:"OpenRouter (many AIs, one key)", free:true, keyUrl:"https://openrouter.ai/keys", keyHint:"sk-or-…", model:"openrouter/auto",
+               models:["openrouter/auto"], note:"One key for models from many companies, including some free ones (look for model names ending in :free)."}
+};
+// Chat apps the question can be handed to (no key needed; some work without signing in)
+const HANDOFFS = {
+  claude:     {name:"Claude",     url:q => "https://claude.ai/new?q=" + encodeURIComponent(q)},
+  chatgpt:    {name:"ChatGPT",    url:q => "https://chatgpt.com/?q=" + encodeURIComponent(q)},
+  gemini:     {name:"Gemini",     url:() => "https://gemini.google.com/app", copy:true},
+  copilot:    {name:"Copilot",    url:q => "https://copilot.microsoft.com/?q=" + encodeURIComponent(q)},
+  perplexity: {name:"Perplexity", url:q => "https://www.perplexity.ai/search?q=" + encodeURIComponent(q)}
+};
+let TUTOR = {provider:"", key:"", model:"", handoff:"claude"};
+try { const t = JSON.parse(localStorage.getItem(TUTOR_STORE) || "null"); if (t) { TUTOR = Object.assign(TUTOR, t); if (TUTOR.key && !TUTOR.provider) TUTOR.provider = "anthropic"; } } catch(e) {}
+function saveTutor(){ try { localStorage.setItem(TUTOR_STORE, JSON.stringify(TUTOR)); } catch(e) {} }
+const provName = () => (PROVIDERS[TUTOR.provider]||{}).name || "your AI";
+function tutErr(code, text){ const e = new Error(text||code); e.code = code; e.text = ""; return e; }
+async function readSSE(res, signal, pick, onText){
+  const rd = res.body.getReader(); const dec = new TextDecoder(); let buf = "", text = "", stop = "";
+  try {
+    for (;;) { const {done, value} = await rd.read(); if (done) break; buf += dec.decode(value, {stream:true});
+      let i; while ((i = buf.indexOf("\n")) >= 0) { const line = buf.slice(0,i).trim(); buf = buf.slice(i+1);
+        if (!line.startsWith("data:")) continue; const data = line.slice(5).trim(); if (data === "[DONE]") continue;
+        let ev; try { ev = JSON.parse(data); } catch(e) { continue; }
+        const r = pick(ev); if (r.err) throw tutErr("api_error", r.err);
+        if (r.text) { text += r.text; if (onText) onText({text}); } if (r.stop) stop = r.stop; } }
+  } catch(e) { if (e && e.name === "AbortError") { const c = tutErr("cancelled"); c.text = text; throw c; } throw e; }
+  return {text, truncated: /max_tokens|length|MAX_TOKENS/.test(stop)};
 }
+// One function per provider; all return {text, truncated} and stream through opts.onText
+function keySample(cfg){
+  cfg = cfg || TUTOR;
+  const P = cfg.provider, model = cfg.model || (PROVIDERS[P]||{}).model;
+  const f = async function(prompt, opts){
+    opts = opts || {}; const max = opts.maxTokens || 1500, stream = !opts.noStream; let url, headers, body;
+    if (P === "anthropic") { url = "https://api.anthropic.com/v1/messages"; headers = {"content-type":"application/json","x-api-key":cfg.key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"};
+      body = {model: opts.model || model, max_tokens: max, stream, messages:[{role:"user", content: prompt}]}; }
+    else if (P === "openai" || P === "openrouter") { url = P === "openai" ? "https://api.openai.com/v1/chat/completions" : "https://openrouter.ai/api/v1/chat/completions";
+      headers = {"content-type":"application/json","authorization":"Bearer " + cfg.key}; if (P === "openrouter") headers["X-Title"] = "A+ Study Bench";
+      body = {model, stream, messages:[{role:"user", content: prompt}]}; if (P === "openrouter") body.max_tokens = max; else body.max_completion_tokens = Math.max(max, 4000); }
+    else if (P === "gemini") { url = "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(model) + ":" + (stream ? "streamGenerateContent?alt=sse" : "generateContent");
+      headers = {"content-type":"application/json","x-goog-api-key":cfg.key}; body = {contents:[{role:"user", parts:[{text: prompt}]}]}; }
+    else throw tutErr("no_provider");
+    let res;
+    try { res = await fetch(url, {method:"POST", signal: opts.signal, headers, body: JSON.stringify(body)}); }
+    catch(e) { if (e && e.name === "AbortError") throw tutErr("cancelled"); throw tutErr("network"); }
+    if (!res.ok) { let msg = ""; try { const j = await res.json(); const er = Array.isArray(j) ? j[0] && j[0].error : j.error; msg = (er && (er.message || er.status)) || ""; } catch(e) {}
+      const st = res.status; throw tutErr(st===401 || st===403 || (st===400 && /api.?key/i.test(msg)) ? "bad_key" : st===429 ? "rate_limited" : st===402 || /credit|balance|billing|quota/i.test(msg) ? "no_credit" : st===404 || /model/i.test(msg) ? "bad_model" : "api_error", msg); }
+    if (!stream) { const j = await res.json(); let text = "", stop = "";
+      if (P === "anthropic") { text = (j.content||[]).map(c=>c.text||"").join(""); stop = j.stop_reason; }
+      else if (P === "gemini") { const c = (j.candidates||[])[0] || {}; text = ((c.content||{}).parts||[]).map(x=>x.text||"").join(""); stop = c.finishReason; }
+      else { const c = (j.choices||[])[0] || {}; text = (c.message||{}).content || ""; stop = c.finish_reason; }
+      return {text, truncated: /max_tokens|length|MAX_TOKENS/.test(stop||"")}; }
+    const pick = P === "anthropic" ? ev => ev.type==="content_block_delta" ? {text: ev.delta && ev.delta.text} : ev.type==="message_delta" ? {stop: ev.delta && ev.delta.stop_reason} : ev.type==="error" ? {err: ev.error && ev.error.message} : {}
+      : P === "gemini" ? ev => { const c = (ev.candidates||[])[0] || {}; return {text: ((c.content||{}).parts||[]).map(x=>x.text||"").join(""), stop: c.finishReason, err: ev.error && ev.error.message}; }
+      : ev => { const c = (ev.choices||[])[0] || {}; return {text: (c.delta||{}).content, stop: c.finish_reason, err: ev.error && (ev.error.message || "error")}; };
+    return readSSE(res, opts.signal, pick, opts.onText);
+  };
+  f.json = async function(prompt){ const r = await f(prompt + "\n\nReply with the JSON object only.", {noStream:true}); const m = r.text.match(/\{[\s\S]*\}/); if (!m) throw tutErr("invalid_json"); try { return JSON.parse(m[0]); } catch(e) { throw tutErr("invalid_json"); } };
+  return f;
+}
+function trimPrompt(prompt){ return prompt.length > 5500 ? prompt.slice(0, 5500) + "\n…" : prompt; }
+function setupTutor(){
+  if (TUTOR_MODE === "claude") return;
+  if (TUTOR.key && PROVIDERS[TUTOR.provider]) { sampleFn = keySample(); TUTOR_MODE = "key"; } else { sampleFn = null; TUTOR_MODE = "handoff"; }
+  document.body.classList.add("has-ai");
+}
+if (window.claude && typeof window.claude.use === "function") {
+  window.claude.use("sample").then(f => { if (f) { sampleFn = f; TUTOR_MODE = "claude"; document.body.classList.add("has-ai"); } else setupTutor(); }).catch(() => setupTutor());
+} else setupTutor();
 function aiErr(e){
   const c = e && e.code;
+  if (TUTOR_MODE === "key") {
+    if (c === "bad_key") return provName() + " rejected the API key. Check it in Tutor settings (Review tab).";
+    if (c === "no_credit") return provName() + " says the account is out of credit or over its quota. Check your plan or limits there, or switch providers in Tutor settings.";
+    if (c === "bad_model") return "That model isn't available for your " + provName() + " key. Pick another model in Tutor settings.";
+    if (c === "network") return "Couldn't reach the tutor. Check your internet connection.";
+    if (c === "rate_limited") return "Too many tutor requests right now (free tiers have per-minute limits). Wait a minute and try again.";
+    if (c === "api_error") return provName() + " returned an error" + (e.message && e.message !== "api_error" ? ": " + e.message : ".");
+  }
   if (["not_granted","sampling_disabled","not_declared","capability_disabled","capability_removed"].includes(c)) { sampleFn = null; document.body.classList.remove("has-ai"); return "The tutor isn't available in this view. Use the study notes and search instead."; }
   if (c === "rate_limited") return "Too many tutor requests right now. Wait a minute and try again.";
   if (c === "session_expired") return "Your Claude session expired. Sign in again to use the tutor.";
@@ -11569,7 +11655,16 @@ function aiErr(e){
 }
 const MOD_LIST = MODULES.map(m => (typeof m.n==="number"?"Chapter ":"Appendix ")+m.n+": "+m.t).join("; ");
 let tutorCtl = null;
+function handoffHTML(prompt){
+  const q = trimPrompt(prompt); const order = [TUTOR.handoff, ...Object.keys(HANDOFFS).filter(k => k !== TUTOR.handoff)].filter(k => HANDOFFS[k]);
+  return `<div class="handoff"><p>Get the tutor's answer in your favorite AI. Your question, the answer choices and the study notes go along with it, so you can follow up there. ChatGPT, Copilot and Perplexity also work without signing in.</p>
+    <div class="row">${order.map((k,i) => { const h = HANDOFFS[k]; return `<a class="btn small${i===0?" teal":""}" href="${esc(h.url(q))}" target="_blank" rel="noopener" ${h.copy?'data-act="copyopen"':""}>Ask ${esc(h.name)}${h.copy?" (paste)":""}</a>`; }).join("")}</div>
+    <div class="row"><button type="button" class="btn small ghost" data-act="copyprompt">Copy the question</button><button type="button" class="btn small ghost" data-act="tutorsetup">Get answers right here…</button></div></div>`;
+}
+let LAST_PROMPT = "";
 async function runTutor(prompt, outEl, stopBtn){
+  LAST_PROMPT = prompt;
+  if (TUTOR_MODE === "handoff") { outEl.innerHTML = handoffHTML(prompt); return; }
   if (!sampleFn) return;
   if (tutorCtl) tutorCtl.abort();
   const ctl = new AbortController(); tutorCtl = ctl;
@@ -11881,15 +11976,23 @@ function openZoom(key){
   $("#sheet").innerHTML = `<div class="spread"><span class="eyebrow">Picture</span><button class="btn small" data-act="close">Close</button></div>${inner}`;
   $("#modal").hidden = false;
 }
-function openPlayer(id){
+const IS_ANDROID = /Android/i.test(navigator.userAgent), IS_IOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+function ytAppOpen(v){ window.open("https://www.youtube.com/watch?v=" + v.yt, "_blank", "noopener"); }
+function openPlayer(id, force){
   const v = VMAP[id]; if (!v || !v.yt) return;
+  if (S.ytapp && !force) return ytAppOpen(v);
   const topics = (VID_TOPICS[id]||[]).map(t=>KBMAP[t]).filter(Boolean);
+  const mobile = IS_ANDROID || IS_IOS;
   $("#sheet").innerHTML = `<div class="spread"><span class="eyebrow">Professor Messer · ${v.ex===1?"220-1201":"220-1202"} · objective ${v.obj}</span><button class="btn small" data-act="close">Close</button></div>
     <h2>${esc(v.title)}</h2>
     <div class="player"><iframe src="https://www.youtube.com/embed/${v.yt}?autoplay=1&playsinline=1&rel=0&modestbranding=1" title="${esc(v.title)}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
     <div class="row"><label class="chip"><input type="checkbox" data-watch="${v.id}" ${S.watched[v.id]?"checked":""}><span>Watched</span></label>
-      <a class="btn small" href="https://www.youtube.com/watch?v=${v.yt}" target="_blank" rel="noopener">Open on YouTube</a><a class="btn small ghost" href="${esc(v.url)}" target="_blank" rel="noopener">Notes on professormesser.com</a></div>
-    <p class="note">Seeing ads? YouTube removes them only for YouTube Premium members. If you have Premium, <a href="https://accounts.google.com/ServiceLogin?service=youtube&amp;continue=https%3A%2F%2Fwww.youtube.com%2F" target="_blank" rel="noopener">sign in to YouTube</a> once in this browser and reopen the video.</p>
+      <a class="btn small primary" href="https://www.youtube.com/watch?v=${v.yt}" target="_blank" rel="noopener">${mobile?"Watch in the YouTube app":"Open on YouTube"}</a><a class="btn small ghost" href="${esc(v.url)}" target="_blank" rel="noopener">Notes on professormesser.com</a></div>
+    <label class="chip"><input type="checkbox" data-ytapp ${S.ytapp?"checked":""}><span>Always open videos ${mobile?"in the YouTube app":"on YouTube"} on this device</span></label>
+    <details class="note"><summary>Seeing ads even though you have YouTube Premium?</summary>
+      <p>The player above runs inside this app's browser (Chrome on Android, Safari on iPhone), not inside the YouTube app. So it only knows about your Premium membership if <b>that browser itself</b> is signed in to your Google account. Being signed in to the YouTube app doesn't count, which is why the sign-in link just opened your YouTube app.</p>
+      <p><b>Easiest fix:</b> tap <b>${mobile?"Watch in the YouTube app":"Open on YouTube"}</b>, or tick <b>Always open videos…</b> above. Your Premium account plays the video ad-free there.</p>
+      <p><b>To make the built-in player ad-free too${IS_ANDROID?" (Android)":""}:</b> ${IS_IOS ? "open Safari, go to google.com, tap Sign in and sign in with your Premium account. Then in Settings → Safari, turn off Prevent Cross-Site Tracking (it blocks YouTube's sign-in inside other sites)." : "open the <b>Chrome</b> app, tap the profile icon or ⋮ → Settings, and turn on Chrome sign-in with your Premium Google account. Then go to Chrome ⋮ → Settings → Site settings → Third-party cookies → <b>Add site exception</b> and add <code>" + esc(location.hostname || "this app's site") + "</code> (this app's address). You can leave third-party cookies blocked for everything else."} Close and reopen this app afterwards.</p></details>
     ${topics.length?`<div><span class="eyebrow">Related study notes</span><div class="linklist" style="margin-top:6px">${topics.map(t=>`<button class="btn small" data-act="note" data-id="${t.id}">${modLabel(t.m)} · ${esc(t.title)}</button>`).join("")}</div></div>`:""}`;
   $("#modal").hidden = false;
 }
@@ -12404,28 +12507,45 @@ async function saveAllPhotos(btn){
 VIEWS.videos = function(){
   const v = $("#view");
   const total = VIDEOS.length, seen = VIDEOS.filter(x => S.watched[x[0]]).length;
+  const order = S.vorder === "book" ? "book" : "obj";
+  const item = vv => {
+    const topics = (VID_TOPICS[vv.id]||[]).map(t=>KBMAP[t]).filter(Boolean);
+    const mods = [...new Set(topics.map(t=>String(t.m)))].sort((a,b)=>(+a||99)-(+b||99));
+    return `<div class="vitem"><label class="vchk"><input type="checkbox" data-watch="${vv.id}" ${S.watched[vv.id]?"checked":""} aria-label="Mark ${esc(vv.title)} as watched"></label>
+      <div class="vbody">${vidLink(vv)}<div class="vmeta">${mods.map(m=>`<span class="tag teal">${modLabel(m)}</span>`).join("")}${topics.slice(0,2).map(t=>`<button class="btn small ghost" data-act="note" data-id="${t.id}">${esc(t.title)}</button>`).join("")}</div></div></div>`;
+  };
   const sec = ex => {
     const objs = {}; VIDEOS.filter(x=>x[1]===ex).forEach(x => (objs[x[2]] = objs[x[2]] || []).push(VMAP[x[0]]));
     return Object.entries(objs).map(([obj, vs]) => {
       const dom = DOMAINS[ex].find(d => d.d === +obj.split(".")[0]);
-      return `<div class="vobj"><div class="vobj-h"><span class="mono">${obj}</span><span class="muted">${esc(dom?dom.t:"")}</span></div>${vs.map(vv => {
-        const topics = (VID_TOPICS[vv.id]||[]).map(t=>KBMAP[t]).filter(Boolean);
-        const mods = [...new Set(topics.map(t=>String(t.m)))];
-        return `<div class="vitem"><label class="vchk"><input type="checkbox" data-watch="${vv.id}" ${S.watched[vv.id]?"checked":""} aria-label="Mark ${esc(vv.title)} as watched"></label>
-          <div class="vbody">${vidLink(vv)}<div class="vmeta">${mods.map(m=>`<span class="tag teal">${modLabel(m)}</span>`).join("")}${topics.slice(0,2).map(t=>`<button class="btn small ghost" data-act="note" data-id="${t.id}">${esc(t.title)}</button>`).join("")}</div></div></div>`;
-      }).join("")}</div>`;
+      return `<div class="vobj"><div class="vobj-h"><span class="mono">${obj}</span><span class="muted">${esc(dom?dom.t:"")}</span></div>${vs.map(item).join("")}</div>`;
     }).join("");
   };
+  const VEXTRA = {1:{label:"Desktop computers: Messer covers these piece by piece (each video is also listed under the chapter that goes deeper)", ids:["periph-cables","video-cables","storage-cables","mb-ff","mb-conn","exp-cards","power","cooling"]}};
+  const VCH = {"os-overview":11, "cloud-prod":11, "win-netconn":12, "vulns":16, "sec-best":17, "cfg-fw":19, "env":"A"};
+  const firstCh = vv => { if (VCH[vv.id]) return VCH[vv.id]; const ms = (VID_TOPICS[vv.id]||[]).map(t=>KBMAP[t]).filter(Boolean).map(t=>+t.m).filter(n=>n>0); return ms.length ? Math.min(...ms) : 0; };
+  const chKey = c => typeof c === "number" ? c : 100 + String(c).charCodeAt(0);
+  const bookSec = part => {
+    const by = {}; VIDEOS.map(x => VMAP[x[0]]).forEach(vv => { const c = firstCh(vv); (by[c] = by[c] || []).push(vv); });
+    return Object.keys(by).map(k => /^\d+$/.test(k) ? +k : k).sort((a,b)=>chKey(a)-chKey(b)).filter(c => part===1 ? (typeof c==="number" && c<=10) : !(typeof c==="number" && c<=10)).map(c => `<div class="vobj"><div class="vobj-h"><span class="mono">${c===0?"Start":(typeof c==="number"?"CH "+c:"APP "+c)}</span><span class="muted">${c===0?"Before you begin":esc(modTitle(c))}</span></div>${by[c].map(item).join("")}${VEXTRA[c]?`<div class="vextra"><span class="eyebrow">${esc(VEXTRA[c].label)}</span>${VEXTRA[c].ids.map(id=>VMAP[id]).filter(Boolean).map(item).join("")}</div>`:""}</div>`).join("");
+  };
   v.innerHTML = `<section class="hero"><span class="eyebrow">Free video course · professormesser.com</span><h1>Professor Messer's A+ videos</h1>
-    <p>Every video from his free 220-1201 and 220-1202 courses, in exam-objective order, matched to your book chapters and the app's study notes. ${STANDALONE?"Tap a video to play it here.":"Videos open on his site or YouTube in a new tab."} Tick each one as you finish it.</p>
-    <div class="row"><span class="tag ${seen?"good":""}" id="wcount">${seen} of ${total} watched</span><a class="btn small" href="${PM_PLAYLIST1}" target="_blank" rel="noopener">Core 1 playlist on YouTube</a><a class="btn small" href="${PM_CHANNEL}" target="_blank" rel="noopener">His YouTube channel</a></div></section>
-    <section class="rgroup"><h2>Core 1 · 220-1201</h2><div class="panel vlist">${sec(1)}</div></section>
-    <section class="rgroup"><h2>Core 2 · 220-1202</h2><div class="panel vlist">${sec(2)}</div></section>
+    <p>Every video from his free 220-1201 and 220-1202 courses, matched to your book chapters and the app's study notes. ${STANDALONE?"Tap a video to play it here.":"Videos open on his site or YouTube in a new tab."} Tick each one as you finish it.</p>
+    <div class="row"><span class="tag ${seen?"good":""}" id="wcount">${seen} of ${total} watched</span><a class="btn small" href="${PM_PLAYLIST1}" target="_blank" rel="noopener">Core 1 playlist on YouTube</a><a class="btn small" href="${PM_CHANNEL}" target="_blank" rel="noopener">His YouTube channel</a></div>
+    <div class="row" style="align-items:center"><span class="eyebrow">Order</span><div class="seg"><button class="btn small${order==="obj"?" primary":""}" data-vorder="obj">Exam objectives (Messer's order)</button><button class="btn small${order==="book"?" primary":""}" data-vorder="book">Book chapters</button></div></div>
+    <p class="note" style="margin:0">${order==="obj" ? "Professor Messer follows the CompTIA objectives (1.1, 1.2 …). Your textbook teaches the same material in a different order, so switch to Book chapters to watch along with your reading." : "Videos are grouped under the first book chapter that covers them, keeping Messer's order within each chapter. A video that also fits other chapters shows those chapter tags too."}</p></section>
+    ${order==="obj" ? `<section class="rgroup"><h2>Core 1 · 220-1201</h2><div class="panel vlist">${sec(1)}</div></section>
+    <section class="rgroup"><h2>Core 2 · 220-1202</h2><div class="panel vlist">${sec(2)}</div></section>`
+    : `<section class="rgroup"><h2>Chapters 1–10 · Core 1 material</h2><div class="panel vlist">${bookSec(1)}</div></section>
+    <section class="rgroup"><h2>Chapters 11–21 · Core 2 material</h2><div class="panel vlist">${bookSec(2)}</div></section>`}
     <p class="note">Video titles and links come from Professor Messer's published course index.${STANDALONE?"":" Videos play on his site or YouTube because this app can't embed outside players."}</p>`;
+  v.querySelectorAll("[data-vorder]").forEach(b => b.onclick = () => { S.vorder = b.dataset.vorder; save(); VIEWS.videos(); });
 };
 document.addEventListener("change", e => {
+  if (e.target && e.target.hasAttribute && e.target.hasAttribute("data-ytapp")) { S.ytapp = e.target.checked; save(); toast(S.ytapp ? "Videos will open in YouTube on this device." : "Videos will play inside the app."); return; }
   const id = e.target && e.target.dataset && e.target.dataset.watch; if (!id) return;
   if (e.target.checked) S.watched[id] = Date.now(); else delete S.watched[id];
+  document.querySelectorAll(`input[data-watch="${id}"]`).forEach(c => { c.checked = e.target.checked; });
   save();
   const c = $("#wcount"); if (c) { const n = Object.keys(S.watched).length; c.textContent = n+" of "+VIDEOS.length+" watched"; c.className = "tag"+(n?" good":""); }
   document.querySelectorAll(`a.vid[href="${CSS.escape(VMAP[id].url)}"], button.vid[data-v="${id}"]`).forEach(a => a.classList.toggle("seen", !!S.watched[id]));
@@ -12442,6 +12562,7 @@ VIEWS.review = function(){
     <div class="row">${missed.length?`<button class="btn primary" data-act="weak">Drill ${missed.length} missed</button>`:""}${flagged.length?`<button class="btn" data-act="drillflag">Drill ${flagged.length} flagged</button>`:""}</div></section>
     <section class="rgroup"><h2>Missed last time (${missed.length})</h2>${missed.length?missed.map(missedItem).join(""):`<div class="empty">Nothing missed yet.</div>`}</section>
     <section class="rgroup"><h2>Flagged (${flagged.length})</h2>${flagged.length?flagged.map(missedItem).join(""):`<div class="empty">Flag questions during practice to collect them here.</div>`}</section>
+    <section class="panel" style="display:grid;gap:10px"><h3>AI tutor</h3><p class="muted">${TUTOR_MODE==="claude"?"Connected through your Claude account.":TUTOR_MODE==="key"?"Answering inside the app with "+esc(provName())+" on this device.":"Tutor buttons open your question in "+esc(HANDOFFS[TUTOR.handoff].name)+" or another AI app. Add an API key (Gemini has a free option) to get answers inside the app."}</p><div class="row"><button class="btn small" data-act="tutorsetup">Tutor settings</button></div></section>
     <section class="panel" style="display:grid;gap:10px"><h3>Reset progress</h3><p class="muted">Clears answer history, flags and simulator scores in this browser.</p>
       <div class="row" id="resetrow"><button class="btn small" data-act="reset1">Reset progress…</button></div></section>`;
 };
@@ -12478,16 +12599,56 @@ function checkPractice(){
 }
 async function aiGrade(){
   const q = QMAP[P.ids[P.i]]; const box = $("#aigrade"); const out = box.querySelector(".out");
-  if (!sampleFn) return; box.hidden = false; out.textContent = "Grading…";
   const prompt = "You grade written answers for CompTIA A+ exam practice. Be fair: accept correct ideas in any wording; don't require exact terms. "
    + "Reply with only a JSON object: {\"score\": integer 0-100, \"verdict\": \"correct\" | \"partly correct\" | \"incorrect\", \"feedback\": \"2-3 sentences addressed to the student, saying what was right and what to add or fix\", \"missing\": [\"short key idea\", ...]}.\n\n"
    + (q.sc ? "Scenario: "+q.sc+"\n" : "") + "Question: "+q.q+"\nModel answer: "+q.ans+"\nKey ideas: "+q.k.map(g=>g[0]).join("; ")+"\n\nStudent answer: "+(P.resp[q.id]||"");
+  box.hidden = false;
+  if (TUTOR_MODE === "handoff") { LAST_PROMPT = "You grade written answers for CompTIA A+ exam practice. Be fair: accept correct ideas in any wording. Give a score out of 100, say whether it's correct, partly correct or incorrect, and explain in 2-3 sentences what was right and what to add or fix.\n\n" + prompt.slice(prompt.indexOf("\n\n")+2); out.innerHTML = handoffHTML(LAST_PROMPT); return; }
+  if (!sampleFn) return; out.textContent = "Grading…";
   try {
     const r = await sampleFn.json(prompt, {modelTier:"quick"});
     const sc = Math.max(0, Math.min(100, Math.round(Number(r.score)||0)));
     out.textContent = (r.verdict ? String(r.verdict).replace(/^./,c=>c.toUpperCase())+" · " : "") + sc + "/100\n\n" + (r.feedback||"") + (Array.isArray(r.missing)&&r.missing.length ? "\n\nTo add: " + r.missing.map(String).join("; ") : "");
     if (sc >= 70 && !P.ok[q.id] && P.mode==="practice") { P.ok[q.id] = true; S.att[q.id] && (S.att[q.id].last = 1, S.att[q.id].w = Math.max(0,S.att[q.id].w-1), S.att[q.id].c++); save(); out.textContent += "\n\nMarked correct based on the tutor's grade."; }
   } catch(e) { out.textContent = e && e.code==="invalid_json" ? "The tutor's reply couldn't be read. Try again." : aiErr(e); }
+}
+
+// ---------- tutor settings (website / installed app) ----------
+function openTutorSetup(){
+  const inClaude = TUTOR_MODE === "claude"; const cur = TUTOR.provider || "gemini"; const pv = PROVIDERS[cur];
+  $("#sheet").innerHTML = `<div class="spread"><span class="eyebrow">AI tutor</span><button class="btn small" data-act="close">Close</button></div>
+    <h2>Tutor settings</h2>
+    ${inClaude ? `<p>You're using the app inside Claude, so the tutor already works here. These settings are for the website and installed app.</p>` : ""}
+    <p class="muted">Settings are saved on this device only. Each person who uses the app picks their own.</p>
+    <div class="panel" style="display:grid;gap:8px"><b>Option 1 · Ask any AI app (no key, no setup)</b>
+      <span class="muted">The tutor buttons open your question, with the study notes, in a chat app. Pick which one comes first:</span>
+      <div class="chips">${Object.entries(HANDOFFS).map(([k,h]) => `<label class="chip"><input type="radio" name="thand" value="${k}" ${TUTOR.handoff===k?"checked":""}><span>${esc(h.name)}</span></label>`).join("")}</div></div>
+    <div class="panel" style="display:grid;gap:10px"><b>Option 2 · Answers right inside the app (your own API key)</b>
+      <span class="muted">Choose an AI provider and paste a key from it. Google Gemini and OpenRouter have free options.</span>
+      <label class="eyebrow" for="tprov">Provider</label>
+      <select id="tprov">${Object.entries(PROVIDERS).map(([k,v]) => `<option value="${k}" ${cur===k?"selected":""}>${esc(v.name)}${v.free?" · free option":""}</option>`).join("")}</select>
+      <p class="note" id="tprovnote" style="margin:0">${esc(pv.note)} <a href="${pv.keyUrl}" target="_blank" rel="noopener">Get a key</a></p>
+      <label class="eyebrow" for="tkey">API key</label>
+      <input id="tkey" type="password" autocomplete="off" spellcheck="false" placeholder="${esc(pv.keyHint)}" value="${esc(TUTOR.provider===cur?TUTOR.key:"")}" style="font-family:var(--f-mono)">
+      <label class="eyebrow" for="tmodel">Model</label>
+      <input id="tmodel" list="tmodels" value="${esc(TUTOR.provider===cur && TUTOR.model ? TUTOR.model : pv.model)}" style="font-family:var(--f-mono)"><datalist id="tmodels">${pv.models.map(m=>`<option value="${esc(m)}">`).join("")}</datalist>
+      <span class="muted" style="font-size:.82rem">Leave the suggested model, or type a newer one from the provider's model list.</span>
+      <div class="row"><button class="btn primary" data-act="tutorsave">Save and test</button>${TUTOR.key?`<button class="btn ghost" data-act="tutorclear">Remove key (use Option 1)</button>`:""}</div>
+      <div class="out" id="ttest"></div>
+      <p class="note" style="margin:0">The key stays on this device and is sent only to the provider you chose. It isn't in the app's files on GitHub, so sharing the app never shares your key. Don't save a key on a shared computer.</p></div>`;
+  $("#modal").hidden = false;
+  $("#tprov").onchange = () => { const k = $("#tprov").value, v = PROVIDERS[k]; $("#tprovnote").innerHTML = esc(v.note) + ` <a href="${v.keyUrl}" target="_blank" rel="noopener">Get a key</a>`; $("#tkey").placeholder = v.keyHint; $("#tkey").value = TUTOR.provider===k ? TUTOR.key : ""; $("#tmodel").value = TUTOR.provider===k && TUTOR.model ? TUTOR.model : v.model; $("#tmodels").innerHTML = v.models.map(m=>`<option value="${esc(m)}">`).join(""); };
+  document.querySelectorAll("input[name=thand]").forEach(r => r.onchange = () => { TUTOR.handoff = r.value; saveTutor(); toast("Tutor buttons will open " + HANDOFFS[r.value].name + " first."); });
+}
+async function tutorSave(){
+  const provider = $("#tprov").value, key = ($("#tkey").value||"").trim(), model = ($("#tmodel").value||"").trim() || PROVIDERS[provider].model, out = $("#ttest");
+  if (!key) { out.textContent = "Paste a key first, or close this to keep using Option 1."; return; }
+  const cfg = {provider, key, model}; out.textContent = "Testing " + PROVIDERS[provider].name + "…";
+  try { const r = await keySample(cfg)("Reply with exactly: Tutor connected.", {noStream:true, maxTokens:50});
+    Object.assign(TUTOR, cfg); saveTutor();
+    if (TUTOR_MODE !== "claude") { sampleFn = keySample(); TUTOR_MODE = "key"; }
+    out.textContent = "✓ " + ((r.text||"").trim() || "Connected.") + " Tutor answers from " + PROVIDERS[provider].name + " will now appear inside the app on this device.";
+  } catch(e) { const prevMode = TUTOR_MODE, prevProv = TUTOR.provider; TUTOR_MODE = "key"; TUTOR.provider = provider; const msg = aiErr(e); TUTOR_MODE = prevMode; TUTOR.provider = prevProv; out.textContent = "Not saved. " + msg; }
 }
 
 // ---------- global click handling ----------
@@ -12549,6 +12710,11 @@ document.addEventListener("click", e => {
     }
     case "tutornote": { const k = KBMAP[b.dataset.id]; const ask = ($("#mq").value||"").trim() || "Explain this topic simply with an example and what the exam tests."; return runTutor(tutorPrompt(ask, [k]), $("#mout"), $("#mstop")); }
     case "aigrade": return aiGrade();
+    case "tutorsetup": return openTutorSetup();
+    case "tutorsave": return tutorSave();
+    case "tutorclear": TUTOR.key = ""; saveTutor(); if (TUTOR_MODE !== "claude") { sampleFn = null; TUTOR_MODE = "handoff"; } toast("Key removed from this device."); return openTutorSetup();
+    case "copyopen": try { navigator.clipboard.writeText(trimPrompt(LAST_PROMPT)); toast("Question copied. Paste it into the chat."); } catch(err) {} return; // link still opens
+    case "copyprompt": try { navigator.clipboard.writeText(LAST_PROMPT).then(() => toast("Question copied. Paste it into Claude.")); } catch(e) { toast("Couldn't copy on this device."); } return;
     case "reset1": $("#resetrow").innerHTML = `<span>Delete all progress in this browser?</span><button class="btn small" data-act="reset2" style="border-color:var(--bad);color:var(--bad)">Yes, reset</button><button class="btn small" data-go="review">Cancel</button>`; return;
     case "reset2": S = {att:{}, flag:{}, exams:[], watched:{}, fc:{}, labs:{}, sims:{}}; save(); toast("Progress cleared."); return go("review");
   }
@@ -12629,8 +12795,8 @@ function showDefine(){
   if (d.acro) html += `<p class="lk-acro"><span class="mono">${esc(d.acro[0])}</span> stands for <b>${esc(d.acro[1])}</b>.</p>`;
   if (d.plain) html += `<p class="lk-def lk-plain">${esc(d.plain)}</p>`;
   d.notes.forEach(f => { html += `<p class="lk-def${d.plain||d.acro?" lk-more":""}">${esc(f.text.length>300?f.text.slice(0,297)+"…":f.text)}</p><p class="lk-src">${modLabel(f.k.m)} · ${esc(f.k.title)} <button type="button" class="lk-link" data-act="note" data-id="${f.k.id}">Open note</button></p>`; });
-  if (!d.acro && !d.plain && !d.notes.length) html += `<p class="lk-def muted">No quick definition in the app for this term.${sampleFn?" Ask the tutor below, or try Search.":" Try Search for related notes."}</p>`;
-  html += `<div class="lk-foot"><button type="button" class="lk-link" data-lk="search">Search instead</button>${sampleFn?`<button type="button" class="lk-link" data-lk="tutor">Ask the tutor to explain</button>`:""}</div><div class="lk-tutor" hidden></div>`;
+  if (!d.acro && !d.plain && !d.notes.length) html += `<p class="lk-def muted">No quick definition in the app for this term.${(sampleFn||TUTOR_MODE==="handoff")?" Ask the tutor below, or try Search.":" Try Search for related notes."}</p>`;
+  html += `<div class="lk-foot"><button type="button" class="lk-link" data-lk="search">Search instead</button>${(sampleFn||TUTOR_MODE==="handoff")?`<button type="button" class="lk-link" data-lk="tutor">Ask the tutor to explain</button>`:""}</div><div class="lk-tutor" hidden></div>`;
   bubble.innerHTML = html; bubble.classList.add("open"); placeBubble(bubble._rect);
 }
 function showSearch(){
