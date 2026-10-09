@@ -343,6 +343,17 @@ svg .dfull{fill:var(--navy)} svg .dchg{fill:var(--teal)}
 /* AI tutor */
 .ai-only{display:none!important}
 body.has-ai .ai-only{display:revert!important}
+.tchat{display:grid;gap:8px;white-space:normal}
+.tmsg{display:grid;gap:2px;padding:9px 12px;border-radius:12px;max-width:92%;line-height:1.5}
+.tmsg .who{font:600 .68rem var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.tmsg .txt{white-space:pre-wrap;font-size:.94rem}
+.tmsg.you{justify-self:end;background:var(--navy);color:var(--surface)}.tmsg.you .who{color:inherit;opacity:.75}
+.tmsg.tutor{justify-self:start;background:var(--surface);border:1px solid var(--line)}
+.tfollow{display:flex;gap:6px;margin-top:8px;white-space:normal}.tfollow input{flex:1;min-width:0}
+.out .handoff,.tutor .out:has(.tchat){white-space:normal}
+.tutorfab{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:40;border:0;border-radius:999px;padding:12px 18px;font-weight:700;background:var(--teal);color:#fff;box-shadow:0 4px 16px rgba(0,0,0,.25);cursor:pointer}
+body.has-ai .tutorfab{display:inline-flex!important;gap:6px;align-items:center}
+#sheet .tutor-out{margin-top:10px}
 .tutor{border:1px solid var(--line);border-radius:8px;background:var(--sunk);padding:14px 16px;display:grid;gap:8px}
 .tutor .out{white-space:pre-wrap;font-size:.95rem}
 .tutor .eyebrow{color:var(--teal)}
@@ -11562,8 +11573,8 @@ let TUTOR_MODE = "none"; // "claude" (inside Claude), "key" (own API key, any pr
 const TUTOR_STORE = "aplus-tutor-v1";
 // In-app providers (bring your own key). Model names can be edited in settings when providers release new ones.
 const PROVIDERS = {
-  gemini:     {name:"Google Gemini", free:true, keyUrl:"https://aistudio.google.com/apikey", keyHint:"AIza…", model:"gemini-2.5-flash",
-               models:["gemini-2.5-flash","gemini-2.5-flash-lite","gemini-2.5-pro"], note:"Free tier available: create a key in Google AI Studio with any Google account. No credit card needed for the free tier (it has daily limits)."},
+  gemini:     {name:"Google Gemini", free:true, keyUrl:"https://aistudio.google.com/apikey", keyHint:"AIza…", model:"gemini-flash-latest",
+               models:["gemini-flash-latest","gemini-3.8-flash","gemini-3.5-flash-lite","gemini-pro-latest"], note:"Free tier available: create a key in Google AI Studio with any Google account. No credit card needed for the free tier (it has daily limits)."},
   anthropic:  {name:"Anthropic Claude", keyUrl:"https://console.anthropic.com/settings/keys", keyHint:"sk-ant-…", model:"claude-sonnet-5-5",
                models:["claude-sonnet-5-5","claude-haiku-4-5-20251001","claude-opus-5-5"], note:"Pay as you go, billed separately from a Claude subscription. Set a monthly limit in the Console."},
   openai:     {name:"OpenAI (ChatGPT models)", keyUrl:"https://platform.openai.com/api-keys", keyHint:"sk-…", model:"gpt-5-mini",
@@ -11614,7 +11625,7 @@ function keySample(cfg){
     try { res = await fetch(url, {method:"POST", signal: opts.signal, headers, body: JSON.stringify(body)}); }
     catch(e) { if (e && e.name === "AbortError") throw tutErr("cancelled"); throw tutErr("network"); }
     if (!res.ok) { let msg = ""; try { const j = await res.json(); const er = Array.isArray(j) ? j[0] && j[0].error : j.error; msg = (er && (er.message || er.status)) || ""; } catch(e) {}
-      const st = res.status; throw tutErr(st===401 || st===403 || (st===400 && /api.?key/i.test(msg)) ? "bad_key" : st===429 ? "rate_limited" : st===402 || /credit|balance|billing|quota/i.test(msg) ? "no_credit" : st===404 || /model/i.test(msg) ? "bad_model" : "api_error", msg); }
+      const st = res.status; throw tutErr(st===401 || st===403 || (st===400 && /api.?key/i.test(msg)) ? "bad_key" : st===402 || /credit|balance|billing|quota|insufficient/i.test(msg) ? "no_credit" : st===429 ? "rate_limited" : st===404 || /model/i.test(msg) ? "bad_model" : "api_error", msg); }
     if (!stream) { const j = await res.json(); let text = "", stop = "";
       if (P === "anthropic") { text = (j.content||[]).map(c=>c.text||"").join(""); stop = j.stop_reason; }
       else if (P === "gemini") { const c = (j.candidates||[])[0] || {}; text = ((c.content||{}).parts||[]).map(x=>x.text||"").join(""); stop = c.finishReason; }
@@ -11628,23 +11639,69 @@ function keySample(cfg){
   f.json = async function(prompt){ const r = await f(prompt + "\n\nReply with the JSON object only.", {noStream:true}); const m = r.text.match(/\{[\s\S]*\}/); if (!m) throw tutErr("invalid_json"); try { return JSON.parse(m[0]); } catch(e) { throw tutErr("invalid_json"); } };
   return f;
 }
+// Ask the provider which models this key can use (for the model picker and automatic fallback)
+async function listModels(cfg){
+  const P = cfg.provider; let url, headers = {};
+  if (P === "gemini") { url = "https://generativelanguage.googleapis.com/v1beta/models?pageSize=200"; headers["x-goog-api-key"] = cfg.key; }
+  else if (P === "openai") { url = "https://api.openai.com/v1/models"; headers.authorization = "Bearer " + cfg.key; }
+  else if (P === "openrouter") { url = "https://openrouter.ai/api/v1/models"; }
+  else if (P === "anthropic") { url = "https://api.anthropic.com/v1/models?limit=100"; Object.assign(headers, {"x-api-key":cfg.key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"}); }
+  const res = await fetch(url, {headers}); if (!res.ok) throw tutErr(res.status===401||res.status===403 ? "bad_key" : "api_error");
+  const j = await res.json();
+  if (P === "gemini") return (j.models||[]).filter(m => (m.supportedGenerationMethods||[]).includes("generateContent")).map(m => m.name.replace(/^models\//,""));
+  return (j.data||[]).map(m => m.id);
+}
+function pickModel(P, ids){
+  const prefs = {gemini:[/^gemini-flash-latest$/,/^gemini-[\d.]+-flash$/,/^gemini-[\d.]+-flash-lite$/,/flash/],
+    openai:[/^gpt-[\d.]+-mini$/,/^gpt-[\d.]+$/,/^gpt-/], anthropic:[/sonnet/,/haiku/,/opus/], openrouter:[/^openrouter\/auto$/,/:free$/]}[P] || [];
+  const ok = ids.filter(id => !/tts|image|live|audio|embed|transcribe|vision-preview|realtime|search|whisper|dall|moderation/i.test(id));
+  for (const re of prefs) { const hit = ok.filter(id => re.test(id)).sort().reverse()[0]; if (hit) return hit; }
+  return ok[0] || null;
+}
 function trimPrompt(prompt){ return prompt.length > 5500 ? prompt.slice(0, 5500) + "\n…" : prompt; }
+// Shared tutor: the app owner's small server (see worker.js). Its address lives in tutor.json next to index.html.
+let TUTOR_PROXY = "";
+function proxySample(){
+  const f = async function(prompt, opts){
+    opts = opts || {}; let res;
+    const ctl = new AbortController(); let timedOut = false; const tm = setTimeout(() => { timedOut = true; ctl.abort(); }, 65000);
+    if (opts.signal) opts.signal.addEventListener("abort", () => ctl.abort());
+    try { res = await fetch(TUTOR_PROXY, {method:"POST", signal: ctl.signal, headers:{"content-type":"application/json"}, body: JSON.stringify({prompt, json: !!opts.json})}); }
+    catch(e) { clearTimeout(tm); if (timedOut) throw tutErr("api_error", "the tutor took too long to answer"); if (e && e.name === "AbortError") throw tutErr("cancelled"); throw tutErr("network"); }
+    clearTimeout(tm);
+    let j = {}; try { j = await res.json(); } catch(e) {}
+    if (!res.ok) throw tutErr(res.status === 429 ? "rate_limited" : "api_error", j.error || "");
+    const text = j.text || ""; if (opts.onText) opts.onText({text}); return {text, truncated: !!j.truncated};
+  };
+  f.json = async function(prompt){ const r = await f(prompt + "\n\nReply with the JSON object only.", {json:true}); const m = r.text.match(/\{[\s\S]*\}/); if (!m) throw tutErr("invalid_json"); try { return JSON.parse(m[0]); } catch(e) { throw tutErr("invalid_json"); } };
+  return f;
+}
 function setupTutor(){
   if (TUTOR_MODE === "claude") return;
-  if (TUTOR.key && PROVIDERS[TUTOR.provider]) { sampleFn = keySample(); TUTOR_MODE = "key"; } else { sampleFn = null; TUTOR_MODE = "handoff"; }
+  if (TUTOR.key && PROVIDERS[TUTOR.provider]) { sampleFn = keySample(); TUTOR_MODE = "key"; }
+  else if (TUTOR_PROXY) { sampleFn = proxySample(); TUTOR_MODE = "shared"; }
+  else { sampleFn = null; TUTOR_MODE = "handoff"; }
   document.body.classList.add("has-ai");
+}
+if (STANDALONE && location.protocol.startsWith("http")) {
+  fetch("tutor.json", {cache:"no-store"}).then(r => r.ok ? r.json() : null).then(j => { if (j && /^https:\/\//.test(j.proxy||"")) { TUTOR_PROXY = j.proxy; setupTutor(); } }).catch(() => {});
 }
 if (window.claude && typeof window.claude.use === "function") {
   window.claude.use("sample").then(f => { if (f) { sampleFn = f; TUTOR_MODE = "claude"; document.body.classList.add("has-ai"); } else setupTutor(); }).catch(() => setupTutor());
 } else setupTutor();
 function aiErr(e){
   const c = e && e.code;
+  if (TUTOR_MODE === "shared") {
+    if (c === "rate_limited") return "The tutor is busy right now. Wait a minute and try again.";
+    if (c === "network") return "Couldn't reach the tutor. Check your internet connection.";
+    return "The tutor couldn't answer just now" + (e && e.message && !["api_error"].includes(e.message) ? " (" + e.message + ")" : "") + ". Try again in a moment.";
+  }
   if (TUTOR_MODE === "key") {
     if (c === "bad_key") return provName() + " rejected the API key. Check it in Tutor settings (Review tab).";
-    if (c === "no_credit") return provName() + " says the account is out of credit or over its quota. Check your plan or limits there, or switch providers in Tutor settings.";
-    if (c === "bad_model") return "That model isn't available for your " + provName() + " key. Pick another model in Tutor settings.";
+    if (c === "no_credit") return provName() + " says this key has no credit or has used up its quota" + (e.message && e.message !== "no_credit" ? " (\"" + e.message + "\")" : "") + ". " + (TUTOR.provider==="openai" ? "A ChatGPT Plus subscription doesn't include API credit: add a few dollars under Billing at platform.openai.com, or pick Google Gemini for a free option." : TUTOR.provider==="anthropic" ? "A Claude subscription doesn't include API credit: add credit under Billing in the Claude Console, or pick Google Gemini for a free option." : "Check your plan or limits with the provider, or switch providers.");
+    if (c === "bad_model") return "That model isn't available for your " + provName() + " key" + (e.message && e.message !== "bad_model" ? " (\"" + e.message + "\")" : "") + ". Tap “show the models my key can use” in Tutor settings.";
     if (c === "network") return "Couldn't reach the tutor. Check your internet connection.";
-    if (c === "rate_limited") return "Too many tutor requests right now (free tiers have per-minute limits). Wait a minute and try again.";
+    if (c === "rate_limited") return provName() + " says too many requests right now" + (e.message && e.message !== "rate_limited" ? " (\"" + e.message + "\")" : "") + ". Free tiers have per-minute limits: wait a minute and try again.";
     if (c === "api_error") return provName() + " returned an error" + (e.message && e.message !== "api_error" ? ": " + e.message : ".");
   }
   if (["not_granted","sampling_disabled","not_declared","capability_disabled","capability_removed"].includes(c)) { sampleFn = null; document.body.classList.remove("has-ai"); return "The tutor isn't available in this view. Use the study notes and search instead."; }
@@ -11657,26 +11714,57 @@ const MOD_LIST = MODULES.map(m => (typeof m.n==="number"?"Chapter ":"Appendix ")
 let tutorCtl = null;
 function handoffHTML(prompt){
   const q = trimPrompt(prompt); const order = [TUTOR.handoff, ...Object.keys(HANDOFFS).filter(k => k !== TUTOR.handoff)].filter(k => HANDOFFS[k]);
-  return `<div class="handoff"><p>Get the tutor's answer in your favorite AI. Your question, the answer choices and the study notes go along with it, so you can follow up there. ChatGPT, Copilot and Perplexity also work without signing in.</p>
+  return `<div class="handoff"><p>Get the tutor's answer from your own AI account: this opens the AI app you're signed in to (Claude, ChatGPT…) with your question, the answer choices and the study notes already filled in, so you can keep the conversation going there.</p>
     <div class="row">${order.map((k,i) => { const h = HANDOFFS[k]; return `<a class="btn small${i===0?" teal":""}" href="${esc(h.url(q))}" target="_blank" rel="noopener" ${h.copy?'data-act="copyopen"':""}>Ask ${esc(h.name)}${h.copy?" (paste)":""}</a>`; }).join("")}</div>
-    <div class="row"><button type="button" class="btn small ghost" data-act="copyprompt">Copy the question</button><button type="button" class="btn small ghost" data-act="tutorsetup">Get answers right here…</button></div></div>`;
+    <div class="row"><button type="button" class="btn small ghost" data-act="copyprompt">Copy the question</button><button type="button" class="btn small ghost" data-act="tutorsetup">Tutor settings</button></div></div>`;
 }
 let LAST_PROMPT = "";
 async function runTutor(prompt, outEl, stopBtn){
   LAST_PROMPT = prompt;
   if (TUTOR_MODE === "handoff") { outEl.innerHTML = handoffHTML(prompt); return; }
   if (!sampleFn) return;
+  const qi = prompt.lastIndexOf("Student's question: ");
+  const ask = qi >= 0 ? prompt.slice(qi + 20).trim() : "";
+  outEl._conv = {context: prompt, turns: ask ? [{r:"you", t: ask}] : [], stopBtn};
+  return tutorTurn(outEl);
+}
+function chatRender(box){
+  const c = box._conv; if (!c) return;
+  box.innerHTML = `<div class="tchat">${c.turns.map(t => `<div class="tmsg ${t.r}"><span class="who">${t.r==="you"?"You":"Tutor"}</span><div class="txt">${esc(t.t)}</div></div>`).join("")}</div>`
+    + (c.busy ? "" : `<form class="tfollow"><input type="text" placeholder="Reply to the tutor or ask a follow-up…" aria-label="Reply to the tutor"><button class="btn small teal" type="submit">Send</button></form>`);
+}
+async function tutorTurn(box){
+  const c = box._conv; if (c.busy) return;
   if (tutorCtl) tutorCtl.abort();
   const ctl = new AbortController(); tutorCtl = ctl;
-  outEl.textContent = "Thinking…";
-  if (stopBtn) { stopBtn.hidden = false; stopBtn.onclick = () => ctl.abort(); }
+  const reply = {r:"tutor", t:"Thinking…"}; c.turns.push(reply); c.busy = true; chatRender(box);
+  const el = () => { const a = box.querySelectorAll(".tmsg.tutor .txt"); return a[a.length-1]; };
+  const hist = c.turns.slice(0, -1);
+  const prompt = hist.filter(t => t.r==="tutor").length === 0 ? c.context
+    : c.context + "\n\nConversation so far:\n" + hist.map(t => (t.r==="you" ? "Student: " : "Tutor: ") + t.t).join("\n\n") + "\n\nReply to the student's latest message as their tutor: plain text, under 200 words, no markdown headings. If they challenge an answer, weigh their point honestly, say where they're right, and explain what the exam expects.";
+  if (c.stopBtn) { c.stopBtn.hidden = false; c.stopBtn.onclick = () => ctl.abort(); }
   try {
-    const r = await sampleFn(prompt, {signal: ctl.signal, onText: ({text}) => { outEl.textContent = text; }});
-    if (r.truncated) outEl.textContent += "\n\n(Answer cut short. Ask a narrower question.)";
+    const r = await sampleFn(prompt, {signal: ctl.signal, onText: ({text}) => { reply.t = text; const e = el(); if (e) e.textContent = text; }});
+    reply.t = (r && r.text) || reply.t; if (r && r.truncated) reply.t += "\n\n(Answer cut short. Ask a narrower question.)";
   } catch(e) {
-    if (e && e.code === "cancelled") outEl.textContent = e.text || "Stopped.";
-    else outEl.textContent = (e && e.text ? e.text + "\n\n" : "") + aiErr(e);
-  } finally { if (stopBtn) stopBtn.hidden = true; if (tutorCtl === ctl) tutorCtl = null; }
+    if (e && e.code === "cancelled") reply.t = (e.text || reply.t.replace(/^Thinking…$/, "")) + (e.text ? "" : "Stopped.");
+    else reply.t = (e && e.text ? e.text + "\n\n" : "") + aiErr(e);
+  } finally { c.busy = false; if (c.stopBtn) c.stopBtn.hidden = true; if (tutorCtl === ctl) tutorCtl = null; chatRender(box); const inp = box.querySelector(".tfollow input"); }
+}
+document.addEventListener("submit", e => {
+  const f = e.target.closest && e.target.closest(".tfollow"); if (!f) return;
+  e.preventDefault(); const box = f.parentElement; const inp = f.querySelector("input"); const v = (inp.value||"").trim();
+  if (!v || !box._conv) return; box._conv.turns.push({r:"you", t:v}); tutorTurn(box);
+});
+// ---------- floating tutor chat (any page) ----------
+function openTutorChat(){
+  $("#sheet").innerHTML = `<div class="spread"><span class="eyebrow">AI tutor</span><div class="row"><button class="btn small ghost" data-act="tutorsetup">Settings</button><button class="btn small" data-act="close">Close</button></div></div>
+    <h2>Chat with the tutor</h2><p class="muted" style="margin:0">Ask anything about the A+ exams or your book. The tutor uses the app's study notes and points you to the chapter and page.</p>
+    ${TUTOR_MODE==="handoff" ? `<div class="out" id="gout">${handoffHTML("Hi! I'm studying for CompTIA A+ 220-1201/220-1202 with the textbook CompTIA A+ Guide to IT Technical Support, 12th ed. Please be my tutor.")}</div>`
+    : `<form class="tfirst row"><input type="text" id="gq" placeholder="e.g., Why is a port replicator different from a docking station?" style="flex:1;min-width:180px"><button class="btn small teal" type="submit">Ask</button></form><div class="out tutor-out" id="gout"></div>`}`;
+  $("#modal").hidden = false;
+  const f = $("#sheet").querySelector(".tfirst");
+  if (f) { f.addEventListener("submit", e => { e.preventDefault(); const q = ($("#gq").value||"").trim(); if (!q) return; f.remove(); const r = search(q); runTutor(tutorPrompt(q, r.kb.map(x=>x.k)), $("#gout")); }); setTimeout(() => { const i = $("#gq"); if (i) i.focus(); }, 50); }
 }
 function tutorPrompt(question, articles, extra){
   const chs = [...new Set(articles.slice(0,4).map(a=>a.m))].filter(c=>CH_REVIEW[c]).slice(0,2);
@@ -12562,7 +12650,7 @@ VIEWS.review = function(){
     <div class="row">${missed.length?`<button class="btn primary" data-act="weak">Drill ${missed.length} missed</button>`:""}${flagged.length?`<button class="btn" data-act="drillflag">Drill ${flagged.length} flagged</button>`:""}</div></section>
     <section class="rgroup"><h2>Missed last time (${missed.length})</h2>${missed.length?missed.map(missedItem).join(""):`<div class="empty">Nothing missed yet.</div>`}</section>
     <section class="rgroup"><h2>Flagged (${flagged.length})</h2>${flagged.length?flagged.map(missedItem).join(""):`<div class="empty">Flag questions during practice to collect them here.</div>`}</section>
-    <section class="panel" style="display:grid;gap:10px"><h3>AI tutor</h3><p class="muted">${TUTOR_MODE==="claude"?"Connected through your Claude account.":TUTOR_MODE==="key"?"Answering inside the app with "+esc(provName())+" on this device.":"Tutor buttons open your question in "+esc(HANDOFFS[TUTOR.handoff].name)+" or another AI app. Add an API key (Gemini has a free option) to get answers inside the app."}</p><div class="row"><button class="btn small" data-act="tutorsetup">Tutor settings</button></div></section>
+    <section class="panel" style="display:grid;gap:10px"><h3>AI tutor</h3><p class="muted">${TUTOR_MODE==="claude"?"Connected through your Claude account.":TUTOR_MODE==="shared"?"Built-in tutor is on: chat and feedback appear right inside the app.":TUTOR_MODE==="key"?"Answering inside the app with "+esc(provName())+" on this device.":"Tutor buttons open your question in "+esc(HANDOFFS[TUTOR.handoff].name)+" or another AI app. Add an API key (Gemini has a free option) to get answers inside the app."}</p><div class="row"><button class="btn small" data-act="tutorsetup">Tutor settings</button></div></section>
     <section class="panel" style="display:grid;gap:10px"><h3>Reset progress</h3><p class="muted">Clears answer history, flags and simulator scores in this browser.</p>
       <div class="row" id="resetrow"><button class="btn small" data-act="reset1">Reset progress…</button></div></section>`;
 };
@@ -12619,12 +12707,13 @@ function openTutorSetup(){
   $("#sheet").innerHTML = `<div class="spread"><span class="eyebrow">AI tutor</span><button class="btn small" data-act="close">Close</button></div>
     <h2>Tutor settings</h2>
     ${inClaude ? `<p>You're using the app inside Claude, so the tutor already works here. These settings are for the website and installed app.</p>` : ""}
+    ${TUTOR_PROXY ? `<div class="panel" style="display:grid;gap:6px;border-color:var(--good)"><b>✓ Built-in tutor is on</b><span class="muted">This app's owner has connected a shared tutor, so answers and chat appear right inside the app with nothing to set up.${TUTOR.key ? " You've also saved your own key below, which is used instead." : ""}</span></div>` : ""}
     <p class="muted">Settings are saved on this device only. Each person who uses the app picks their own.</p>
-    <div class="panel" style="display:grid;gap:8px"><b>Option 1 · Ask any AI app (no key, no setup)</b>
-      <span class="muted">The tutor buttons open your question, with the study notes, in a chat app. Pick which one comes first:</span>
+    <div class="panel" style="display:grid;gap:8px"><b>Use your AI account (recommended)</b>
+      <span class="muted">Tutor buttons open your question, with the answer choices and study notes, in the AI app you're already signed in to (for example the Claude app with your Claude account), so it uses your own plan. Pick which AI opens first:</span>
       <div class="chips">${Object.entries(HANDOFFS).map(([k,h]) => `<label class="chip"><input type="radio" name="thand" value="${k}" ${TUTOR.handoff===k?"checked":""}><span>${esc(h.name)}</span></label>`).join("")}</div></div>
-    <div class="panel" style="display:grid;gap:10px"><b>Option 2 · Answers right inside the app (your own API key)</b>
-      <span class="muted">Choose an AI provider and paste a key from it. Google Gemini and OpenRouter have free options.</span>
+    <details class="panel revd" ${TUTOR.key?"open":""}><summary>Advanced: answers inside this app with a developer API key</summary><div style="display:grid;gap:10px;margin-top:10px">
+      <span class="muted">Only for people who have a developer API key. This is not your account password: never type a password here. AI companies don't let outside apps sign in with your Claude or ChatGPT subscription, so in-app answers need a separate developer key from the provider's developer site. Google Gemini and OpenRouter have free keys.</span>
       <label class="eyebrow" for="tprov">Provider</label>
       <select id="tprov">${Object.entries(PROVIDERS).map(([k,v]) => `<option value="${k}" ${cur===k?"selected":""}>${esc(v.name)}${v.free?" · free option":""}</option>`).join("")}</select>
       <p class="note" id="tprovnote" style="margin:0">${esc(pv.note)} <a href="${pv.keyUrl}" target="_blank" rel="noopener">Get a key</a></p>
@@ -12632,10 +12721,10 @@ function openTutorSetup(){
       <input id="tkey" type="password" autocomplete="off" spellcheck="false" placeholder="${esc(pv.keyHint)}" value="${esc(TUTOR.provider===cur?TUTOR.key:"")}" style="font-family:var(--f-mono)">
       <label class="eyebrow" for="tmodel">Model</label>
       <input id="tmodel" list="tmodels" value="${esc(TUTOR.provider===cur && TUTOR.model ? TUTOR.model : pv.model)}" style="font-family:var(--f-mono)"><datalist id="tmodels">${pv.models.map(m=>`<option value="${esc(m)}">`).join("")}</datalist>
-      <span class="muted" style="font-size:.82rem">Leave the suggested model, or type a newer one from the provider's model list.</span>
+      <span class="muted" style="font-size:.82rem">Leave the suggested model, or <button type="button" class="lk-link" data-act="tutormodels">show the models my key can use</button>.</span>
       <div class="row"><button class="btn primary" data-act="tutorsave">Save and test</button>${TUTOR.key?`<button class="btn ghost" data-act="tutorclear">Remove key (use Option 1)</button>`:""}</div>
       <div class="out" id="ttest"></div>
-      <p class="note" style="margin:0">The key stays on this device and is sent only to the provider you chose. It isn't in the app's files on GitHub, so sharing the app never shares your key. Don't save a key on a shared computer.</p></div>`;
+      <p class="note" style="margin:0">The key stays on this device and is sent only to the provider you chose. It isn't in the app's files on GitHub, so sharing the app never shares your key. Don't save a key on a shared computer.</p></div></details>`;
   $("#modal").hidden = false;
   $("#tprov").onchange = () => { const k = $("#tprov").value, v = PROVIDERS[k]; $("#tprovnote").innerHTML = esc(v.note) + ` <a href="${v.keyUrl}" target="_blank" rel="noopener">Get a key</a>`; $("#tkey").placeholder = v.keyHint; $("#tkey").value = TUTOR.provider===k ? TUTOR.key : ""; $("#tmodel").value = TUTOR.provider===k && TUTOR.model ? TUTOR.model : v.model; $("#tmodels").innerHTML = v.models.map(m=>`<option value="${esc(m)}">`).join(""); };
   document.querySelectorAll("input[name=thand]").forEach(r => r.onchange = () => { TUTOR.handoff = r.value; saveTutor(); toast("Tutor buttons will open " + HANDOFFS[r.value].name + " first."); });
@@ -12644,13 +12733,21 @@ async function tutorSave(){
   const provider = $("#tprov").value, key = ($("#tkey").value||"").trim(), model = ($("#tmodel").value||"").trim() || PROVIDERS[provider].model, out = $("#ttest");
   if (!key) { out.textContent = "Paste a key first, or close this to keep using Option 1."; return; }
   const cfg = {provider, key, model}; out.textContent = "Testing " + PROVIDERS[provider].name + "…";
-  try { const r = await keySample(cfg)("Reply with exactly: Tutor connected.", {noStream:true, maxTokens:50});
+  try { let r, note = "";
+    try { r = await keySample(cfg)("Reply with exactly: Tutor connected.", {noStream:true, maxTokens:50}); }
+    catch(e1) { if (e1.code !== "bad_model") throw e1;
+      out.textContent = "The model “" + model + "” isn't available for this key. Looking for one that is…";
+      const best = pickModel(provider, await listModels(cfg)); if (!best) throw e1;
+      cfg.model = best; $("#tmodel").value = best; note = " (Switched to " + best + ", the best model available to your key.)";
+      r = await keySample(cfg)("Reply with exactly: Tutor connected.", {noStream:true, maxTokens:50}); }
+    r.text = ((r.text||"").trim() || "Connected.") + note;
     Object.assign(TUTOR, cfg); saveTutor();
     if (TUTOR_MODE !== "claude") { sampleFn = keySample(); TUTOR_MODE = "key"; }
-    out.textContent = "✓ " + ((r.text||"").trim() || "Connected.") + " Tutor answers from " + PROVIDERS[provider].name + " will now appear inside the app on this device.";
+    out.textContent = "✓ " + r.text + " Tutor answers from " + PROVIDERS[provider].name + " will now appear inside the app on this device.";
   } catch(e) { const prevMode = TUTOR_MODE, prevProv = TUTOR.provider; TUTOR_MODE = "key"; TUTOR.provider = provider; const msg = aiErr(e); TUTOR_MODE = prevMode; TUTOR.provider = prevProv; out.textContent = "Not saved. " + msg; }
 }
 
+(function(){ const fab = document.createElement("button"); fab.className = "tutorfab ai-only"; fab.type = "button"; fab.dataset.act = "tutorchat"; fab.innerHTML = '<span aria-hidden="true">💬</span> Tutor'; fab.setAttribute("aria-label","Open the AI tutor chat"); document.body.appendChild(fab); })();
 // ---------- global click handling ----------
 document.addEventListener("click", e => {
   const z = e.target.closest("[data-zoom]"); if (z && !e.target.closest("a")) return openZoom(z.dataset.zoom);
@@ -12711,7 +12808,12 @@ document.addEventListener("click", e => {
     case "tutornote": { const k = KBMAP[b.dataset.id]; const ask = ($("#mq").value||"").trim() || "Explain this topic simply with an example and what the exam tests."; return runTutor(tutorPrompt(ask, [k]), $("#mout"), $("#mstop")); }
     case "aigrade": return aiGrade();
     case "tutorsetup": return openTutorSetup();
+    case "tutorchat": return openTutorChat();
     case "tutorsave": return tutorSave();
+    case "tutormodels": { const provider = $("#tprov").value, key = ($("#tkey").value||"").trim(), out = $("#ttest"); if (!key) { out.textContent = "Paste your key first."; return; }
+      out.textContent = "Asking " + PROVIDERS[provider].name + " which models your key can use…";
+      listModels({provider, key}).then(ids => { const good = ids.filter(id => !/tts|image|live|audio|embed|transcribe|realtime|whisper|dall|moderation/i.test(id)); $("#tmodels").innerHTML = good.map(m=>`<option value="${esc(m)}">`).join(""); const best = pickModel(provider, ids); if (best) $("#tmodel").value = best; out.textContent = good.length + " models available. Selected " + (best||"none") + ". Tap the model box to pick a different one, then Save and test."; })
+        .catch(e => { const m = TUTOR_MODE, pp = TUTOR.provider; TUTOR_MODE = "key"; TUTOR.provider = provider; out.textContent = "Couldn't list models. " + aiErr(e); TUTOR_MODE = m; TUTOR.provider = pp; }); return; }
     case "tutorclear": TUTOR.key = ""; saveTutor(); if (TUTOR_MODE !== "claude") { sampleFn = null; TUTOR_MODE = "handoff"; } toast("Key removed from this device."); return openTutorSetup();
     case "copyopen": try { navigator.clipboard.writeText(trimPrompt(LAST_PROMPT)); toast("Question copied. Paste it into the chat."); } catch(err) {} return; // link still opens
     case "copyprompt": try { navigator.clipboard.writeText(LAST_PROMPT).then(() => toast("Question copied. Paste it into Claude.")); } catch(e) { toast("Couldn't copy on this device."); } return;
