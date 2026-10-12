@@ -488,6 +488,31 @@ mark{background:var(--amber-bg);color:inherit;padding:0 2px;border-radius:2px}
 .hfig{margin:10px 0 0;display:grid;gap:6px}.hfig img{max-width:100%;height:auto;border-radius:10px;border:1px solid var(--line);background:#fff}.hfig figcaption{font-size:.8rem;color:var(--muted)}
 .pname{display:grid;gap:8px;margin-bottom:8px}.pname-ex{display:flex;flex-wrap:wrap;gap:4px}.pname-ex span{font-family:var(--f-mono);font-weight:700;padding:6px 10px;border-radius:8px;background:var(--teal-bg);border:1px solid var(--teal)}
 .pname dl,.sufl{display:grid;grid-template-columns:minmax(70px,max-content) 1fr;gap:6px 12px;margin:0;font-size:.92rem}.pname dt,.sufl dt{font-family:var(--f-mono);font-weight:700;color:var(--teal)}.pname dd,.sufl dd{margin:0}
+/* chipsets & cpus */
+.cgrid{border-collapse:collapse;font-size:.85rem;width:auto;min-width:100%}.cgrid th,.cgrid td{border:1px solid var(--line);padding:5px 9px;text-align:center;white-space:nowrap}
+.cgrid thead th{font-family:var(--f-mono);font-size:.72rem;color:var(--muted);font-weight:500;background:var(--sunk)}.cgrid tbody th{text-align:left;font-weight:600}
+.cg-y{background:var(--good-bg);color:var(--good);font-weight:700}.cg-b{background:var(--amber-bg);color:var(--amber);font-weight:700}.cg-n{color:var(--bad);opacity:.8}
+.cgnote{margin:4px 0 0;font-size:.8rem;color:var(--muted)}
+.pchain{display:flex;flex-wrap:wrap;align-items:center;gap:8px}.pchain span{font-family:var(--f-display);font-weight:700;padding:8px 14px;border-radius:10px;background:var(--teal-bg);border:1.5px solid var(--teal)}.pchain i{font-style:normal;color:var(--muted);font-weight:700}
+.prules{margin:10px 0 0;padding-left:20px;display:grid;gap:6px}
+.ptimeline{display:grid;gap:14px;margin-top:12px;position:relative}
+.pcard{border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:var(--r);background:var(--surface);padding:14px 16px;display:grid;gap:10px}
+.pcard-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.pcard-h b{font-family:var(--f-display);font-size:1.15rem;display:block}.pcard-h span{font-size:.85rem;color:var(--muted)}
+.ramb{flex:none;font-family:var(--f-mono);font-weight:700;font-size:.85rem!important;color:var(--ink)!important;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:4px 10px;white-space:nowrap}
+.prow{display:grid;grid-template-columns:76px minmax(0,1fr);gap:10px;align-items:start}.pl{font-family:var(--f-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding-top:3px}
+.prow ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}.prow li small{display:block;color:var(--muted);font-size:.8rem}
+.pchips{display:grid;gap:6px}.pser{font-size:.8rem;color:var(--muted);margin-right:6px}
+.chipb{display:inline-block;font-family:var(--f-mono);font-weight:700;font-size:.82rem;padding:2px 8px;border-radius:6px;margin:2px 4px 2px 0;border:1px solid}
+.chipb.t-z{background:var(--teal-bg);border-color:var(--teal);color:var(--ink)}.chipb.t-b{background:var(--good-bg);border-color:var(--good);color:var(--ink)}.chipb.t-h{background:var(--sunk);border-color:var(--line);color:var(--ink)}.chipb.t-q{background:var(--amber-bg);border-color:var(--amber);color:var(--ink)}
+.ptip{margin:0;font-size:.9rem;padding:8px 10px;border-radius:8px;background:var(--sunk)}
+@media (max-width:560px){.prow{grid-template-columns:1fr;gap:2px}}
+.pm{display:grid;gap:12px}.pm-start{display:grid;gap:10px}.pm-order{display:grid;gap:8px}.pm-q{display:grid;gap:10px}
+.pm-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:4px}.pm-chain i{font-style:normal;color:var(--muted)}
+.pm-link{display:grid;border:1.5px dashed var(--line);border-radius:10px;padding:6px 10px;min-width:96px}.pm-link span{font-family:var(--f-mono);font-size:.68rem;text-transform:uppercase;color:var(--muted)}.pm-link b{font-size:.92rem}
+.pm-link.set{border-style:solid;border-color:var(--good);background:var(--good-bg)}.pm-link.cur{border-color:var(--teal);border-style:solid}
+.pm-opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px}.pm-opt{justify-content:center;min-height:44px;font-weight:600}.pm-opt:disabled{opacity:.4;text-decoration:line-through}
+.pm-reftbl{display:grid;gap:6px;margin-top:8px;font-size:.85rem}.pm-refrow{display:grid;grid-template-columns:150px 1.3fr 1.5fr 90px;gap:8px;border-bottom:1px solid var(--line);padding:4px 0}
+@media (max-width:640px){.pm-refrow{grid-template-columns:1fr}}
 </style>
 
 </head>
@@ -6520,6 +6545,120 @@ PLATQ.push(
 );
 PLATQ.forEach(q => { q.ex = 1; q.d = 3; q.ty = "mc"; });
 
+// Desktop platform families: one record per socket, every record with the same fields, oldest → newest.
+// Used by the Chipsets & CPUs page and the Platform Matcher lab.
+// cpus: [generation, code name, example models]; chips: [series, [chipset, tier]...]; tier: z = enthusiast/OC, b = mainstream, h = budget, q = business
+const PLAT = {
+  intel: [
+    {id:"lga1155", socket:"LGA1155", years:"2011–2012", type:"LGA", legacy:true,
+      cpus:[["2nd Gen Core","Sandy Bridge","i7-2600K, i5-2500",[["6 series","y"],["7 series","y"]]],["3rd Gen Core","Ivy Bridge","i7-3770K, i5-3570",[["6 series","b"],["7 series","y"]]]],
+      chips:[["6 series",[["Z68","z"],["H67","h"]]],["7 series",[["Z77","z"],["B75","b"]]]], ram:"DDR3",
+      tip:"Older systems you'll still meet in repair work. DDR3 only."},
+    {id:"lga1150", socket:"LGA1150", years:"2013–2015", type:"LGA", legacy:true,
+      cpus:[["4th Gen Core","Haswell","i7-4790K, i5-4590",[["8 series","y"],["9 series","y"]]],["5th Gen Core","Broadwell","i7-5775C",[["8 series","n"],["9 series","y"]]]],
+      chips:[["8 series",[["Z87","z"],["B85","b"],["H81","h"]]],["9 series",[["Z97","z"],["H97","b"]]]], ram:"DDR3",
+      tip:"Last mainstream Intel socket that used DDR3."},
+    {id:"lga1151", socket:"LGA1151 (1st release)", years:"2015–2016", type:"LGA",
+      cpus:[["6th Gen Core","Skylake","i7-6700K, i5-6600",[["100 series","y"],["200 series","y"]]],["7th Gen Core","Kaby Lake","i7-7700K, i5-7400",[["100 series","b"],["200 series","y"]]]],
+      chips:[["100 series",[["Z170","z"],["H170","b"],["B150","b"],["H110","h"]]],["200 series",[["Z270","z"],["H270","b"],["B250","b"]]]], ram:"DDR4",
+      tip:"First mainstream Intel socket with DDR4 (a few 100-series boards used DDR3L)."},
+    {id:"lga1151v2", socket:"LGA1151 (2nd release)", years:"2017–2018", type:"LGA",
+      cpus:[["8th Gen Core","Coffee Lake","i5-8400, i7-8700K",[["300 series","y"]]],["9th Gen Core","Coffee Lake Refresh","i9-9900K, i5-9600K",[["300 series","y","Z390 out of the box; older 300-series boards with a BIOS update"]]]],
+      chips:[["300 series",[["Z390","z"],["Z370","z"],["H370","b"],["B360","b"],["H310","h"]]]], ram:"DDR4",
+      tip:"Same socket name as the 1st release, but NOT interchangeable: an 8th or 9th Gen CPU won't run on a 100/200-series board."},
+    {id:"lga1200", socket:"LGA1200", years:"2020–2021", type:"LGA",
+      cpus:[["10th Gen Core","Comet Lake","i5-10400, i9-10900K",[["400 series","y"],["500 series","y"]]],["11th Gen Core","Rocket Lake","i7-11700K, i5-11400",[["400 series","b","Z490 and H470 only, after a BIOS update; not B460 or H410",["Z490","H470"]],["500 series","y"]]]],
+      chips:[["400 series",[["Z490","z"],["H470","b"],["B460","b"],["H410","h"]]],["500 series",[["Z590","z"],["H570","b"],["B560","b"],["H510","h"]]]], ram:"DDR4",
+      tip:"11th Gen CPUs need a 500-series board (or Z490/H470); B460 and H410 don't support them."},
+    {id:"lga1700", socket:"LGA1700 (Socket V)", years:"2021–2023", type:"LGA",
+      cpus:[["12th Gen Core","Alder Lake","i5-12400, i7-12700K",[["600 series","y"],["700 series","y"]]],["13th Gen Core","Raptor Lake","i5-13600K, i7-13700",[["600 series","b"],["700 series","y"]]],["14th Gen Core","Raptor Lake Refresh","i9-14900K, i5-14400F",[["600 series","b"],["700 series","y"]]]],
+      chips:[["600 series",[["Z690","z"],["H670","b"],["B660","b"],["H610","h"]]],["700 series",[["Z790","z"],["H770","b"],["B760","b"]]]], ram:"DDR4 or DDR5",
+      ramNote:"The CPU supports both, but each board is built for one: DDR4 boards or DDR5 boards, never both.",
+      tip:"Bigger than older sockets, so older coolers don't fit. 13th/14th Gen on a 600-series board may need a BIOS update first."},
+    {id:"lga1851", socket:"LGA1851 (Socket V1)", years:"2024–", type:"LGA",
+      cpus:[["Core Ultra 200S (\"15th Gen\")","Arrow Lake","Core Ultra 5 245K, Core Ultra 9 285K",[["800 series","y"]]]],
+      chips:[["800 series",[["Z890","z"],["B860","b"],["H810","h"],["Q870","q"],["W880","q"]]]], ram:"DDR5",
+      tip:"DDR5 only. Same size as LGA1700, so LGA1700 coolers usually fit. Your book calls this the 15th generation."}
+  ],
+  amd: [
+    {id:"am3", socket:"AM3 / AM3+", years:"2009–2014", type:"PGA", legacy:true,
+      cpus:[["FX series","Bulldozer, Piledriver","FX-8350, FX-6300",[["900 series","y"]]],["Phenom II / Athlon II","K10","Phenom II X6 1100T",[["900 series","y"]]]],
+      chips:[["900 series",[["990FX","z"],["990X","z"],["970","b"]]]], ram:"DDR3",
+      tip:"FX CPUs fit either AM3+ or AM3 boards (with a BIOS that supports them)."},
+    {id:"fm2", socket:"FM2+", years:"2014–2016", type:"PGA", legacy:true,
+      cpus:[["A-Series APUs","Kaveri, Godavari","A10-7850K, A8-7600",[["A series","y"]]],["Athlon X4","Kaveri","Athlon X4 860K",[["A series","y"]]]],
+      chips:[["A series",[["A88X","b"],["A78","b"],["A68H","h"],["A58","h"]]]], ram:"DDR3",
+      tip:"Budget APU platform (CPU + Radeon graphics on one chip)."},
+    {id:"am4", socket:"AM4", years:"2016–2022", type:"PGA (1331 pins)",
+      cpus:[["Ryzen 1000","Zen","Ryzen 7 1700X, Ryzen 5 1600",[["300 series","y"],["400 series","y"],["500 series","n"]]],["Ryzen 2000","Zen+","Ryzen 5 2600, Ryzen 7 2700X",[["300 series","b"],["400 series","y"],["500 series","y","X570 only (not B550 or A520)",["X570"]]]],["Ryzen 3000","Zen 2","Ryzen 5 3600, Ryzen 9 3900X",[["300 series","b"],["400 series","b"],["500 series","y"]]],["Ryzen 5000","Zen 3","Ryzen 7 5800X3D, Ryzen 5 5600G",[["300 series","b"],["400 series","b"],["500 series","y"]]]],
+      chips:[["300 series",[["X370","z"],["B350","b"],["A320","h"]]],["400 series",[["X470","z"],["B450","b"]]],["500 series",[["X570","z"],["B550","b"],["A520","h"]]]], ram:"DDR4",
+      tip:"One socket for four Ryzen generations. A newer Ryzen on an older board needs a BIOS update first; check the board's CPU support list."},
+    {id:"am5", socket:"AM5", years:"2022–", type:"LGA (1718)",
+      cpus:[["Ryzen 7000","Zen 4","Ryzen 5 7600X, Ryzen 7 7800X3D",[["600 series","y"],["800 series","y"]]],["Ryzen 8000G","Zen 4 APU","Ryzen 5 8600G",[["600 series","b"],["800 series","y"]]],["Ryzen 9000","Zen 5","Ryzen 7 9700X, Ryzen 9 9950X",[["600 series","b"],["800 series","y"]]]],
+      chips:[["600 series",[["X670E","z"],["X670","z"],["B650E","b"],["B650","b"],["A620","h"]]],["800 series",[["X870E","z"],["X870","z"],["B850","b"],["B840","h"]]]], ram:"DDR5",
+      tip:"DDR5 only, and AMD's switch from PGA to LGA. Any AM5 CPU works on any AM5 chipset (with a current BIOS)."}
+  ],
+  // high-end desktop, workstation and server: good to recognize
+  hedt: [
+    ["Intel","LGA2011 (and v3)","2011–2016","Core i7 Extreme / Xeon E5","X79, X99","DDR3 → DDR4 (v3)"],
+    ["Intel","LGA2066","2017–2019","Core X-series (Skylake-X)","X299","DDR4"],
+    ["Intel","LGA4189","2019–2021","2nd–3rd Gen Xeon Scalable","C620 series","DDR4"],
+    ["Intel","LGA4677","2023–","4th Gen Xeon Scalable (Sapphire Rapids), Xeon W","W790, C740","DDR5"],
+    ["AMD","TR4","2017–2018","1st & 2nd Gen Threadripper","X399","DDR4"],
+    ["AMD","sTRX4","2019","3rd Gen Threadripper","TRX40","DDR4"],
+    ["AMD","sWRX8","2020–2022","Threadripper PRO 3000/5000","WRX80","DDR4"],
+    ["AMD","sTR5","2023–","Threadripper 7000/9000 & PRO","TRX50, WRX90","DDR5"]
+  ],
+  tier: {
+    intel: [["Z","Enthusiast. The only Intel tier that overclocks the CPU (with a K-series CPU)."],["H (high number, like H770)","Upper mainstream: more ports, no CPU overclocking."],["B","Mainstream: the usual choice. Memory overclocking, no CPU overclocking."],["H (low number, like H610)","Budget: fewest ports and lanes."],["Q / W","Business (vPro remote management) / workstation."]],
+    amd: [["X","Enthusiast: most lanes and ports. CPU overclocking."],["E (X870E, B650E)","\"Extreme\" version with PCIe 5.0 for graphics and storage."],["B","Mainstream: the usual choice. CPU overclocking allowed (except B840)."],["A","Entry level: no CPU overclocking."]]
+  },
+  names: {
+    intel: {ex:["Core i7","-","14","700","K"], parts:[["Core i7","Tier: i3 entry · i5 mainstream · i7 high · i9 top"],["14","Generation (the first 1–2 digits): i5-9600K = 9th Gen, i5-12400 = 12th Gen"],["700","Model number (SKU)"],["K","Suffix: K = unlocked · F = no built-in graphics · KF = both · T = low power"]],
+      ex2:["Core Ultra 9","2","85","K"], parts2:[["Core Ultra 9","New brand (2023 on): Core Ultra 5 / 7 / 9"],["2","Series 2 = Arrow Lake (LGA1851)"],["85","Model number"],["K","Unlocked"]]},
+    amd: {ex:["Ryzen 7"," ","9","7","00","X"], parts:[["Ryzen 7","Tier: Ryzen 3 entry · 5 mainstream · 7 high · 9 top"],["9","Series (generation): 1000–5000 = AM4, 7000/8000/9000 = AM5"],["7","Performance level within the series"],["00","Model number"],["X","Suffix: X = higher clocks · X3D = extra cache for gaming · G = strong built-in graphics · F = no graphics"]]}
+  }
+};
+const PLAT_RULES = [
+  ["Socket first","Every desktop CPU fits exactly one socket. Intel and AMD sockets are never interchangeable."],
+  ["Chipset belongs to the socket","Each socket has its own chipset series. The chipset sets the features (ports, lanes, overclocking), not which socket."],
+  ["RAM comes with the platform","Each socket generation uses one RAM type. Only LGA1700 lets the board maker choose DDR4 or DDR5."],
+  ["Check the support list","A matching socket isn't always enough. A newer CPU on an older board may need a BIOS update first."]
+];
+// CPUs for the Platform Matcher lab. p = PLAT id; oc = the customer wants to overclock it
+const PLAT_CPUS = [
+  {n:"Core i7-2600K", mk:"intel", p:"lga1155"},
+  {n:"Core i5-4590", mk:"intel", p:"lga1150"},
+  {n:"Core i7-6700K", mk:"intel", p:"lga1151", oc:true},
+  {n:"Core i5-7400", mk:"intel", p:"lga1151"},
+  {n:"Core i5-8400", mk:"intel", p:"lga1151v2"},
+  {n:"Core i9-9900K", mk:"intel", p:"lga1151v2", oc:true},
+  {n:"Core i5-10400", mk:"intel", p:"lga1200"},
+  {n:"Core i7-11700K", mk:"intel", p:"lga1200", oc:true},
+  {n:"Core i5-12400", mk:"intel", p:"lga1700"},
+  {n:"Core i7-13700K", mk:"intel", p:"lga1700", oc:true},
+  {n:"Core i5-14400F", mk:"intel", p:"lga1700", noGfx:true},
+  {n:"Core Ultra 5 245K", mk:"intel", p:"lga1851", oc:true},
+  {n:"Core Ultra 7 265", mk:"intel", p:"lga1851"},
+  {n:"FX-8350", mk:"amd", p:"am3"},
+  {n:"A10-7850K", mk:"amd", p:"fm2"},
+  {n:"Ryzen 5 2600", mk:"amd", p:"am4"},
+  {n:"Ryzen 5 3600", mk:"amd", p:"am4"},
+  {n:"Ryzen 7 5800X3D", mk:"amd", p:"am4"},
+  {n:"Ryzen 5 5600G", mk:"amd", p:"am4"},
+  {n:"Ryzen 5 7600X", mk:"amd", p:"am5", oc:true},
+  {n:"Ryzen 7 7800X3D", mk:"amd", p:"am5"},
+  {n:"Ryzen 5 8600G", mk:"amd", p:"am5"},
+  {n:"Ryzen 9 9950X", mk:"amd", p:"am5", oc:true}
+];
+// Which chipsets support a CPU generation: {y:[...out of the box], b:[...after a BIOS update], n:[...not supported]}
+function platCompat(p, gen){
+  const r = {y:[], b:[], n:[]};
+  p.chips.forEach(([sr, list]) => { const e = (gen[3] || []).find(x => x[0] === sr); const lvl = e ? e[1] : "n"; const only = e && e[3];
+    list.forEach(([c]) => { if (lvl !== "n" && only && !only.includes(c)) r.n.push(c); else r[lvl].push(c); }); });
+  return r;
+}
+
 // ===== Interactive virtual labs: registry + "bench" engine for physical assembly simulations =====
 // Each sim: {id, title, cat, ch:[chapters], obj, ex, t (topic id), mins, summary, modes:true|false, mount(stage, api, opts) -> {hint(), destroy()}}
 const SIMS = [];
@@ -11854,6 +11993,137 @@ SIMS.push({
 
 })();
 
+// Platform Matcher: given a CPU, pick its socket, a chipset that supports it, and its RAM type.
+(function(){
+const RAMOPTS = ["DDR3","DDR4","DDR5","DDR4 or DDR5 (depends on the board)"];
+const ramKey = r => r === "DDR4 or DDR5" ? RAMOPTS[3] : r;
+const allPlats = () => [...PLAT.intel.map(p => Object.assign({mk:"intel"}, p)), ...PLAT.amd.map(p => Object.assign({mk:"amd"}, p))];
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const an = x => /^(8|11|18|A )/.test(x) ? "an " + x : "a " + x;
+const list = a => a.length < 2 ? a.join("") : a.slice(0, -1).join(", ") + " and " + a[a.length-1];
+const TIERW = {z:"enthusiast", b:"mainstream", h:"budget/entry", q:"business/workstation"};
+function chipInfo(name){ for (const p of allPlats()) for (const [series, list] of p.chips) for (const [c, t] of list) if (c === name) return {p, series, tier:t}; return null; }
+function genOf(cpu, p){
+  let key = null; const n = cpu.n;
+  let m = n.match(/i\d-(\d{4,5})/); if (m) { const d = m[1]; const g = d.length === 5 ? d.slice(0,2) : d[0]; key = new RegExp("^" + g + "(st|nd|rd|th) Gen"); }
+  if (/Ultra/.test(n)) key = /Core Ultra/;
+  m = n.match(/Ryzen \d (\d)\d{3}(G?)/); if (m) key = new RegExp("^Ryzen " + m[1] + "000" + (m[1] === "8" ? "G" : "") + "$");
+  return (key && p.cpus.find(c => key.test(c[0]))) || p.cpus[0];
+}
+function mount(stage, api, opts){
+  const guided = opts.mode !== "challenge";
+  const R = {mk:null, rounds:[], i:0, step:0, wrong:new Set(), log:[], showRef:false};
+  const ROUNDS = 8;
+  function start(mk){
+    R.mk = mk; const pool = PLAT_CPUS.filter(c => mk === "both" || c.mk === mk);
+    // favor current/recent platforms but keep a couple of legacy ones
+    const legacyIds = allPlats().filter(p => p.legacy).map(p => p.id);
+    const cur = shuffle(pool.filter(c => !legacyIds.includes(c.p))), old = shuffle(pool.filter(c => legacyIds.includes(c.p)));
+    R.rounds = shuffle([...cur.slice(0, ROUNDS - 2), ...old.slice(0, 2)]).slice(0, ROUNDS).map(cpu => makeRound(cpu));
+    R.i = 0; R.step = 0; R.wrong = new Set(); render();
+    api.info("Work orders are in. For each customer CPU, pick the socket, a chipset for the motherboard, and the RAM type.");
+  }
+  function makeRound(cpu){
+    const plats = allPlats(); const p = plats.find(x => x.id === cpu.p);
+    const same = plats.filter(x => x.mk === p.mk && x.id !== p.id);
+    const gen = genOf(cpu, p), cm = platCompat(p, gen);
+    const ocOk = c => { const t = chipInfo(c).tier; return p.mk === "intel" ? t === "z" : t !== "h"; };
+    const yes = cm.y.filter(c => !cpu.oc || ocOk(c)), bios = cm.b.filter(c => !cpu.oc || ocOk(c));
+    const sockOpts = shuffle([p, ...shuffle(same).slice(0, 3)]).map(x => x.socket);
+    const right = shuffle(yes)[0];
+    let wrongChips = [];
+    if (cpu.oc) { const nonOc = [...cm.y, ...cm.b].filter(c => !ocOk(c)); if (nonOc.length) wrongChips.push(shuffle(nonOc)[0]); }
+    if (cm.n.length && Math.random() < .6) wrongChips.push(shuffle(cm.n)[0]);
+    const others = []; same.forEach(x => x.chips.forEach(([s, l]) => l.forEach(([c]) => others.push(c))));
+    wrongChips = [...wrongChips, ...shuffle(others)].slice(0, 3);
+    const chipOpts = shuffle([right, ...wrongChips]);
+    return {cpu, p, gen, cm, yes, bios, sockOpts, chipOpts, ramOpts:RAMOPTS.slice(), ans:[p.socket, null, ramKey(p.ram)], picked:[null,null,null]};
+  }
+  const STEPS = ["Socket","Chipset","RAM"];
+  function cpuLine(rd){ return `${esc(rd.cpu.n)} · ${esc(rd.gen[0])} (${esc(rd.gen[1])})`; }
+  function render(){
+    if (!R.mk) {
+      stage.innerHTML = `<div class="pm"><div class="panel pm-start"><h2>Platform Matcher</h2>
+        <p>You're the technician. Each work order names the customer's CPU. Pick the <b>socket</b> it needs, a <b>chipset</b> for the motherboard, and the <b>RAM</b> type. ${guided ? "Guided mode explains every answer and lets you open the family table." : "Challenge mode: no reference table."}</p>
+        <div class="row"><button class="btn primary" data-pmk="intel">Intel</button><button class="btn primary" data-pmk="amd">AMD</button><button class="btn" data-pmk="both">Both (mixed)</button></div></div></div>`;
+      api.setTask("Choose Intel, AMD, or both."); api.progress(0, 1); if (guided) api.checklist([["Choose a maker", false, true]]);
+      return;
+    }
+    const rd = R.rounds[R.i];
+    const total = R.rounds.length * 3, doneN = R.i * 3 + R.step;
+    api.progress(doneN, total);
+    if (guided) api.checklist(R.rounds.map((x, k) => [`${x.cpu.n}`, k < R.i, k === R.i]));
+    api.setTask(`Work order ${R.i + 1} of ${R.rounds.length} — Next: choose the ${STEPS[R.step].toLowerCase()} for the ${rd.cpu.n}.`);
+    const link = (k, label, val) => `<div class="pm-link${val ? " set" : ""}${k === R.step ? " cur" : ""}"><span>${label}</span><b>${val ? esc(val) : "?"}</b></div>`;
+    const opts = [rd.sockOpts, rd.chipOpts, rd.ramOpts][R.step];
+    const q = [`Which socket does the ${esc(rd.cpu.n)} fit?`, `The motherboard needs a chipset that supports the ${esc(rd.cpu.n)}${rd.cpu.oc ? ", and the customer wants to <b>overclock</b> the CPU" : ""}. Which chipset?`, `What RAM does this ${esc(rd.p.socket)} build use?`][R.step];
+    stage.innerHTML = `<div class="pm">
+      <div class="panel pm-order"><span class="eyebrow">Work order ${R.i + 1} of ${R.rounds.length}</span><h2>${esc(rd.cpu.n)}</h2>
+        ${rd.cpu.oc ? `<p class="muted" style="margin:0">Customer: "I want to overclock it."</p>` : ""}${rd.cpu.noGfx ? `<p class="muted" style="margin:0">Note: the F means no built-in graphics, so this build needs a graphics card.</p>` : ""}
+        <div class="pm-chain">${link(-1, "CPU", rd.cpu.n)}<i aria-hidden="true">→</i>${link(0, "Socket", rd.picked[0])}<i aria-hidden="true">→</i>${link(1, "Chipset", rd.picked[1])}<i aria-hidden="true">→</i>${link(2, "RAM", rd.picked[2])}</div></div>
+      <div class="panel pm-q"><b>${q}</b><div class="pm-opts">${opts.map(o => `<button class="btn pm-opt" data-pmopt="${esc(o)}" ${R.wrong.has(o) ? "disabled" : ""}>${esc(o)}</button>`).join("")}</div></div>
+      ${guided ? `<details class="revd pm-ref"${R.showRef ? " open" : ""}><summary>Family table: ${rd.p.mk === "intel" ? "Intel" : "AMD"}</summary>${refHTML(rd.p.mk)}</details>` : ""}
+    </div>`;
+    const d = stage.querySelector(".pm-ref"); if (d) d.addEventListener("toggle", () => { R.showRef = d.open; });
+  }
+  function refHTML(mk){
+    return `<div class="pm-reftbl">${PLAT[mk].map(p => `<div class="pm-refrow"><b>${esc(p.socket)}</b><span>${p.cpus.map(c => esc(c[0])).join(" · ")}</span><span>${p.chips.map(([s, l]) => l.map(x => x[0]).join(", ")).join(" | ")}</span><span class="mono">${esc(p.ram)}</span></div>`).join("")}</div>`;
+  }
+  function choose(val){
+    const rd = R.rounds[R.i]; const st = R.step;
+    let ok, why;
+    if (st === 0) {
+      ok = val === rd.ans[0];
+      if (ok) why = `${rd.cpu.n} is a ${rd.gen[0]} (${rd.gen[1]}) processor, so it fits ${rd.p.socket}: ${rd.p.type}, ${rd.p.years}.`;
+      else { const o = allPlats().find(p => p.socket === val); why = `Not ${val}. That socket holds ${list(o.cpus.map(c => c[0]))}. The ${rd.cpu.n} is a ${rd.gen[0]} CPU.` + (rd.p.id === "lga1151v2" && o.id === "lga1151" ? " Same socket name, different release: 8th/9th Gen need the 2nd release (300-series boards)." : rd.p.id === "lga1151" && o.id === "lga1151v2" ? " Same socket name, different release: 6th/7th Gen use the 1st release (100/200-series boards)." : ""); }
+    } else if (st === 1) {
+      const ci = chipInfo(val);
+      ok = rd.yes.includes(val) || rd.bios.includes(val);
+      if (ok) { why = `${val} is ${an(ci.series)} chipset for ${rd.p.socket} (${TIERW[ci.tier]})` + (rd.bios.includes(val) ? ", and it supports this CPU after a BIOS update." : ".") + (rd.cpu.oc ? (rd.p.mk === "intel" ? " Z chipset + K-series CPU = CPU overclocking." : " AMD X and B chipsets (except B840) allow CPU overclocking.") : "");
+        const also = rd.yes.filter(c => c !== val), alsoB = rd.bios.filter(c => c !== val);
+        if (also.length || alsoB.length) why += ` Also compatible: ${also.length ? also.join(", ") : "none other out of the box"}${alsoB.length ? "; after a BIOS update: " + alsoB.join(", ") : ""}.`;
+        rd.ans[1] = val; }
+      else if (ci && ci.p.id === rd.p.id && rd.cm.n.includes(val)) why = `${val} fits the ${rd.p.socket} socket, but its chipset doesn't support ${rd.gen[0]} processors. ` + ((rd.gen[3].find(x => x[0] === ci.series) || [])[2] || "Check the board's CPU support list.");
+      else if (ci && ci.p.id === rd.p.id && rd.cpu.oc) why = `${val} fits this socket, but it's a ${TIERW[ci.tier]} chipset that can't overclock the CPU. ${rd.p.mk === "intel" ? "On Intel, only Z chipsets overclock a K-series CPU." : "On AMD, A-series chipsets and B840 can't overclock the CPU."}`;
+      else why = `${val} is ${ci ? an(ci.series) + " chipset for " + ci.p.socket : "a chipset for a different socket"}, not ${rd.p.socket}. The chipset always belongs to the socket.`;
+    } else {
+      ok = val === rd.ans[2];
+      why = ok ? `${rd.p.socket} uses ${rd.p.ram}.` + (rd.p.ramNote ? " " + rd.p.ramNote : "") : `Not ${val}. ${rd.p.socket} uses ${rd.p.ram}.` + (rd.p.ramNote ? " " + rd.p.ramNote : "") + " Each socket generation has its own RAM type, and DDR3, DDR4 and DDR5 are keyed differently, so they can't be swapped.";
+      if (!ok && !guided) why = `Not ${val}. Think about when ${rd.p.socket} was current and which DDR generation it used.`;
+    }
+    if (!ok) { R.wrong.add(val); api.err(why); return render(); }
+    rd.picked[st] = val; R.wrong = new Set();
+    api.ok(why);
+    if (st < 2) { R.step++; return render(); }
+    api.info(`✓ ${rd.cpu.n} → ${rd.p.socket} → ${rd.picked[1]} → ${rd.p.ram}.` + (rd.p.tip ? " Remember: " + rd.p.tip : ""));
+    if (R.i < R.rounds.length - 1) { R.i++; R.step = 0; return render(); }
+    api.progress(1, 1); if (guided) api.checklist(R.rounds.map(x => [x.cpu.n, true, false]));
+    api.setTask("All work orders matched. Lab complete!");
+    stage.querySelector(".pm-opts").innerHTML = ""; api.done();
+  }
+  function hint(){
+    if (!R.mk) return "Pick Intel, AMD, or both to start.";
+    const rd = R.rounds[R.i];
+    if (R.step === 0) return guided ? `${rd.cpu.n} is a ${rd.gen[0]} CPU. Find "${rd.gen[0]}" in the family table: it's on ${rd.p.socket}.` : `Find the generation in the name (${rd.p.mk === "intel" ? "the first digits after i3/i5/i7/i9, or Core Ultra" : "the first digit of the Ryzen number"}), then recall which socket that generation used.`;
+    if (R.step === 1) return `Pick a chipset that supports ${rd.gen[0]}: ${rd.gen[3].filter(x => x[1] !== "n").map(x => x[0] + (x[1] === "b" ? " (after a BIOS update)" : "")).join(" or ")}.` + (rd.cpu.oc ? (rd.p.mk === "intel" ? " For overclocking, it must be a Z chipset." : " For overclocking, avoid A-series and B840.") : "");
+    return guided ? `${rd.p.socket} uses ${rd.p.ram}.` : `When was ${rd.p.socket} current (${rd.p.years})? Match it to that era's DDR generation.`;
+  }
+  function onClick(e){
+    const m = e.target.closest("[data-pmk]"); if (m) return start(m.dataset.pmk);
+    const o = e.target.closest("[data-pmopt]"); if (o && !o.disabled) return choose(o.dataset.pmopt);
+  }
+  stage.addEventListener("click", onClick); stage._pm = R;
+  render();
+  return {hint, destroy(){ stage.removeEventListener("click", onClick); }, _state:R};
+}
+SIMS.push({
+  id:"platform-match", title:"Platform Matcher: CPU → socket → chipset → RAM", cat:"Hardware", ch:[2,3], obj:"Core 1 Domain 3 (Hardware: CPUs, sockets, chipsets, RAM)", ex:1, t:"cpu", mins:8, modes:true,
+  summary:"Eight work orders: for each customer CPU, pick the socket it fits, a chipset that supports it, and the RAM type. Choose Intel, AMD, or both.",
+  mount
+});
+})();
+
 </script>
 <script>
 (function(){
@@ -12986,40 +13256,57 @@ function noteExtraHTML(id){
 }
 
 // ---------- Intel & AMD platform guide ----------
+const TIERNAME = {z:"enthusiast", b:"mainstream", h:"budget", q:"business"};
+function platCardHTML(p){
+  return `<article class="pcard"><header class="pcard-h"><div><b>${esc(p.socket)}</b><span>${esc(p.years)} · ${esc(p.type)}</span></div><span class="ramb" title="RAM type">${esc(p.ram)}</span></header>
+    <div class="prow"><span class="pl">CPUs</span><ul>${p.cpus.map(c => `<li><b>${esc(c[0])}</b> <span class="muted">${esc(c[1])}</span><small>e.g. ${esc(c[2])}</small></li>`).join("")}</ul></div>
+    <div class="prow"><span class="pl">Chipsets</span><div class="pchips">${p.chips.map(([sr, l]) => `<div><span class="pser">${esc(sr)}</span>${l.map(([c,t]) => `<span class="chipb t-${t}" title="${TIERNAME[t]}">${esc(c)}</span>`).join("")}</div>`).join("")}</div></div>
+    ${platGridHTML(p)}
+    <div class="prow"><span class="pl">RAM</span><div><b>${esc(p.ram)}</b>${p.ramNote?` <span class="muted">${esc(p.ramNote)}</span>`:""}</div></div>
+    <p class="ptip"><b>Remember:</b> ${esc(p.tip)}</p></article>`;
+}
+function platGridHTML(p){
+  const series = p.chips.map(c => c[0]); const notes = [];
+  const cell = (g, sr) => { const e = (g[3]||[]).find(x => x[0]===sr); const lvl = e ? e[1] : "n"; let mark = lvl==="y" ? "✓" : lvl==="b" ? "✓ BIOS update" : "✗";
+    if (e && e[2]) { notes.push(e[2]); mark += `<sup>${notes.length}</sup>`; }
+    return `<td class="cg-${lvl}">${mark}</td>`; };
+  const rows = p.cpus.map(g => `<tr><th scope="row">${esc(g[0])}</th>${series.map(sr => cell(g, sr)).join("")}</tr>`).join("");
+  return `<div class="prow"><span class="pl">Works with</span><div><div class="tablewrap"><table class="cgrid"><thead><tr><th>CPU</th>${series.map(sr => `<th>${esc(sr)}</th>`).join("")}</tr></thead><tbody>${rows}</tbody></table></div>${notes.map((n,i) => `<p class="cgnote"><sup>${i+1}</sup> ${esc(n)}</p>`).join("")}</div></div>`;
+}
 VIEWS.platforms = function(){
   const v = $("#view"); const R = PLATREF, C = MB_GUIDE.chipset;
-  const naming = (ex, parts) => `<div class="pname"><div class="pname-ex">${parts.map(([k])=>`<span>${esc(k)}</span>`).join("")}</div><dl>${parts.map(([k,d])=>`<dt>${esc(k)}</dt><dd>${esc(d)}</dd>`).join("")}</dl></div>`;
-  const suf = list => `<dl class="sufl">${list.map(([k,d])=>`<dt>${esc(k)}</dt><dd>${esc(d)}</dd>`).join("")}</dl>`;
-  v.innerHTML = `<section class="hero"><span class="eyebrow">Reference · Chapters 2 and 3</span><h1>Chipsets &amp; CPUs: Intel and AMD</h1>
-    <p>${esc(R.intro)}</p>
-    <div class="refs">${refHTML([2,"Intel and AMD Chipsets and Processor Sockets","71"])}${refHTML([3,"Intel Processors / AMD Processors","121"])}</div>
-    <p class="muted" style="font-size:.85rem;margin:0">Written for this app from those pages of your book, with newer details (chipset tiers, Ryzen generations) added. Product lineups change fast, so ark.intel.com and amd.com have the latest.</p>
-    <nav class="row cjump" aria-label="Sections"><a href="#pl-what">What a chipset does</a><a href="#pl-tiers">Chipset tiers</a><a href="#pl-ic">Intel chipsets</a><a href="#pl-ac">AMD chipsets</a><a href="#pl-so">Sockets</a><a href="#pl-in">Intel CPU names</a><a href="#pl-an">AMD CPU names</a><a href="#pl-bk">Book key points</a><a href="#pl-q">Practice</a></nav></section>
-    <section class="rgroup" id="pl-what"><h2>What the chipset does</h2><p>${esc(C.lead)}</p>
-      <div class="chipflow" aria-label="What the chipset does"><div class="cf-col"><span>DDR5 memory</span><span>PCIe x16 graphics</span><span>Primary M.2 (NVMe)</span></div><div class="cf-box"><b>CPU</b><small>memory controller + fastest PCIe lanes</small></div><div class="cf-link"><small>one link</small><span>DMI (Intel)<br>PCIe x4 (AMD)</span></div><div class="cf-box"><b>Chipset</b><small>Intel: PCH · AMD: Promontory</small></div><div class="cf-col"><span>USB ports</span><span>SATA drives</span><span>Extra M.2</span><span>LAN / Wi-Fi</span><span>Audio, PCIe x1</span></div></div>
-      ${MB_IMG.chipset?`<details class="revd"><summary>Diagram</summary><figure class="hfig"><img src="${MB_IMG.chipset}" alt="The CPU connects directly to memory, the x16 graphics slot and the primary M.2; one link (DMI on Intel, PCIe x4 on AMD) connects it to the chipset, which handles USB, SATA, extra M.2, LAN/Wi-Fi, audio and PCIe x1" loading="lazy"></figure></details>`:""}
-      <p class="note">${esc(C.history)}</p>
-      <h3>Reading a chipset name</h3>
-      <div class="namegrid"><div class="panel"><b>Intel, e.g. Z890</b><dl>${C.intelNames.map(([k,d])=>`<dt>${esc(k)}</dt><dd>${esc(d)}</dd>`).join("")}</dl></div><div class="panel"><b>AMD, e.g. X870E</b><dl>${C.amdNames.map(([k,d])=>`<dt>${esc(k)}</dt><dd>${esc(d)}</dd>`).join("")}</dl></div></div>
-      <h3>Platform at a glance</h3>${tblHTML(C.glance)}</section>
-    <section class="rgroup" id="pl-tiers"><h2>Chipset tiers: what each one gets you</h2>
-      ${C.tables.map(t=>`<h3>${esc(t.t)}</h3><p class="muted" style="margin:0 0 6px">${esc(t.sub)}</p>${tblHTML(t)}${t.note?`<p class="note">${esc(t.note)}</p>`:""}`).join("")}
-      <div class="leak"><span class="eyebrow">Heads-up · not test material</span><b>Coming next from Intel</b><p>${esc(C.leak)}</p></div></section>
-    <section class="rgroup" id="pl-ic"><h2>Intel chipset generations</h2><p class="muted">Letter tiers: Z = enthusiast (CPU overclocking), H (higher number like H770) = upper mainstream, B = mainstream, H (lowest like H610) = budget, Q/W = business and workstation.</p>${tblHTML(R.intelChip)}<p class="note">${esc(R.intelNote)}</p></section>
-    <section class="rgroup" id="pl-ac"><h2>AMD chipset generations</h2><p class="muted">Letter tiers: X = enthusiast, E = PCIe 5.0 \"extreme\" version, B = mainstream, A = entry.</p>${tblHTML(R.amdChip)}<p class="note">${esc(R.amdNote)}</p></section>
-    <section class="rgroup" id="pl-so"><h2>Processor sockets</h2>${tblHTML(R.sockets)}</section>
-    <section class="rgroup" id="pl-in"><h2>Reading an Intel processor name</h2>
-      <h3>${esc(R.intelNaming.example)}</h3>${naming(R.intelNaming.example, R.intelNaming.parts)}
-      <h3>${esc(R.intelNaming.example2)}</h3>${naming(R.intelNaming.example2, R.intelNaming.parts2)}
-      <h3>Suffixes</h3>${suf(R.intelNaming.suffixes)}<p>${esc(R.intelNaming.extra)}</p></section>
-    <section class="rgroup" id="pl-an"><h2>Reading an AMD processor name</h2>
-      <h3>${esc(R.amdNaming.example)}</h3>${naming(R.amdNaming.example, R.amdNaming.parts)}
-      <h3>Suffixes</h3>${suf(R.amdNaming.suffixes)}
-      <h3>Ryzen desktop generations</h3>${tblHTML({head:["Series","Released","Architecture","Socket"], rows:R.amdNaming.gens})}<p>${esc(R.amdNaming.extra)}</p></section>
-    <section class="rgroup" id="pl-bk"><h2>Key points from your book</h2><div class="refs">${refHTML([2,"Intel and AMD Chipsets and Processor Sockets","71"])}</div><ul>${R.book.map(t=>`<li>${esc(t)}</li>`).join("")}</ul></section>
-    <section class="rgroup"><h2>Tech tips</h2><ul>${R.tips.map(t=>`<li>${esc(t)}</li>`).join("")}</ul></section>
-    <section class="rgroup" id="pl-q"><h2>Practice</h2><div class="row"><button class="btn primary" data-act="platquiz">Practice ${PLQS.length} chipset &amp; CPU questions</button><button class="btn teal" data-act="note" data-id="mb-components">Motherboard map</button><button class="btn" data-act="note" data-id="cpu">Study note: processors</button></div></section>`;
-  v.querySelectorAll(".cjump a").forEach(a => a.addEventListener("click", e => { e.preventDefault(); const t = document.querySelector(a.getAttribute("href")); if (t) t.scrollIntoView({behavior:"smooth", block:"start"}); }));
+  const mk = S.pref.platMake === "amd" ? "amd" : "intel";
+  const fam = PLAT[mk], cur = fam.filter(p => !p.legacy), old = fam.filter(p => p.legacy);
+  const N = PLAT.names[mk];
+  const dec = (ex, parts) => `<div class="pname"><div class="pname-ex">${ex.filter(x => x.trim() && x !== "-").map(x => `<span>${esc(x)}</span>`).join("")}</div><dl>${parts.map(([k,d]) => `<dt>${esc(k)}</dt><dd>${esc(d)}</dd>`).join("")}</dl></div>`;
+  v.innerHTML = `<section class="hero"><span class="eyebrow">Study · Chapters 2 and 3</span><h1>Chipsets &amp; CPUs</h1>
+    <p>Every desktop CPU fits <b>one socket</b>. Each socket has its <b>own chipsets</b> and its <b>own RAM type</b>. So learn them as families: one card per socket, oldest to newest.</p>
+    <div class="row"><button class="btn primary" data-go="sim" data-arg="platform-match">▶ Platform Matcher lab</button><button class="btn" data-act="platquiz">Practice ${PLQS.length} questions</button></div>
+    <p class="muted" style="font-size:.85rem;margin:0">Book: Ch 2 "Intel and AMD Chipsets and Processor Sockets" (p. 71) · Ch 3 "Intel Processors" and "AMD Processors" (p. 121)</p></section>
+
+    <section class="rgroup"><h2>The chain</h2>
+      <div class="pchain" aria-label="CPU, then socket, then chipset, then RAM"><span>CPU</span><i aria-hidden="true">→</i><span>Socket</span><i aria-hidden="true">→</i><span>Chipset</span><i aria-hidden="true">→</i><span>RAM</span></div>
+      <ol class="prules">${PLAT_RULES.map(([h,t]) => `<li><b>${esc(h)}.</b> ${esc(t)}</li>`).join("")}</ol></section>
+
+    <section class="rgroup" id="pl-fam"><div class="spread"><h2>Families, oldest → newest</h2>
+      <div class="seg" role="group" aria-label="Maker"><button class="btn small${mk==="intel"?" primary":""}" data-pmake="intel" aria-pressed="${mk==="intel"}">Intel</button><button class="btn small${mk==="amd"?" primary":""}" data-pmake="amd" aria-pressed="${mk==="amd"}">AMD</button></div></div>
+      <p class="muted" style="margin:0">Chipset colors: <span class="chipb t-z">enthusiast</span> <span class="chipb t-b">mainstream</span> <span class="chipb t-h">budget</span>${mk==="intel"?` <span class="chipb t-q">business</span>`:""}. Within a series, they're listed best to most basic. Each card's "Works with" grid shows which chipset series support each CPU generation: ✓ out of the box, ✓ BIOS update = works after updating the board's firmware, ✗ = not supported.</p>
+      ${old.length?`<details class="revd"><summary>Older ${mk==="intel"?"Intel":"AMD"} platforms (still seen in repair work)</summary><div class="ptimeline">${old.map(platCardHTML).join("")}</div></details>`:""}
+      <div class="ptimeline">${cur.map(platCardHTML).join("")}</div></section>
+
+    <section class="rgroup"><h2>Reading ${mk==="intel"?"Intel":"AMD"} names</h2>
+      <h3>Processor</h3>${dec(N.ex, N.parts)}${N.ex2?dec(N.ex2, N.parts2):""}
+      <h3>Chipset letter</h3><dl class="sufl">${PLAT.tier[mk].map(([k,d]) => `<dt>${esc(k)}</dt><dd>${esc(d)}</dd>`).join("")}</dl>
+      <p class="muted">The number after the letter is the series: ${mk==="intel"?"Z790 = 700 series, Z890 = 800 series":"X570 = 500 series (AM4), X870 = 800 series (AM5)"}.</p></section>
+
+    <section class="rgroup"><details class="revd"><summary>Workstation and server sockets (${mk==="intel"?"Intel":"AMD"})</summary>${tblHTML({head:["Socket","Years","Processors","Chipsets","RAM"], rows:PLAT.hedt.filter(r => r[0].toLowerCase()===mk).map(r => r.slice(1))})}</details>
+      <details class="revd"><summary>What a chipset does</summary><p>${esc(C.lead)}</p>
+        <div class="chipflow" aria-label="What the chipset does"><div class="cf-col"><span>DDR5 memory</span><span>PCIe x16 graphics</span><span>Primary M.2 (NVMe)</span></div><div class="cf-box"><b>CPU</b><small>memory controller + fastest PCIe lanes</small></div><div class="cf-link"><small>one link</small><span>DMI (Intel)<br>PCIe x4 (AMD)</span></div><div class="cf-box"><b>Chipset</b><small>Intel: PCH · AMD: Promontory</small></div><div class="cf-col"><span>USB ports</span><span>SATA drives</span><span>Extra M.2</span><span>LAN / Wi-Fi</span><span>Audio, PCIe x1</span></div></div>
+        <p class="note">${esc(C.history)}</p></details>
+      <details class="revd"><summary>Processor families and key points from your book</summary><ul>${R.book.map(t=>`<li>${esc(t)}</li>`).join("")}</ul><p>${esc(mk==="intel"?R.intelNaming.extra:R.amdNaming.extra)}</p></details></section>
+
+    <section class="rgroup"><h2>Practice</h2><div class="row"><button class="btn primary" data-go="sim" data-arg="platform-match">▶ Platform Matcher lab</button><button class="btn" data-act="platquiz">Practice ${PLQS.length} questions</button><button class="btn" data-act="note" data-id="mb-components">Motherboard map</button></div></section>`;
+  v.querySelectorAll("[data-pmake]").forEach(b => b.addEventListener("click", () => { S.pref.platMake = b.dataset.pmake; save(); const y = $("#pl-fam").getBoundingClientRect().top + window.scrollY - 120; VIEWS.platforms(); window.scrollTo({top: Math.max(0, y)}); }));
 };
 
 // ---------- key-term flashcards ----------
