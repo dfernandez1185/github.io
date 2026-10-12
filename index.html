@@ -79,6 +79,13 @@ p{margin:0}
 .nav button:hover{background:var(--sunk)}
 .nav button[aria-current="page"]{background:var(--teal-bg);color:var(--ink);font-weight:700;box-shadow:inset 3px 0 0 var(--teal)}
 /* settings */
+.shade{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.shade input[type=range]{flex:1;min-width:140px;accent-color:var(--teal)}
+#voicesel{max-width:100%;min-width:200px}
+/* voice + explain */
+.spkbar{display:inline-flex;gap:4px;align-items:center;margin-right:6px}
+.spk{border:0;background:none;cursor:pointer;font-size:.95rem;padding:0 4px;border-radius:6px;opacity:.8}.spk:hover,.spk.on{opacity:1;background:var(--teal-bg)}
+.lk-btn.lk-ex{background:var(--amber)}
+.lk-explain{display:grid;gap:8px;max-height:min(50vh,360px);overflow:auto}.lk-explain .lk-def{margin:0}
 .setgrp{display:grid;gap:12px}.setgrp h2{font-size:1.2rem}
 .qlist{list-style:none;margin:0;padding:0;display:grid;gap:6px}.qlist li{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .accentchip .sw{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px}
@@ -489,6 +496,7 @@ mark{background:var(--amber-bg);color:inherit;padding:0 2px;border-radius:2px}
 .pname{display:grid;gap:8px;margin-bottom:8px}.pname-ex{display:flex;flex-wrap:wrap;gap:4px}.pname-ex span{font-family:var(--f-mono);font-weight:700;padding:6px 10px;border-radius:8px;background:var(--teal-bg);border:1px solid var(--teal)}
 .pname dl,.sufl{display:grid;grid-template-columns:minmax(70px,max-content) 1fr;gap:6px 12px;margin:0;font-size:.92rem}.pname dt,.sufl dt{font-family:var(--f-mono);font-weight:700;color:var(--teal)}.pname dd,.sufl dd{margin:0}
 /* chipsets & cpus */
+.pmakebar{display:flex;align-items:center;gap:10px}.pmakebar span{font-weight:600}
 .cgrid{border-collapse:collapse;font-size:.85rem;width:auto;min-width:100%}.cgrid th,.cgrid td{border:1px solid var(--line);padding:5px 9px;text-align:center;white-space:nowrap}
 .cgrid thead th{font-family:var(--f-mono);font-size:.72rem;color:var(--muted);font-weight:500;background:var(--sunk)}.cgrid tbody th{text-align:left;font-weight:600}
 .cg-y{background:var(--good-bg);color:var(--good);font-weight:700}.cg-b{background:var(--amber-bg);color:var(--amber);font-weight:700}.cg-n{color:var(--bad);opacity:.8}
@@ -502,8 +510,8 @@ mark{background:var(--amber-bg);color:inherit;padding:0 2px;border-radius:2px}
 .prow{display:grid;grid-template-columns:76px minmax(0,1fr);gap:10px;align-items:start}.pl{font-family:var(--f-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding-top:3px}
 .prow ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}.prow li small{display:block;color:var(--muted);font-size:.8rem}
 .pchips{display:grid;gap:6px}.pser{font-size:.8rem;color:var(--muted);margin-right:6px}
-.chipb{display:inline-block;font-family:var(--f-mono);font-weight:700;font-size:.82rem;padding:2px 8px;border-radius:6px;margin:2px 4px 2px 0;border:1px solid}
-.chipb.t-z{background:var(--teal-bg);border-color:var(--teal);color:var(--ink)}.chipb.t-b{background:var(--good-bg);border-color:var(--good);color:var(--ink)}.chipb.t-h{background:var(--sunk);border-color:var(--line);color:var(--ink)}.chipb.t-q{background:var(--amber-bg);border-color:var(--amber);color:var(--ink)}
+.chipb{display:inline-block;font-family:var(--f-mono);font-weight:700;font-size:.82rem;padding:2px 8px;border-radius:6px;margin:2px 4px 2px 0;border:1.5px solid}
+.chipb.t-z{background:var(--teal);border-color:var(--teal);color:var(--bg)}.chipb.t-b{background:var(--good);border-color:var(--good);color:var(--bg)}.chipb.t-h{background:transparent;border-color:var(--muted);color:var(--ink)}.chipb.t-q{background:var(--amber);border-color:var(--amber);color:var(--bg)}
 .ptip{margin:0;font-size:.9rem;padding:8px 10px;border-radius:8px;background:var(--sunk)}
 @media (max-width:560px){.prow{grid-template-columns:1fr;gap:2px}}
 .pm{display:grid;gap:12px}.pm-start{display:grid;gap:10px}.pm-order{display:grid;gap:8px}.pm-q{display:grid;gap:10px}
@@ -12204,7 +12212,7 @@ const QUICK = {
   videos:{label:"Watch the video course", go:"videos"}, pictures:{label:"Pictures", go:"pictures"}, figures:{label:"Figure finder", go:"figures"},
   review:{label:"Review my weak spots", go:"review"}, tutor:{label:"Ask the AI tutor", act:"tutorchat", ai:true}};
 const QUICK_DEFAULT = ["warm","chapters","flash","labs","study","videos"];
-S.pref = Object.assign({theme:"auto", accent:"teal", size:"normal", quick:QUICK_DEFAULT.slice(), qorder:Object.keys(QUICK)}, S.pref || {});
+S.pref = Object.assign({theme:"auto", accent:"teal", size:"normal", quick:QUICK_DEFAULT.slice(), qorder:Object.keys(QUICK), bgTint:"navy", bgShade:0, voice:"", rate:1, voiceExplain:true, voiceChat:false}, S.pref || {});
 Object.keys(QUICK).forEach(k => { if (!S.pref.qorder.includes(k)) S.pref.qorder.push(k); });
 S.pref.qorder = S.pref.qorder.filter(k => QUICK[k]); S.pref.quick = S.pref.quick.filter(k => QUICK[k]);
 function applyPrefs(){
@@ -12212,7 +12220,56 @@ function applyPrefs(){
   if (P0.theme === "light" || P0.theme === "dark") de.dataset.theme = P0.theme; else delete de.dataset.theme;
   if (P0.accent && P0.accent !== "teal") de.dataset.accent = P0.accent; else delete de.dataset.accent;
   if (P0.size === "large") de.dataset.size = "large"; else delete de.dataset.size;
+  applyBg();
 }
+// Background tint and shade (Settings → Appearance). 0 = the default look; higher = lighter (dark mode) or dimmer (light mode).
+const BG_TINTS = {navy:{h:219, sd:48, sl:24, label:"Navy"}, slate:{h:212, sd:20, sl:14, label:"Slate"}, charcoal:{h:220, sd:5, sl:4, label:"Charcoal"}, warm:{h:30, sd:14, sl:28, label:"Warm"}, forest:{h:160, sd:26, sl:18, label:"Forest"}};
+const darkNow = () => S.pref.theme === "dark" || (S.pref.theme !== "light" && window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches);
+function applyBg(){
+  const de = document.documentElement, t = Math.max(0, Math.min(100, +S.pref.bgShade || 0)) / 100, tint = BG_TINTS[S.pref.bgTint] || BG_TINTS.navy;
+  const vars = ["--bg","--surface","--sunk","--line"];
+  if (S.pref.bgTint === "navy" && t === 0) { vars.forEach(v => de.style.removeProperty(v)); return; }
+  const hsl = (sat, l) => `hsl(${tint.h} ${Math.round(sat)}% ${l.toFixed(1)}%)`;
+  if (darkNow()) {
+    const sat = tint.sd * (1 - .35 * t), bg = 9 + 16 * t;
+    de.style.setProperty("--bg", hsl(sat, bg)); de.style.setProperty("--surface", hsl(sat * .9, bg + 4.5)); de.style.setProperty("--sunk", hsl(sat, bg + 2)); de.style.setProperty("--line", hsl(sat * .75, bg + 13));
+  } else {
+    const sat = tint.sl, bg = 96 - 12 * t;
+    de.style.setProperty("--bg", hsl(sat, bg)); de.style.setProperty("--surface", hsl(sat * .6, 100 - 7 * t)); de.style.setProperty("--sunk", hsl(sat, bg - 3)); de.style.setProperty("--line", hsl(sat * .8, bg - 10));
+  }
+}
+if (window.matchMedia) { const mq = matchMedia("(prefers-color-scheme: dark)"); const f = () => applyBg(); if (mq.addEventListener) mq.addEventListener("change", f); else if (mq.addListener) mq.addListener(f); }
+// ---------- voice (text-to-speech in the browser) ----------
+const SPEECH = (function(){
+  const ok = typeof window.speechSynthesis !== "undefined" && typeof window.SpeechSynthesisUtterance !== "undefined";
+  let queue = [], onEnd = null, speaking = false;
+  const voices = () => ok ? speechSynthesis.getVoices().filter(v => /^en(-|_|$)/i.test(v.lang)) : [];
+  function pick(){
+    const vs = voices(); if (!vs.length) return null;
+    const mine = vs.find(v => v.voiceURI === S.pref.voice); if (mine) return mine;
+    const pref = [/natural/i, /neural/i, /Google US English/i, /Samantha/i, /Aria/i, /Jenny/i, /Guy/i, /Zira/i];
+    for (const re of pref) { const v = vs.find(x => re.test(x.name) && /en-US/i.test(x.lang)) || vs.find(x => re.test(x.name)); if (v) return v; }
+    return vs.find(v => /en-US/i.test(v.lang)) || vs[0];
+  }
+  const clean = t => String(t).replace(/^Where to read:.*$/gmi, "").replace(/^\s*[-•]\s+/gm, "").replace(/[*_#`>]/g, "").replace(/\be\.g\./gi, "for example").replace(/\bi\.e\./gi, "that is").replace(/→/g, " to ").replace(/\s+/g, " ").trim();
+  function chunks(t){ const parts = clean(t).match(/[^.!?]+[.!?]+["')]*\s*|[^.!?]+$/g) || []; const out = []; let cur = "";
+    parts.forEach(p => { if ((cur + p).length > 220 && cur) { out.push(cur); cur = p; } else cur += p; }); if (cur.trim()) out.push(cur); return out; }
+  function next(){
+    if (!queue.length) { speaking = false; const f = onEnd; onEnd = null; if (f) f(); return; }
+    const u = new SpeechSynthesisUtterance(queue.shift()); const v = pick(); if (v) { u.voice = v; u.lang = v.lang; } else u.lang = "en-US";
+    u.rate = +S.pref.rate || 1; u.onend = next; u.onerror = () => { queue = []; next(); };
+    speechSynthesis.speak(u);
+  }
+  function speak(text, done){ if (!ok) return false; stop(); queue = chunks(text); onEnd = done || null; speaking = true; next(); return true; }
+  function stop(){ if (!ok) return; queue = []; onEnd = null; speaking = false; try { speechSynthesis.cancel(); } catch(e) {} }
+  function pause(){ if (ok) speechSynthesis.pause(); }
+  function resume(){ if (ok) speechSynthesis.resume(); }
+  if (ok && speechSynthesis.addEventListener) speechSynthesis.addEventListener("voiceschanged", () => { const sel = document.getElementById("voicesel"); if (sel && sel.options.length < 2) VIEWS.settings && route === "settings" && fillVoices(sel); });
+  return {ok, speak, stop, pause, resume, voices, pick, get speaking(){ return speaking; }, get paused(){ return ok && speechSynthesis.paused; }};
+})();
+function fillVoices(sel){ const vs = SPEECH.voices(); const cur = SPEECH.pick();
+  sel.innerHTML = vs.length ? vs.map(v => `<option value="${esc(v.voiceURI)}" ${cur && v.voiceURI === cur.voiceURI ? "selected" : ""}>${esc(v.name)} (${esc(v.lang)})</option>`).join("") : `<option value="">Default voice</option>`; }
+function speakBtnsHTML(){ return SPEECH.ok ? `<span class="spkbar"><button type="button" class="btn small" data-spk="play" aria-label="Read aloud">🔊 Listen</button><button type="button" class="btn small ghost" data-spk="pause" aria-label="Pause">⏸</button><button type="button" class="btn small ghost" data-spk="stop" aria-label="Stop">⏹</button></span>` : ""; }
 applyPrefs();
 function record(qid, ok){ const a = S.att[qid] || {c:0,w:0}; ok ? a.c++ : a.w++; a.last = ok ? 1 : 0; a.t = Date.now(); S.att[qid] = a; save(); }
 
@@ -12379,7 +12436,7 @@ async function runTutor(prompt, outEl, stopBtn){
 }
 function chatRender(box){
   const c = box._conv; if (!c) return;
-  box.innerHTML = `<div class="tchat">${c.turns.map(t => `<div class="tmsg ${t.r}"><span class="who">${t.r==="you"?"You":"Tutor"}</span><div class="txt">${esc(t.t)}</div></div>`).join("")}</div>`
+  box.innerHTML = `<div class="tchat">${c.turns.map((t,i) => `<div class="tmsg ${t.r}"><span class="who">${t.r==="you"?"You":"Tutor"}${t.r==="tutor" && SPEECH.ok && !c.busy ? ` <button type="button" class="spk" data-speak-i="${i}" aria-label="Read this reply aloud" title="Read aloud">🔊</button>` : ""}</span><div class="txt">${esc(t.t)}</div></div>`).join("")}</div>`
     + (c.busy ? "" : `<form class="tfollow"><input type="text" placeholder="Reply to the tutor or ask a follow-up…" aria-label="Reply to the tutor"><button class="btn small teal" type="submit">Send</button></form>`);
 }
 async function tutorTurn(box){
@@ -12398,6 +12455,7 @@ async function tutorTurn(box){
   } catch(e) {
     if (e && e.code === "cancelled") reply.t = (e.text || reply.t.replace(/^Thinking…$/, "")) + (e.text ? "" : "Stopped.");
     else reply.t = (e && e.text ? e.text + "\n\n" : "") + aiErr(e);
+    if (S.pref.voiceChat && reply.t && !/^Thinking…$/.test(reply.t)) setTimeout(() => SPEECH.speak(reply.t), 50);
   } finally { c.busy = false; if (c.stopBtn) c.stopBtn.hidden = true; if (tutorCtl === ctl) tutorCtl = null; chatRender(box); const inp = box.querySelector(".tfollow input"); }
 }
 document.addEventListener("submit", e => {
@@ -12612,6 +12670,7 @@ function go(r, arg, fromHist){
     if (!confirmLeave()) return false;
   }
   if (!fromHist) histPush(r, arg);
+  SPEECH.stop();
   if ($("#drawer").classList.contains("open")) setDrawer(false);
   route = r.split("-")[0] === "exam" ? "exam" : (r.split("-")[0] === "practice" ? "practice" : r);
   setNav();
@@ -13054,7 +13113,7 @@ function openNote(id){
   bindBoard($("#sheet"));
   $("#sheet").querySelector("[data-act=close]").focus();
 }
-function closeModal(){ $("#modal").hidden = true; $("#sheet").innerHTML = ""; if (tutorCtl) tutorCtl.abort(); }
+function closeModal(){ SPEECH.stop(); $("#modal").hidden = true; $("#sheet").innerHTML = ""; if (tutorCtl) tutorCtl.abort(); }
 
 // ---------- chapter reviews ----------
 function openReview(ch){
@@ -13282,22 +13341,23 @@ VIEWS.platforms = function(){
   v.innerHTML = `<section class="hero"><span class="eyebrow">Study · Chapters 2 and 3</span><h1>Chipsets &amp; CPUs</h1>
     <p>Every desktop CPU fits <b>one socket</b>. Each socket has its <b>own chipsets</b> and its <b>own RAM type</b>. So learn them as families: one card per socket, oldest to newest.</p>
     <div class="row"><button class="btn primary" data-go="sim" data-arg="platform-match">▶ Platform Matcher lab</button><button class="btn" data-act="platquiz">Practice ${PLQS.length} questions</button></div>
-    <p class="muted" style="font-size:.85rem;margin:0">Book: Ch 2 "Intel and AMD Chipsets and Processor Sockets" (p. 71) · Ch 3 "Intel Processors" and "AMD Processors" (p. 121)</p></section>
+    <p class="muted" style="font-size:.85rem;margin:0">Book: Ch 2 "Intel and AMD Chipsets and Processor Sockets" (p. 71) · Ch 3 "Intel Processors" and "AMD Processors" (p. 121)</p>
+      <div class="pmakebar"><span>Show:</span><div class="seg" role="group" aria-label="Maker"><button class="btn small${mk==="intel"?" primary":""}" data-pmake="intel" aria-pressed="${mk==="intel"}">Intel</button><button class="btn small${mk==="amd"?" primary":""}" data-pmake="amd" aria-pressed="${mk==="amd"}">AMD</button></div></div></section>
 
-    <section class="rgroup"><h2>The chain</h2>
+    <section class="rgroup" id="pl-names"><h2>Step 1: read the ${mk==="intel"?"Intel":"AMD"} names</h2><p class="muted" style="margin:0">Decode the name first. It tells you the generation, which tells you the socket.</p>
+      <h3>Processor</h3>${dec(N.ex, N.parts)}${N.ex2?dec(N.ex2, N.parts2):""}
+      <h3>Chipset letter</h3><dl class="sufl">${PLAT.tier[mk].map(([k,d]) => `<dt>${esc(k)}</dt><dd>${esc(d)}</dd>`).join("")}</dl>
+      <p class="muted">The number after the letter is the series: ${mk==="intel"?"Z790 = 700 series, Z890 = 800 series":"X570 = 500 series (AM4), X870 = 800 series (AM5)"}.</p></section>
+
+    <section class="rgroup"><h2>Step 2: follow the chain</h2>
       <div class="pchain" aria-label="CPU, then socket, then chipset, then RAM"><span>CPU</span><i aria-hidden="true">→</i><span>Socket</span><i aria-hidden="true">→</i><span>Chipset</span><i aria-hidden="true">→</i><span>RAM</span></div>
       <ol class="prules">${PLAT_RULES.map(([h,t]) => `<li><b>${esc(h)}.</b> ${esc(t)}</li>`).join("")}</ol></section>
 
-    <section class="rgroup" id="pl-fam"><div class="spread"><h2>Families, oldest → newest</h2>
-      <div class="seg" role="group" aria-label="Maker"><button class="btn small${mk==="intel"?" primary":""}" data-pmake="intel" aria-pressed="${mk==="intel"}">Intel</button><button class="btn small${mk==="amd"?" primary":""}" data-pmake="amd" aria-pressed="${mk==="amd"}">AMD</button></div></div>
+    <section class="rgroup" id="pl-fam"><h2>Step 3: ${mk==="intel"?"Intel":"AMD"} families, oldest → newest</h2>
       <p class="muted" style="margin:0">Chipset colors: <span class="chipb t-z">enthusiast</span> <span class="chipb t-b">mainstream</span> <span class="chipb t-h">budget</span>${mk==="intel"?` <span class="chipb t-q">business</span>`:""}. Within a series, they're listed best to most basic. Each card's "Works with" grid shows which chipset series support each CPU generation: ✓ out of the box, ✓ BIOS update = works after updating the board's firmware, ✗ = not supported.</p>
       ${old.length?`<details class="revd"><summary>Older ${mk==="intel"?"Intel":"AMD"} platforms (still seen in repair work)</summary><div class="ptimeline">${old.map(platCardHTML).join("")}</div></details>`:""}
       <div class="ptimeline">${cur.map(platCardHTML).join("")}</div></section>
 
-    <section class="rgroup"><h2>Reading ${mk==="intel"?"Intel":"AMD"} names</h2>
-      <h3>Processor</h3>${dec(N.ex, N.parts)}${N.ex2?dec(N.ex2, N.parts2):""}
-      <h3>Chipset letter</h3><dl class="sufl">${PLAT.tier[mk].map(([k,d]) => `<dt>${esc(k)}</dt><dd>${esc(d)}</dd>`).join("")}</dl>
-      <p class="muted">The number after the letter is the series: ${mk==="intel"?"Z790 = 700 series, Z890 = 800 series":"X570 = 500 series (AM4), X870 = 800 series (AM5)"}.</p></section>
 
     <section class="rgroup"><details class="revd"><summary>Workstation and server sockets (${mk==="intel"?"Intel":"AMD"})</summary>${tblHTML({head:["Socket","Years","Processors","Chipsets","RAM"], rows:PLAT.hedt.filter(r => r[0].toLowerCase()===mk).map(r => r.slice(1))})}</details>
       <details class="revd"><summary>What a chipset does</summary><p>${esc(C.lead)}</p>
@@ -13306,7 +13366,7 @@ VIEWS.platforms = function(){
       <details class="revd"><summary>Processor families and key points from your book</summary><ul>${R.book.map(t=>`<li>${esc(t)}</li>`).join("")}</ul><p>${esc(mk==="intel"?R.intelNaming.extra:R.amdNaming.extra)}</p></details></section>
 
     <section class="rgroup"><h2>Practice</h2><div class="row"><button class="btn primary" data-go="sim" data-arg="platform-match">▶ Platform Matcher lab</button><button class="btn" data-act="platquiz">Practice ${PLQS.length} questions</button><button class="btn" data-act="note" data-id="mb-components">Motherboard map</button></div></section>`;
-  v.querySelectorAll("[data-pmake]").forEach(b => b.addEventListener("click", () => { S.pref.platMake = b.dataset.pmake; save(); const y = $("#pl-fam").getBoundingClientRect().top + window.scrollY - 120; VIEWS.platforms(); window.scrollTo({top: Math.max(0, y)}); }));
+  v.querySelectorAll("[data-pmake]").forEach(b => b.addEventListener("click", () => { S.pref.platMake = b.dataset.pmake; save(); const y = window.scrollY; VIEWS.platforms(); window.scrollTo({top: y}); }));
 };
 
 // ---------- key-term flashcards ----------
@@ -13468,6 +13528,8 @@ VIEWS.settings = function(){
     <section class="panel setgrp"><h2>Appearance</h2>
       <fieldset><legend>Color mode</legend><div class="chips">${radio("theme","auto","Match my device",P0.theme)}${radio("theme","light","Light",P0.theme)}${radio("theme","dark","Dark",P0.theme)}</div></fieldset>
       <fieldset><legend>Accent color</legend><div class="chips">${ACC.map(([k,l]) => `<label class="chip accentchip"><input type="radio" name="accent" value="${k}" ${P0.accent===k?"checked":""}><span><i class="sw sw-${k}" aria-hidden="true"></i>${l}</span></label>`).join("")}</div></fieldset>
+      <fieldset><legend>Background tint</legend><div class="chips">${Object.entries(BG_TINTS).map(([k,t]) => `<label class="chip"><input type="radio" name="bgtint" value="${k}" ${P0.bgTint===k?"checked":""}><span><i class="sw" style="background:hsl(${t.h} ${t.sd}% 22%)" aria-hidden="true"></i>${t.label}</span></label>`).join("")}</div></fieldset>
+      <fieldset><legend>Background shade</legend><div class="shade"><span class="muted">${darkNow()?"Darker":"Brighter"}</span><input type="range" id="bgshade" min="0" max="100" step="5" value="${+P0.bgShade||0}" aria-label="Background shade"><span class="muted">${darkNow()?"Lighter":"Dimmer"}</span><button type="button" class="btn small ghost" data-bgreset>Reset</button></div><p class="muted" style="margin:4px 0 0;font-size:.85rem">In dark mode, slide right for a lighter background so colors stand out more.</p></fieldset>
       <fieldset><legend>Text size</legend><div class="chips">${radio("size","normal","Normal",P0.size)}${radio("size","large","Large",P0.size)}</div></fieldset>
     </section>
     <section class="panel setgrp"><h2>Home screen buttons</h2><p class="muted" style="margin:0">Choose the quick-access buttons on your Home screen and their order. The first one is highlighted.</p>
@@ -13481,6 +13543,11 @@ VIEWS.settings = function(){
       <fieldset><legend>Video list order</legend><div class="chips">${radio("vorder","obj","By exam objective",S.vorder==="book"?"book":"obj")}${radio("vorder","book","By book chapter",S.vorder==="book"?"book":"obj")}</div></fieldset>
     </section>
     <section class="panel setgrp"><h2>AI tutor</h2><p class="muted">${TUTOR_MODE==="claude"?"Connected through your Claude account.":TUTOR_MODE==="shared"?"Built-in tutor is on: chat and feedback appear right inside the app.":TUTOR_MODE==="key"?"Answering inside the app with "+esc(provName())+" on this device.":"Tutor buttons open your question in "+esc(HANDOFFS[TUTOR.handoff].name)+" or another AI app. Add an API key (Gemini has a free option) to get answers inside the app."}</p><div class="row"><button class="btn small primary" data-act="tutorsetup">Choose the tutor's AI…</button><button class="btn small" data-act="tutorchat">Open the tutor chat</button></div></section>
+    <section class="panel setgrp"><h2>Voice</h2>${SPEECH.ok ? `
+      <p class="muted" style="margin:0">Highlight any term or phrase and tap <b>Explain</b> to hear a short, plain-English explanation. Tutor replies have a 🔊 button too. The voices come from your device; phones and Edge often have the most natural ones.</p>
+      <fieldset><legend>Voice</legend><div class="row"><select id="voicesel" aria-label="Voice"></select><button type="button" class="btn small" data-voicetest>▶ Hear a sample</button></div></fieldset>
+      <fieldset><legend>Speed</legend><div class="shade"><span class="muted">Slower</span><input type="range" id="voicerate" min="0.7" max="1.4" step="0.05" value="${+P0.rate||1}" aria-label="Speaking speed"><span class="muted">Faster</span><span class="mono" id="ratev">${(+P0.rate||1).toFixed(2)}×</span></div></fieldset>
+      <fieldset><legend>Read aloud automatically</legend><div class="chips"><label class="chip"><input type="checkbox" data-vpref="voiceExplain" ${P0.voiceExplain?"checked":""}><span>Explanations (Explain button)</span></label><label class="chip"><input type="checkbox" data-vpref="voiceChat" ${P0.voiceChat?"checked":""}><span>Tutor chat replies</span></label></div></fieldset>` : `<p class="muted" style="margin:0">This browser doesn't support reading text aloud. Explanations will still appear as text.</p>`}</section>
     <section class="panel setgrp"><h2>Progress</h2><p class="muted" style="margin:0">Reset clears answer history, flags, flashcard and lab progress, and simulator scores in this browser. Your settings stay.</p>
       <div class="row" id="resetrow"><button class="btn small" data-act="reset1">Reset progress…</button></div></section>`;
   const bind = (name, fn) => v.querySelectorAll(`input[name=${name}]`).forEach(i => i.addEventListener("change", () => { fn(i.value); save(); }));
@@ -13489,6 +13556,13 @@ VIEWS.settings = function(){
   bind("size", x => { S.pref.size = x; applyPrefs(); });
   bind("ytapp", x => { S.ytapp = x === "yt"; toast(S.ytapp ? "Videos will open in YouTube on this device." : "Videos will play inside the app."); });
   bind("vorder", x => { S.vorder = x; });
+  bind("bgtint", x => { S.pref.bgTint = x; applyBg(); });
+  const sh = v.querySelector("#bgshade"); if (sh) sh.addEventListener("input", () => { S.pref.bgShade = +sh.value; applyBg(); save(); });
+  const br = v.querySelector("[data-bgreset]"); if (br) br.addEventListener("click", () => { S.pref.bgShade = 0; S.pref.bgTint = "navy"; save(); applyBg(); const y = window.scrollY; VIEWS.settings(); window.scrollTo({top:y}); });
+  const vs = v.querySelector("#voicesel"); if (vs) { fillVoices(vs); vs.addEventListener("change", () => { S.pref.voice = vs.value; save(); }); }
+  const vt = v.querySelector("[data-voicetest]"); if (vt) vt.addEventListener("click", () => SPEECH.speak("Hi! This is how the tutor will sound. A chipset is like a traffic controller on the motherboard, directing data between the processor and everything else."));
+  const vr = v.querySelector("#voicerate"); if (vr) vr.addEventListener("input", () => { S.pref.rate = +vr.value; $("#ratev").textContent = (+vr.value).toFixed(2) + "×"; save(); });
+  v.querySelectorAll("[data-vpref]").forEach(cb => cb.addEventListener("change", () => { S.pref[cb.dataset.vpref] = cb.checked; save(); }));
   v.querySelectorAll("[data-quick]").forEach(cb => cb.addEventListener("change", () => { const k = cb.dataset.quick; S.pref.quick = S.pref.quick.filter(x => x !== k); if (cb.checked) S.pref.quick.push(k); save(); }));
   v.querySelectorAll("[data-qmove]").forEach(b => b.addEventListener("click", () => { const o = S.pref.qorder, i = o.indexOf(b.dataset.qmove), j = i + (+b.dataset.dir); if (j < 0 || j >= o.length) return; [o[i], o[j]] = [o[j], o[i]]; save(); const y = window.scrollY; VIEWS.settings(); window.scrollTo({top:y}); const nb = document.querySelector(`[data-qmove="${b.dataset.qmove}"][data-dir="${b.dataset.dir}"]`); if (nb && !nb.disabled) nb.focus(); }));
   v.querySelector("[data-qreset]").addEventListener("click", () => { S.pref.quick = QUICK_DEFAULT.slice(); S.pref.qorder = Object.keys(QUICK); save(); VIEWS.settings(); toast("Home buttons restored."); });
@@ -13602,6 +13676,12 @@ async function tutorSave(){
 // ---------- global click handling ----------
 document.addEventListener("click", e => {
   const z = e.target.closest("[data-zoom]"); if (z && !e.target.closest("a")) return openZoom(z.dataset.zoom);
+  const sp = e.target.closest("[data-spk]"); if (sp) { const k = sp.dataset.spk;
+    if (k === "play") { if (SPEECH.paused) { SPEECH.resume(); setSpk("playing"); } else { const txt = sp.closest(".lookup") ? (bubble._explain || "") : (sp.dataset.text || ""); if (txt) { SPEECH.speak(txt, () => setSpk("idle")); setSpk("playing"); } } }
+    else if (k === "pause") { if (SPEECH.paused) { SPEECH.resume(); setSpk("playing"); } else { SPEECH.pause(); setSpk("paused"); } }
+    else { SPEECH.stop(); setSpk("idle"); }
+    return; }
+  const si = e.target.closest("[data-speak-i]"); if (si) { const box = si.closest(".tchat") && si.closest(".tchat").parentElement; const t = box && box._conv && box._conv.turns[+si.dataset.speakI]; if (t) { if (SPEECH.speaking && si.classList.contains("on")) { SPEECH.stop(); si.classList.remove("on"); } else { document.querySelectorAll(".spk.on").forEach(x => x.classList.remove("on")); si.classList.add("on"); SPEECH.speak(t.t, () => si.classList.remove("on")); } } return; }
   if (e.target.closest("#menubtn")) return setDrawer(!$("#drawer").classList.contains("open"));
   if (e.target.closest("#scrim")) return setDrawer(false);
   if (e.target.closest("#histback")) return histGo(-1);
@@ -13731,7 +13811,7 @@ function ensureBubble(){
   bubble.addEventListener("mousedown", e => { if (!e.target.closest("input")) e.preventDefault(); });
   return bubble;
 }
-function hideBubble(){ if (bubble) { bubble.hidden = true; bubble.classList.remove("open"); } }
+function hideBubble(){ if (bubble) { if (bubble.classList.contains("open") && bubble.querySelector(".spkbar")) SPEECH.stop(); if (explainCtl) { explainCtl.abort(); explainCtl = null; } bubble.hidden = true; bubble.classList.remove("open"); } }
 function placeBubble(rect){
   const b = bubble; b.style.left = "0px"; b.style.top = "0px"; b.hidden = false;
   const bw = b.offsetWidth, bh = b.offsetHeight, vw = document.documentElement.clientWidth, vh = window.innerHeight;
@@ -13745,7 +13825,7 @@ function placeBubble(rect){
 function showChooser(term, rect){
   ensureBubble(); bubbleTerm = term;
   bubble.classList.remove("open");
-  bubble.innerHTML = `<div class="lk-actions"><span class="lk-term">${esc(term.length>28?term.slice(0,27)+"…":term)}</span><button type="button" class="lk-btn" data-lk="define">Define</button><button type="button" class="lk-btn" data-lk="search">Search</button></div>`;
+  bubble.innerHTML = `<div class="lk-actions"><span class="lk-term">${esc(term.length>28?term.slice(0,27)+"…":term)}</span><button type="button" class="lk-btn" data-lk="define">Define</button><button type="button" class="lk-btn" data-lk="search">Search</button><button type="button" class="lk-btn lk-ex" data-lk="explain">Explain${SPEECH.ok?" 🔊":""}</button></div>`;
   bubble._rect = rect; placeBubble(rect);
 }
 function showDefine(){
@@ -13768,12 +13848,50 @@ function showSearch(){
   html += `<div class="lk-foot"><button type="button" class="lk-link" data-lk="all">See all results${r.qs.length?` (${r.qs.length} questions)`:""}</button><button type="button" class="lk-link" data-lk="define">Define instead</button></div>`;
   bubble.innerHTML = html; bubble.classList.add("open"); placeBubble(bubble._rect);
 }
+function explainPrompt(term){
+  const r = search(term); const notes = r.kb.slice(0,2).map(x => x.k);
+  const ctx = notes.map(a => a.title + ": " + strip(a.body).slice(0, 1200)).join("\n\n");
+  return "You are a friendly CompTIA A+ tutor talking out loud to a beginner. Explain \"" + term + "\" in plain, everyday language, as if speaking. "
+   + "Use 60 to 110 words in 2 or 3 short paragraphs. No lists, no markdown, no headings. Say what any acronym stands for. Give one simple real-life comparison. "
+   + "End with one sentence on why it matters for the A+ exam. If the phrase isn't about IT, still explain it simply.\n\n"
+   + (ctx ? "Study notes from this app (stay consistent with them):\n" + ctx : "");
+}
+let explainCtl = null;
+function localExplain(term){ const d = defineTerm(term); const bits = [];
+  if (d.acro) bits.push(d.acro[0] + " stands for " + d.acro[1] + ".");
+  if (d.plain) bits.push(d.plain); else if (d.notes[0]) bits.push(d.notes[0].text);
+  return bits.join(" "); }
+function showExplain(){
+  const term = bubbleTerm;
+  bubble.innerHTML = `<div class="lk-head"><span class="eyebrow">Explain</span><b>${esc(term)}</b><button type="button" class="lk-x" data-lk="close" aria-label="Close">×</button></div>
+    <div class="lk-explain" aria-live="polite"><p class="lk-def muted">Thinking…</p></div>
+    <div class="lk-foot">${speakBtnsHTML()}</div>`;
+  bubble.classList.add("open"); placeBubble(bubble._rect);
+  const box = bubble.querySelector(".lk-explain");
+  const finish = (text, fromAI) => {
+    bubble._explain = text; box.innerHTML = text.split(/\n\s*\n/).map(p => `<p class="lk-def">${esc(p.trim())}</p>`).join("") || `<p class="lk-def muted">No explanation available.</p>`;
+    const foot = bubble.querySelector(".lk-foot");
+    foot.innerHTML = speakBtnsHTML() + (fromAI ? `<button type="button" class="lk-link" data-lk="explainchat">Ask a follow-up</button>` : "") + `<button type="button" class="lk-link" data-lk="define">Define</button>`;
+    placeBubble(bubble._rect);
+    if (S.pref.voiceExplain && SPEECH.ok && text) { SPEECH.speak(text, () => setSpk("idle")); setSpk("playing"); }
+  };
+  if (!sampleFn) {
+    const t = localExplain(term);
+    if (t) return finish(t + (TUTOR_MODE === "handoff" ? "\n\nFor a fuller, plain-English explanation, turn on the AI tutor in Settings." : ""), false);
+    return finish("The app doesn't have a quick explanation for this phrase yet. Turn on the AI tutor in Settings to get one.", false);
+  }
+  if (explainCtl) explainCtl.abort(); const ctl = explainCtl = new AbortController();
+  sampleFn(explainPrompt(term), {signal: ctl.signal, onText: ({text}) => { if (explainCtl === ctl && text) box.innerHTML = `<p class="lk-def">${esc(text)}</p>`; }})
+    .then(r => { if (explainCtl !== ctl) return; finish(((r && r.text) || "").trim(), true); })
+    .catch(e => { if (explainCtl !== ctl || (e && e.code === "cancelled")) return; const t = localExplain(term); finish((t ? t + "\n\n" : "") + "(The tutor couldn't answer just now: " + aiErr(e) + ")", false); });
+}
+function setSpk(state){ document.querySelectorAll(".spkbar [data-spk=play]").forEach(b => { b.textContent = state === "playing" ? "🔊 Playing…" : state === "paused" ? "▶ Resume" : "🔊 Listen"; }); }
 function selectionTerm(){
   const sel = window.getSelection(); if (!sel || sel.isCollapsed || !sel.rangeCount) return null;
   const node = sel.anchorNode && (sel.anchorNode.nodeType===1 ? sel.anchorNode : sel.anchorNode.parentElement);
   if (!node || !node.closest("#view, #sheet") || node.closest("input, textarea, .lookup, button")) return null;
   const term = cleanTerm(sel.toString());
-  if (term.length < 2 || term.length > 60 || term.split(" ").length > 6) return null;
+  if (term.length < 2 || term.length > 140 || term.split(" ").length > 20) return null;
   const rect = sel.getRangeAt(0).getBoundingClientRect(); if (!rect.width && !rect.height) return null;
   return {term, rect};
 }
@@ -13792,6 +13910,11 @@ window.addEventListener("scroll", () => { if (bubble && !bubble.hidden && !bubbl
 document.addEventListener("click", e => {
   const b = e.target.closest("[data-lk]"); if (!b) { if (e.target.closest(".lookup [data-act]")) hideBubble(); return; }
   const a = b.dataset.lk;
+  if (a === "explain") return showExplain();
+  if (a === "explainchat") { const t = bubbleTerm, ex = bubble._explain || ""; hideBubble(); SPEECH.stop(); openTutorChat();
+    const box = $("#gout"); const f = $("#sheet").querySelector(".tfirst"); if (f) f.remove();
+    if (box) { box._conv = {context: explainPrompt(t), turns:[{r:"you", t:"Explain \"" + t + "\" in simple terms."},{r:"tutor", t:ex}]}; chatRender(box); const inp = box.querySelector(".tfollow input"); if (inp) inp.focus(); }
+    return; }
   if (a === "define") return showDefine();
   if (a === "search") return showSearch();
   if (a === "close") { hideBubble(); window.getSelection().removeAllRanges(); return; }
