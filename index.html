@@ -79,8 +79,33 @@ p{margin:0}
 .nav button:hover{background:var(--sunk)}
 .nav button[aria-current="page"]{background:var(--teal-bg);color:var(--ink);font-weight:700;box-shadow:inset 3px 0 0 var(--teal)}
 /* settings */
+.tintrow .sw{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px;border:1px solid var(--line)}
+.tintrow{display:grid;grid-template-columns:62px 1fr;gap:8px;align-items:center;margin-bottom:6px}.tintg{font-size:.8rem;color:var(--muted)}
+@media (max-width:520px){.tintrow{grid-template-columns:1fr}}
 .shade{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.shade input[type=range]{flex:1;min-width:140px;accent-color:var(--teal)}
 #voicesel{max-width:100%;min-width:200px}
+/* networking cheat sheet */
+.secgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px}.secgrid div{display:flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--surface);font-size:.88rem}.secgrid i{font-style:normal;color:var(--muted)}.secgrid b{color:var(--good)}
+.drill{display:grid;gap:10px}.pm-opt.right{background:var(--good-bg);border-color:var(--good);opacity:1;text-decoration:none}.pm-opt.wrongp{background:var(--bad-bg);border-color:var(--bad)}
+.okmsg{color:var(--good);margin:0}.errmsg{color:var(--bad);margin:0}
+.places{display:flex;gap:4px;flex-wrap:wrap}.places span{display:grid;place-items:center;min-width:44px;padding:6px 4px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font-weight:700}.places span small{font-weight:400;font-size:.7rem;color:var(--muted)}.places span.on{background:var(--teal-bg);border-color:var(--teal)}
+.bintool{display:grid;gap:8px}.bintool label{display:flex;gap:8px;align-items:center;font-weight:600}.bintool input{width:130px}
+.calcgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-top:10px}.calcgrid div{display:grid;border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--surface)}.calcgrid span{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.binwrap{display:grid;gap:4px;margin:10px 0;overflow-x:auto}.binwrap>div{display:grid;grid-template-columns:70px auto;gap:8px;align-items:center}
+.binrow{white-space:nowrap;font-size:.92rem}.binrow b{margin:0 2px;color:var(--muted)}.binrow i,.binwrap i{font-style:normal;padding:0 1px}.bn{color:var(--teal);font-weight:700}.bh{color:var(--amber);font-weight:700}
+.sdgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}.sdf{display:grid;gap:4px;font-size:.85rem;font-weight:600}.sdf input{font-family:var(--f-mono)}
+.sdres{display:grid;gap:4px}
+.calcgrid b{overflow-wrap:anywhere}.binwrap{max-width:100%}
+@media (max-width:520px){.binrow{font-size:.7rem}.binwrap>div{grid-template-columns:56px max-content}.calcgrid{grid-template-columns:1fr 1fr}.calcgrid div{padding:6px 8px}.calcgrid b{font-size:.85rem}}
+/* highlights */
+mark.hl{color:inherit;border-radius:3px;padding:0 1px;cursor:pointer;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.hl-yellow{background:rgba(255,214,10,.45)}.hl-green{background:rgba(52,199,89,.38)}.hl-blue{background:rgba(64,156,255,.38)}.hl-pink{background:rgba(255,85,160,.36)}.hl-orange{background:rgba(255,149,0,.42)}
+:root[data-theme="dark"] .hl-yellow{background:rgba(255,214,10,.32)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .hl-yellow{background:rgba(255,214,10,.32)}}
+.hlsw{width:26px;height:26px;border-radius:50%;border:2px solid var(--surface);box-shadow:0 0 0 1px var(--line);cursor:pointer;flex:none}.hlsw.on{box-shadow:0 0 0 2px var(--ink)}
+.hlsw.hl-yellow{background:#ffd60a}.hlsw.hl-green{background:#34c759}.hlsw.hl-blue{background:#409cff}.hlsw.hl-pink{background:#ff55a0}.hlsw.hl-orange{background:#ff9500}
+.lk-btn.lk-hl{background:#c99a06}
+.hllist{display:grid;gap:10px}.hlitem{display:grid;gap:4px;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
 /* voice + explain */
 .spkbar{display:inline-flex;gap:4px;align-items:center;margin-right:6px}
 .spk{border:0;background:none;cursor:pointer;font-size:.95rem;padding:0 4px;border-radius:6px;opacity:.8}.spk:hover,.spk.on{opacity:1;background:var(--teal-bg)}
@@ -408,7 +433,7 @@ body.has-ai .tutorfab{display:inline-flex!important;gap:6px;align-items:center}
 .searchbar{display:flex;gap:10px}
 .searchbar input{font-size:1.05rem;padding:12px 14px}
 .results{display:grid;gap:26px}
-.rgroup{display:grid;gap:10px}
+.rgroup{display:grid;gap:10px;min-width:0}.rgroup>*{min-width:0}
 .hit{display:grid;gap:4px;padding:14px 16px;border:1px solid var(--line);border-radius:8px;background:var(--surface);cursor:pointer;text-align:left}
 .hit:hover{border-color:var(--muted)}
 .hit .t{font-weight:600}
@@ -494,7 +519,7 @@ mark{background:var(--amber-bg);color:inherit;padding:0 2px;border-radius:2px}
 .classlink{display:grid;gap:6px;border:1px solid var(--teal);background:var(--teal-bg);border-radius:var(--r);padding:12px 14px;justify-items:start}
 .hfig{margin:10px 0 0;display:grid;gap:6px}.hfig img{max-width:100%;height:auto;border-radius:10px;border:1px solid var(--line);background:#fff}.hfig figcaption{font-size:.8rem;color:var(--muted)}
 .pname{display:grid;gap:8px;margin-bottom:8px}.pname-ex{display:flex;flex-wrap:wrap;gap:4px}.pname-ex span{font-family:var(--f-mono);font-weight:700;padding:6px 10px;border-radius:8px;background:var(--teal-bg);border:1px solid var(--teal)}
-.pname dl,.sufl{display:grid;grid-template-columns:minmax(70px,max-content) 1fr;gap:6px 12px;margin:0;font-size:.92rem}.pname dt,.sufl dt{font-family:var(--f-mono);font-weight:700;color:var(--teal)}.pname dd,.sufl dd{margin:0}
+.pname dl,.sufl{display:grid;grid-template-columns:minmax(70px,max-content) 1fr;gap:6px 12px;margin:0;font-size:.92rem}.pname dt,.sufl dt{font-family:var(--f-mono);font-weight:700;color:var(--teal)}.pname dd,.sufl dd{margin:0;overflow-wrap:anywhere;min-width:0}
 /* chipsets & cpus */
 .pmakebar{display:flex;align-items:center;gap:10px}.pmakebar span{font-weight:600}
 .cgrid{border-collapse:collapse;font-size:.85rem;width:auto;min-width:100%}.cgrid th,.cgrid td{border:1px solid var(--line);padding:5px 9px;text-align:center;white-space:nowrap}
@@ -6667,6 +6692,52 @@ function platCompat(p, gen){
   return r;
 }
 
+// Networking cheat sheet data: ports, IPv4/IPv6 reference. (Core 1 objective 2.1 ports list + addressing.)
+const NET = {
+  // [port(s), protocol, full name, TCP/UDP, what it does, memory tip]
+  ports: [
+    ["20, 21","FTP","File Transfer Protocol","TCP","Transfers files. 21 = control (commands), 20 = data.","The very first ports: FTP starts the list."],
+    ["22","SSH","Secure Shell","TCP","Encrypted remote command line. Also carries SFTP and SCP.","2-2 = secure, two times over. Replaces Telnet."],
+    ["23","Telnet","Telnet","TCP","Unencrypted remote command line. Avoid it.","23 is one more than SSH, and it's the insecure one."],
+    ["25","SMTP","Simple Mail Transfer Protocol","TCP","Sends email (client → server, server → server).","SMTP Sends Mail: 25."],
+    ["53","DNS","Domain Name System","TCP/UDP","Turns names like comptia.org into IP addresses. Mostly UDP; TCP for big replies and zone transfers.","DNS: 5-3, \"find me.\""],
+    ["67, 68","DHCP","Dynamic Host Configuration Protocol","UDP","Hands out IP addresses automatically. 67 = server, 68 = client.","Server gets the lower number (67)."],
+    ["80","HTTP","Hypertext Transfer Protocol","TCP","Unencrypted web pages.","80 = plain web. Add security → 443."],
+    ["110","POP3","Post Office Protocol v3","TCP","Downloads email to one device (usually removes it from the server).","POP3: 110, \"pop it off the server.\""],
+    ["137–139","NetBIOS / NetBT","NetBIOS over TCP/IP","UDP 137–138, TCP 139","Old Windows name lookup (137), datagrams (138) and sessions/file sharing (139).","Legacy Windows sharing, before SMB moved to 445."],
+    ["143","IMAP","Internet Message Access Protocol","TCP","Reads email kept on the server, synced across devices.","IMAP keeps mail \"in the map\" (on the server): 143."],
+    ["161, 162","SNMP","Simple Network Management Protocol","UDP","Monitors and manages network devices. 161 = queries, 162 = traps (alerts).","SNMP: 161 asks, 162 alerts."],
+    ["389","LDAP","Lightweight Directory Access Protocol","TCP/UDP","Queries directories like Active Directory (users, groups).","LDAP 389; secure LDAPS is 636."],
+    ["443","HTTPS","HTTP Secure (HTTP over TLS)","TCP","Encrypted web pages.","443 = the padlock in your browser."],
+    ["445","SMB / CIFS","Server Message Block","TCP","Windows file and printer sharing (mapped drives, shared folders).","445 = Windows shares. 443 is web, 445 is files."],
+    ["3389","RDP","Remote Desktop Protocol","TCP (and UDP)","Windows Remote Desktop: full graphical remote control.","The only 4-digit port on the list."]
+  ],
+  secure: [["Telnet 23","SSH 22"],["HTTP 80","HTTPS 443"],["FTP 20/21","SFTP 22 (over SSH) or FTPS 989/990"],["LDAP 389","LDAPS 636"],["POP3 110","POP3S 995"],["IMAP 143","IMAPS 993"],["SMTP 25","SMTP with TLS 587 (or 465)"]],
+  extra: [["69","TFTP","UDP","Trivial FTP: no login; used for network boot and device configs"],["123","NTP","UDP","Network Time Protocol: keeps clocks in sync"],["514","Syslog","UDP","Sends device logs to a log server"],["5900","VNC","TCP","Virtual Network Computing remote control"],["1433","SQL Server","TCP","Microsoft SQL Server database"]],
+  ranges: [
+    ["10.0.0.0 – 10.255.255.255","10.0.0.0/8","Private (Class A range)","Big company networks"],
+    ["172.16.0.0 – 172.31.255.255","172.16.0.0/12","Private (Class B range)","Medium networks. 172.32.x.x is public!"],
+    ["192.168.0.0 – 192.168.255.255","192.168.0.0/16","Private (Class C range)","Home and SOHO routers"],
+    ["169.254.0.1 – 169.254.255.254","169.254.0.0/16","APIPA (link-local)","Windows gave itself this because DHCP didn't answer"],
+    ["127.0.0.1 – 127.255.255.254","127.0.0.0/8","Loopback","Tests the computer's own TCP/IP stack (ping 127.0.0.1)"]],
+  classes: [
+    ["A","1 – 126","255.0.0.0","/8","Huge networks (16 million hosts each)"],
+    ["B","128 – 191","255.255.0.0","/16","Medium networks (65,534 hosts each)"],
+    ["C","192 – 223","255.255.255.0","/24","Small networks (254 hosts each)"],
+    ["D","224 – 239","—","—","Multicast (one-to-many)"],
+    ["E","240 – 255","—","—","Experimental / reserved"]],
+  v6: [
+    ["Size","128 bits, written as 8 groups (hextets) of 4 hex digits: 2001:0db8:0000:0000:0000:ff00:0042:8329"],
+    ["Shorten rule 1","Drop leading zeros in any group: 0db8 → db8, 0042 → 42"],
+    ["Shorten rule 2","Replace ONE run of all-zero groups with :: (only once per address): 2001:db8::ff00:42:8329"],
+    ["Loopback","::1 (like 127.0.0.1)"],
+    ["Link-local","fe80::/10. Every IPv6 interface makes one automatically (like APIPA, but normal and always present)"],
+    ["Global unicast","2000::/3 (starts with 2 or 3): public, routable addresses"],
+    ["Unique local","fc00::/7 (usually fd…): private addresses, like 10.x or 192.168.x"],
+    ["Getting an address","SLAAC (the device builds its own from the router's prefix) or DHCPv6"],
+    ["No broadcast","IPv6 uses multicast instead of broadcast; there is no NAT needed"]]
+};
+
 // ===== Interactive virtual labs: registry + "bench" engine for physical assembly simulations =====
 // Each sim: {id, title, cat, ch:[chapters], obj, ex, t (topic id), mins, summary, modes:true|false, mount(stage, api, opts) -> {hint(), destroy()}}
 const SIMS = [];
@@ -12208,7 +12279,7 @@ function save(){ try { localStorage.setItem(STORE, JSON.stringify(S)); } catch(e
 const QUICK = {
   warm:{label:"Start a 10-question warm-up", act:"quick"}, practice:{label:"Practice by topic", go:"practice"}, exam:{label:"Exam simulator", go:"exam"},
   chapters:{label:"Chapter reviews", go:"chapters"}, flash:{label:"Flashcards", go:"flash"}, labs:{label:"Virtual labs", go:"labs"},
-  study:{label:"Search a topic", go:"study"}, book:{label:"Book map", go:"book"}, platforms:{label:"Chipsets & CPUs", go:"platforms"},
+  study:{label:"Search a topic", go:"study"}, book:{label:"Book map", go:"book"}, platforms:{label:"Chipsets & CPUs", go:"platforms"}, netsheet:{label:"Networking cheat sheet", go:"netsheet"},
   videos:{label:"Watch the video course", go:"videos"}, pictures:{label:"Pictures", go:"pictures"}, figures:{label:"Figure finder", go:"figures"},
   review:{label:"Review my weak spots", go:"review"}, tutor:{label:"Ask the AI tutor", act:"tutorchat", ai:true}};
 const QUICK_DEFAULT = ["warm","chapters","flash","labs","study","videos"];
@@ -12223,7 +12294,12 @@ function applyPrefs(){
   applyBg();
 }
 // Background tint and shade (Settings → Appearance). 0 = the default look; higher = lighter (dark mode) or dimmer (light mode).
-const BG_TINTS = {navy:{h:219, sd:48, sl:24, label:"Navy"}, slate:{h:212, sd:20, sl:14, label:"Slate"}, charcoal:{h:220, sd:5, sl:4, label:"Charcoal"}, warm:{h:30, sd:14, sl:28, label:"Warm"}, forest:{h:160, sd:26, sl:18, label:"Forest"}};
+const BG_TINTS = {
+  navy:{h:219, sd:48, sl:24, label:"Navy (default)", g:"Blues"}, midnight:{h:228, sd:55, sl:30, label:"Midnight", g:"Blues"}, ocean:{h:204, sd:58, sl:42, label:"Ocean", g:"Blues"}, royal:{h:226, sd:62, sl:45, label:"Royal", g:"Blues"}, steel:{h:210, sd:22, sl:18, label:"Steel", g:"Blues"},
+  silver:{h:220, sd:6, sl:8, label:"Silver", g:"Grays"}, charcoal:{h:220, sd:3, sl:3, label:"Charcoal", g:"Grays"}, graphite:{h:210, sd:10, sl:10, label:"Graphite", g:"Grays"},
+  forest:{h:150, sd:32, sl:24, label:"Forest green", g:"Colors"}, darkred:{h:352, sd:42, sl:34, label:"Dark red", g:"Colors"}, lavender:{h:262, sd:32, sl:48, label:"Lavender", g:"Colors"}, warm:{h:30, sd:14, sl:28, label:"Warm", g:"Colors"}};
+if (S.pref.bgTint === "slate") S.pref.bgTint = "steel";
+if (!Array.isArray(S.hl)) S.hl = [];
 const darkNow = () => S.pref.theme === "dark" || (S.pref.theme !== "light" && window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches);
 function applyBg(){
   const de = document.documentElement, t = Math.max(0, Math.min(100, +S.pref.bgShade || 0)) / 100, tint = BG_TINTS[S.pref.bgTint] || BG_TINTS.navy;
@@ -12465,6 +12541,7 @@ document.addEventListener("submit", e => {
 });
 // ---------- floating tutor chat (any page) ----------
 function openTutorChat(){
+  $("#sheet").dataset.key = "";
   $("#sheet").innerHTML = `<div class="spread"><span class="eyebrow">AI tutor</span><div class="row"><button class="btn small ghost" data-act="tutorsetup">Settings</button><button class="btn small" data-act="close">Close</button></div></div>
     <h2>Chat with the tutor</h2><p class="muted" style="margin:0">Ask anything about the A+ exams or your book. The tutor uses the app's study notes and points you to the chapter and page.</p>
     ${TUTOR_MODE==="handoff" ? `<div class="out" id="gout">${handoffHTML("Hi! I'm studying for CompTIA A+ 220-1201/220-1202 with the textbook CompTIA A+ Guide to IT Technical Support, 12th ed. Please be my tutor.")}</div>`
@@ -12612,7 +12689,7 @@ function domainStats(ex){
 // ---------- render: nav ----------
 const NAV = [
   {label:"Home", items:[["home","Home (Dashboard)"]]},
-  {label:"Study", items:[["study","Study & search"],["book","Book map"],["chapters","Chapter review"],["flash","Flashcards"],["platforms","Chipsets & CPUs"]]},
+  {label:"Study", items:[["study","Study & search"],["book","Book map"],["chapters","Chapter review"],["flash","Flashcards"],["platforms","Chipsets & CPUs"],["netsheet","Networking cheat sheet"]]},
   {label:"Practice & exams", items:[["practice","Practice"],["exam","Exam simulator"],["labs","Labs"],["review","Review"]]},
   {label:"Media", items:[["videos","Videos"],["pictures","Pictures"],["figures","Figures"]]},
   {label:"Settings", items:[["settings","Settings"]]}];
@@ -13093,6 +13170,7 @@ function renderResults(s){
 // ---------- study note modal ----------
 function openNote(id){
   const k = KBMAP[id]; if (!k) return;
+  $("#sheet").dataset.key = "note:" + id;
   const n = QS.filter(q=>q.t===id).length;
   const rel = KB.filter(x => x.m===k.m && x.id!==id);
   $("#sheet").innerHTML = `<div class="spread"><span class="tag teal">${modLabel(k.m)} · ${esc(modTitle(k.m))}${refsFor(id)[0]&&refsFor(id)[0][2]?" · p. "+refsFor(id)[0][2]:""}</span><button class="btn small" data-act="close" aria-label="Close">Close</button></div>
@@ -13113,10 +13191,11 @@ function openNote(id){
   bindBoard($("#sheet"));
   $("#sheet").querySelector("[data-act=close]").focus();
 }
-function closeModal(){ SPEECH.stop(); $("#modal").hidden = true; $("#sheet").innerHTML = ""; if (tutorCtl) tutorCtl.abort(); }
+function closeModal(){ SPEECH.stop(); $("#modal").hidden = true; $("#sheet").dataset.key = ""; $("#sheet").innerHTML = ""; if (tutorCtl) tutorCtl.abort(); }
 
 // ---------- chapter reviews ----------
 function openReview(ch){
+  $("#sheet").dataset.key = "chrev:" + ch;
   const nq = REVQ.filter(q=>q.ch===ch).length, nall = QS.filter(q=>q.m===ch).length;
   const notes = KB.filter(k => k.m===ch);
   $("#sheet").innerHTML = `<div class="spread"><span class="tag teal">${modLabel(ch)} · p. ${(MODMAP[String(ch)]||{}).p||""}</span><button class="btn small" data-act="close" aria-label="Close">Close</button></div>
@@ -13150,6 +13229,7 @@ function chExtrasHTML(ch){
   return (ntc?`<button class="btn small" data-act="practicetc" data-ch="${ch}">Thinking Critically (${ntc})</button>`:"")
    + (nl||SIMS.some(sm=>(sm.ch||[]).includes(ch))?`<button class="btn small" data-go="labs" data-arg="${ch}">Labs (${nl + SIMS.filter(sm=>(sm.ch||[]).includes(ch)).length})</button>`:"")
    + (nf?`<button class="btn small" data-go="flash" data-arg="${ch}">Flashcards (${nf})</button>`:"")
+   + (ch===7||ch===8?`<button class="btn small" data-go="netsheet">Networking cheat sheet</button>`:"")
    + (ch===2||ch===3?`<button class="btn small" data-go="platforms">Chipsets &amp; CPUs guide</button>`:"")
    + (ch===MB_GUIDE.ch?`<button class="btn small" data-act="note" data-id="mb-components">Motherboard map</button>`:"");
 }
@@ -13369,6 +13449,177 @@ VIEWS.platforms = function(){
   v.querySelectorAll("[data-pmake]").forEach(b => b.addEventListener("click", () => { S.pref.platMake = b.dataset.pmake; save(); const y = window.scrollY; VIEWS.platforms(); window.scrollTo({top: y}); }));
 };
 
+// ---------- networking cheat sheet: ports, IP addressing, subnetting ----------
+const ip2int = a => ((a[0] << 24) >>> 0) + (a[1] << 16) + (a[2] << 8) + a[3];
+const int2ip = n => [n >>> 24, (n >>> 16) & 255, (n >>> 8) & 255, n & 255];
+const ipStr = a => a.join(".");
+function parseIP(s){ const m = String(s).trim().match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/); if (!m) return null; const a = m.slice(1).map(Number); return a.every(x => x <= 255) ? a : null; }
+function parseMask(s){ s = String(s).trim().replace(/^\//, ""); if (/^\d{1,2}$/.test(s)) { const n = +s; return n >= 0 && n <= 32 ? n : null; }
+  const a = parseIP(s); if (!a) return null; const v = ip2int(a); let n = 0; while (n < 32 && (v & (0x80000000 >>> n))) n++; return ((n === 32 ? 0xFFFFFFFF : (0xFFFFFFFF << (32 - n)) >>> 0) >>> 0) === v || (n === 0 && v === 0) ? n : null; }
+const maskOf = n => n === 0 ? [0,0,0,0] : int2ip((0xFFFFFFFF << (32 - n)) >>> 0);
+const bin8 = x => x.toString(2).padStart(8, "0");
+function ipType(a){
+  if (a[0] === 10 || (a[0] === 172 && a[1] >= 16 && a[1] <= 31) || (a[0] === 192 && a[1] === 168)) return ["Private", "Not routed on the internet; NAT on the router translates it."];
+  if (a[0] === 169 && a[1] === 254) return ["APIPA", "Windows assigned this itself because no DHCP server answered."];
+  if (a[0] === 127) return ["Loopback", "Points back to this same computer."];
+  if (a[0] >= 224 && a[0] <= 239) return ["Multicast", "Class D: one sender, many receivers."];
+  if (a[0] >= 240) return ["Reserved", "Class E: experimental."];
+  if (a[0] === 0) return ["Reserved", "0.x.x.x means \"this network\"."];
+  return ["Public", "Routable on the internet."];
+}
+const ipClass = a => a[0] <= 126 ? "A" : a[0] === 127 ? "A (loopback)" : a[0] <= 191 ? "B" : a[0] <= 223 ? "C" : a[0] <= 239 ? "D" : "E";
+function subnet(ipA, n){
+  const ip = ip2int(ipA), m = n === 0 ? 0 : (0xFFFFFFFF << (32 - n)) >>> 0;
+  const net = (ip & m) >>> 0, bc = (net | (~m >>> 0)) >>> 0, size = 2 ** (32 - n);
+  const usable = n >= 31 ? (n === 31 ? 2 : 1) : size - 2;
+  return {n, mask: maskOf(n), net: int2ip(net), bc: int2ip(bc), first: int2ip(n >= 31 ? net : net + 1), last: int2ip(n >= 31 ? bc : bc - 1), size, usable};
+}
+function subnetSteps(ipA, n){
+  const r = subnet(ipA, n), mk = r.mask, steps = [];
+  steps.push(`<b>1. Write the mask.</b> /${n} means the first ${n} bits are 1s (network) and the last ${32 - n} are 0s (hosts): <span class="mono">${ipStr(mk)}</span>.`);
+  if (n % 8 === 0) {
+    steps.push(`<b>2. Easy case:</b> /${n} ends on an octet boundary, so the network part is just the first ${n / 8} octet${n === 8 ? "" : "s"}. Copy ${n === 8 ? "it" : "them"}; host octets become 0 for the network and 255 for the broadcast.`);
+  } else {
+    const o = Math.floor(n / 8), mo = mk[o], bs = 256 - mo, v = ipA[o], lo = Math.floor(v / bs) * bs;
+    steps.push(`<b>2. Find the "interesting" octet:</b> octet ${o + 1}, where the mask is <span class="mono">${mo}</span> (not 255 or 0).`);
+    steps.push(`<b>3. Block size = 256 − ${mo} = ${bs}.</b> Subnets in that octet start at 0, ${bs}, ${bs * 2}, ${bs * 3}…`);
+    steps.push(`<b>4. Which block holds ${v}?</b> ${v} ÷ ${bs} = ${Math.floor(v / bs)} remainder ${v % bs}, so the block starts at ${Math.floor(v / bs)} × ${bs} = <b>${lo}</b> and the next one at ${lo + bs}.`);
+    steps.push(`<b>5. Network</b> = that block start, with later octets set to 0: <span class="mono">${ipStr(r.net)}</span>. <b>Broadcast</b> = one less than the next block (${lo + bs - 1}), with later octets set to 255: <span class="mono">${ipStr(r.bc)}</span>.`);
+  }
+  steps.push(`<b>${n % 8 === 0 ? 3 : 6}. Hosts</b> = 2<sup>${32 - n}</sup> − 2 = ${r.size} − 2 = <b>${r.usable.toLocaleString()}</b> usable (minus the network and broadcast addresses).${n >= 31 ? " (/31 and /32 are special cases.)" : ""}`);
+  return steps;
+}
+function binRowHTML(a, n){
+  return `<div class="binrow mono">${a.map((o, i) => `<span>${bin8(o).split("").map((b, j) => `<i class="${i * 8 + j < n ? "bn" : "bh"}">${b}</i>`).join("")}</span>`).join("<b>.</b>")}</div>`;
+}
+const PORT_DRILL = {n:0, ok:0, cur:null};
+function newPortQ(){
+  const P0 = NET.ports, item = P0[Math.floor(Math.random() * P0.length)], dir = Math.random() < .5 ? "port" : "proto";
+  const others = shuffle(P0.filter(p => p !== item)).slice(0, 3);
+  const opts = shuffle([item, ...others]).map(p => dir === "port" ? p[1] : p[0]);
+  PORT_DRILL.cur = {item, dir, opts, ans: dir === "port" ? item[1] : item[0], done:false};
+}
+function portDrillHTML(){
+  const c = PORT_DRILL.cur; if (!c) newPortQ(); const q = PORT_DRILL.cur;
+  return `<div class="panel drill"><div class="spread"><b>${q.dir === "port" ? `Which protocol uses port <span class="mono">${esc(q.item[0])}</span>?` : `Which port does <span class="mono">${esc(q.item[1])}</span> use?`}</b><span class="mono muted">${PORT_DRILL.ok}/${PORT_DRILL.n}</span></div>
+    <div class="pm-opts">${q.opts.map(o => `<button class="btn pm-opt${q.done && o === q.ans ? " right" : ""}${q.done && q.pick === o && o !== q.ans ? " wrongp" : ""}" data-pd="${esc(o)}" ${q.done ? "disabled" : ""}>${esc(o)}</button>`).join("")}</div>
+    ${q.done ? `<p class="${q.pick === q.ans ? "okmsg" : "errmsg"}">${q.pick === q.ans ? "✓ Right." : "✗ It's " + esc(q.ans) + "."} ${esc(q.item[1])} (${esc(q.item[2])}) uses ${esc(q.item[0])} over ${esc(q.item[3])}. ${esc(q.item[5])}</p><button class="btn small primary" data-pdnext>Next →</button>` : ""}</div>`;
+}
+const SUB_DRILL = {cur:null, n:0, ok:0};
+function newSubQ(){
+  const ns = [24, 25, 26, 27, 28, 29, 30, 23, 22, 20, 16];
+  const n = ns[Math.floor(Math.random() * ns.length)];
+  const bases = [[192,168,Math.floor(Math.random()*256)],[10,Math.floor(Math.random()*256),Math.floor(Math.random()*256)],[172,16 + Math.floor(Math.random()*16),Math.floor(Math.random()*256)]];
+  const b = bases[Math.floor(Math.random() * 3)]; const ip = [...b, 1 + Math.floor(Math.random() * 254)];
+  SUB_DRILL.cur = {ip, n, r: subnet(ip, n), done:false};
+}
+function subDrillHTML(){
+  if (!SUB_DRILL.cur) newSubQ(); const q = SUB_DRILL.cur;
+  const field = (k, label, ph) => `<label class="sdf"><span>${label}</span><input type="text" inputmode="decimal" data-sd="${k}" placeholder="${ph}" ${q.done ? "disabled" : ""} value="${esc((q.vals || {})[k] || "")}" autocomplete="off"></label>`;
+  return `<div class="panel drill"><div class="spread"><b>Host <span class="mono">${ipStr(q.ip)}/${q.n}</span></b><span class="mono muted">${SUB_DRILL.ok}/${SUB_DRILL.n}</span></div>
+    <div class="sdgrid">${field("net", "Network address", "e.g. 192.168.1.0")}${field("bc", "Broadcast address", "e.g. 192.168.1.255")}${field("hosts", "Usable hosts", "e.g. 254")}</div>
+    ${q.done ? `<div class="sdres">${q.res.map(([l, ok, a]) => `<span class="${ok ? "okmsg" : "errmsg"}">${ok ? "✓" : "✗"} ${l}: <span class="mono">${esc(a)}</span></span>`).join("")}</div><details class="revd" open><summary>How to work it out</summary><ol class="steps">${subnetSteps(q.ip, q.n).map(x => `<li>${x}</li>`).join("")}</ol></details><button class="btn small primary" data-sdnext>Next problem →</button>`
+      : `<div class="row"><button class="btn primary" data-sdcheck>Check</button><button class="btn ghost small" data-sdhint>Show the first step</button></div><p class="muted sdhint" hidden>${subnetSteps(q.ip, q.n).slice(0, q.n % 8 ? 3 : 2).map(x => x.replace(/<[^>]+>/g, "")).join(" ")}</p>`}</div>`;
+}
+function v6expand(s){
+  s = String(s).trim().toLowerCase(); if (!/^[0-9a-f:]+$/.test(s) || (s.match(/::/g) || []).length > 1) return null;
+  let parts; if (s.includes("::")) { const [a, b] = s.split("::"); const A = a ? a.split(":") : [], B = b ? b.split(":") : []; const fill = 8 - A.length - B.length; if (fill < 1) return null; parts = [...A, ...Array(fill).fill("0"), ...B]; }
+  else parts = s.split(":");
+  if (parts.length !== 8 || parts.some(p => !/^[0-9a-f]{1,4}$/.test(p))) return null;
+  return parts.map(p => p.padStart(4, "0"));
+}
+function v6compress(full){
+  const g = full.map(p => p.replace(/^0+(?=.)/, "")); let best = [-1, 0], cur = [-1, 0];
+  g.forEach((p, i) => { if (p === "0") { if (cur[0] < 0) cur = [i, 0]; cur[1]++; if (cur[1] > best[1]) best = cur.slice(); } else cur = [-1, 0]; });
+  if (best[1] < 2) return g.join(":");
+  const a = g.slice(0, best[0]).join(":"), b = g.slice(best[0] + best[1]).join(":"); return a + "::" + b;
+}
+VIEWS.netsheet = function(){
+  const v = $("#view");
+  const cidrRows = []; for (let n = 8; n <= 30; n++) { if (n > 8 && n < 16 && n !== 12) continue; const r = subnet([10,0,0,0], n); const o = Math.floor(n / 8); cidrRows.push([`/${n}`, ipStr(r.mask), n % 8 ? `${256 - r.mask[o]} (octet ${o + 1})` : "—", r.size.toLocaleString(), r.usable.toLocaleString()]); }
+  v.innerHTML = `<section class="hero"><span class="eyebrow">Study · Chapters 7 and 8 · Core 1 Domain 2</span><h1>Networking cheat sheet</h1>
+    <p>Ports to memorize, IP address ranges to recognize, and subnetting math, with a calculator that shows every step and drills to practice.</p>
+    <nav class="row cjump" aria-label="Sections"><a href="#ns-ports">Ports</a><a href="#ns-ip">IPv4 ranges</a><a href="#ns-bin">Binary</a><a href="#ns-sub">Subnetting</a><a href="#ns-calc">Calculator</a><a href="#ns-same">Same network?</a><a href="#ns-v6">IPv6</a></nav></section>
+
+    <section class="rgroup" id="ns-ports"><h2>Ports to know for Core 1</h2>
+      <p class="muted" style="margin:0">A port number tells the receiving computer which service a packet is for. The IP address gets it to the right computer; the port gets it to the right program.</p>
+      <div class="tablewrap"><table class="ctbl"><thead><tr><th>Port</th><th>Protocol</th><th>TCP/UDP</th><th>What it does</th><th>Memory tip</th></tr></thead><tbody>${NET.ports.map(p => `<tr><th scope="row" class="mono">${esc(p[0])}</th><td data-label="Protocol"><b>${esc(p[1])}</b><br><small class="muted">${esc(p[2])}</small></td><td data-label="TCP/UDP">${esc(p[3])}</td><td data-label="What it does">${esc(p[4])}</td><td data-label="Tip">${esc(p[5])}</td></tr>`).join("")}</tbody></table></div>
+      <h3>Insecure → secure versions</h3><div class="secgrid">${NET.secure.map(([a, b]) => `<div><span class="mono">${esc(a)}</span><i aria-hidden="true">→</i><b class="mono">${esc(b)}</b></div>`).join("")}</div>
+      <h3>TCP vs. UDP</h3><div class="namegrid"><div class="panel"><b>TCP</b><p style="margin:6px 0 0">Connection-oriented: three-way handshake (SYN, SYN-ACK, ACK), guaranteed delivery, in order, resends lost data. Used for web, email, file transfer, remote access.</p></div><div class="panel"><b>UDP</b><p style="margin:6px 0 0">Connectionless: no handshake, no guarantee, but fast and light. Used for DNS lookups, DHCP, SNMP, streaming, VoIP and online games.</p></div></div>
+      <details class="revd"><summary>Also good to recognize (not on the exam's list)</summary>${tblHTML({head:["Port","Protocol","TCP/UDP","Use"], rows:NET.extra})}</details>
+      <h3>Port drill</h3><div id="portdrill">${portDrillHTML()}</div></section>
+
+    <section class="rgroup" id="ns-ip"><h2>IPv4 addresses to recognize</h2>
+      <p class="muted" style="margin:0">An IPv4 address is 32 bits, written as four octets (0–255) like <span class="mono">192.168.1.25</span>. The subnet mask splits it into a network part (which street) and a host part (which house).</p>
+      ${tblHTML({head:["Range","CIDR","Type","What it means"], rows:NET.ranges})}
+      <h3>Classes (classful addressing)</h3>${tblHTML({head:["Class","First octet","Default mask","CIDR","Use"], rows:NET.classes})}
+      <p class="note">Quick checks: an address starting with <b>169.254</b> means DHCP failed. <b>127.0.0.1</b> is the computer itself. <b>172.16–172.31</b> is private, but 172.32 and up is public. The default gateway (usually the router) must be on the same subnet as the computer.</p></section>
+
+    <section class="rgroup" id="ns-bin"><h2>Binary in one minute</h2>
+      <p style="margin:0">Each octet has 8 bits. Each bit has a place value; add up the values of the 1 bits.</p>
+      <div class="places mono">${[128,64,32,16,8,4,2,1].map(x => `<span>${x}</span>`).join("")}</div>
+      <p class="muted" style="margin:0">Example: 192 = 128 + 64 = <span class="mono">11000000</span>. The only mask octets you'll see are 0, 128, 192, 224, 240, 248, 252, 254 and 255 (1s filling from the left).</p>
+      <div class="bintool"><label>Decimal <input type="number" id="bindec" min="0" max="255" value="192"></label><label>Binary <input type="text" id="binbin" maxlength="8" value="11000000" class="mono"></label><div id="binshow"></div></div></section>
+
+    <section class="rgroup" id="ns-sub"><h2>Subnetting, step by step</h2>
+      <ol class="prules"><li><b>CIDR /n</b> = how many 1 bits are in the mask. /24 = 255.255.255.0.</li><li><b>Block size</b> = 256 − the mask value in the "interesting" octet (the one that isn't 255 or 0).</li><li><b>Network address</b> = the block start your IP falls in. <b>Broadcast</b> = the next block start − 1.</li><li><b>Usable hosts</b> = 2<sup>host bits</sup> − 2 (the network and broadcast addresses can't be assigned).</li></ol>
+      ${tblHTML({head:["CIDR","Mask","Block size","Addresses","Usable hosts"], rows:cidrRows})}
+      <h3>Subnet drill</h3><div id="subdrill">${subDrillHTML()}</div></section>
+
+    <section class="rgroup" id="ns-calc"><h2>Subnet calculator</h2>
+      <div class="row"><input type="text" id="calcip" value="192.168.10.77/26" aria-label="IP address with /CIDR or mask" class="mono" style="flex:1;min-width:200px"><input type="text" id="calcmask" placeholder="mask (optional), e.g. 255.255.255.192" aria-label="Subnet mask" class="mono" style="flex:1;min-width:200px"><button class="btn primary" id="calcgo">Calculate</button></div>
+      <div id="calcout"></div></section>
+
+    <section class="rgroup" id="ns-same"><h2>Same network?</h2>
+      <p class="muted" style="margin:0">Two devices can talk directly only if they're on the same subnet. Use this to check a PC and its default gateway.</p>
+      <div class="row"><input type="text" id="sameA" value="192.168.1.20" class="mono" aria-label="First IP"><input type="text" id="sameB" value="192.168.1.130" class="mono" aria-label="Second IP"><input type="text" id="sameM" value="/25" class="mono" aria-label="Mask or CIDR" style="width:110px"><button class="btn" id="samego">Check</button></div>
+      <div id="sameout"></div></section>
+
+    <section class="rgroup" id="ns-v6"><h2>IPv6 essentials</h2>
+      <dl class="sufl">${NET.v6.map(([k, d]) => `<dt>${esc(k)}</dt><dd>${esc(d)}</dd>`).join("")}</dl>
+      <h3>Shorten / expand an IPv6 address</h3>
+      <div class="row"><input type="text" id="v6in" value="2001:0db8:0000:0000:0000:ff00:0042:8329" class="mono" style="flex:1;min-width:240px" aria-label="IPv6 address"><button class="btn" id="v6go">Convert</button></div><div id="v6out"></div></section>`;
+
+  const calc = () => {
+    const raw = $("#calcip").value.trim(); const [ipS, cS] = raw.split("/"); const ip = parseIP(ipS);
+    const n = cS != null ? parseMask(cS) : parseMask($("#calcmask").value || "");
+    const out = $("#calcout");
+    if (!ip) return out.innerHTML = `<p class="errmsg">Enter an IPv4 address like 192.168.10.77/26 (or put the mask in the second box).</p>`;
+    if (n == null) return out.innerHTML = `<p class="errmsg">Add a /CIDR (like /26) or a valid subnet mask (like 255.255.255.192).</p>`;
+    const r = subnet(ip, n), t = ipType(ip);
+    out.innerHTML = `<div class="calcgrid">${[["Address", ipStr(ip)], ["Mask", ipStr(r.mask) + " (/" + n + ")"], ["Network", ipStr(r.net)], ["Broadcast", ipStr(r.bc)], ["First usable", ipStr(r.first)], ["Last usable", ipStr(r.last)], ["Usable hosts", r.usable.toLocaleString()], ["Class / type", ipClass(ip) + " · " + t[0]]].map(([k, val]) => `<div><span>${k}</span><b class="mono">${esc(val)}</b></div>`).join("")}</div>
+      <p class="muted">${esc(t[1])}</p>
+      <div class="binwrap"><div><span class="muted">Address</span>${binRowHTML(ip, n)}</div><div><span class="muted">Mask</span>${binRowHTML(r.mask, n)}</div><div><span class="muted">Network</span>${binRowHTML(r.net, n)}</div><p class="muted" style="margin:0"><i class="bn">1</i> network bits · <i class="bh">0</i> host bits</p></div>
+      <ol class="steps">${subnetSteps(ip, n).map(x => `<li>${x}</li>`).join("")}</ol>`;
+  };
+  const same = () => {
+    const a = parseIP($("#sameA").value), b = parseIP($("#sameB").value), n = parseMask($("#sameM").value), out = $("#sameout");
+    if (!a || !b || n == null) return out.innerHTML = `<p class="errmsg">Enter two IPv4 addresses and a mask (/25 or 255.255.255.128).</p>`;
+    const ra = subnet(a, n), rb = subnet(b, n), ok = ipStr(ra.net) === ipStr(rb.net);
+    out.innerHTML = `<p class="${ok ? "okmsg" : "errmsg"}"><b>${ok ? "✓ Same network." : "✗ Different networks."}</b> ${ipStr(a)} is in ${ipStr(ra.net)}/${n}; ${ipStr(b)} is in ${ipStr(rb.net)}/${n}. ${ok ? "They can talk directly." : "They need a router between them. If one is the default gateway, the PC can't reach it: fix the IP, the mask or the gateway setting."}</p>`;
+  };
+  const bin = from => { const d = $("#bindec"), b = $("#binbin"), o = $("#binshow");
+    if (from === "dec") { const x = Math.max(0, Math.min(255, parseInt(d.value || "0", 10) || 0)); b.value = bin8(x); }
+    else { const bs = (b.value || "").replace(/[^01]/g, "").slice(0, 8); d.value = parseInt(bs || "0", 2); }
+    const bits = bin8(+d.value || 0); o.innerHTML = `<div class="places mono">${[128,64,32,16,8,4,2,1].map((x, i) => `<span class="${bits[i] === "1" ? "on" : ""}">${bits[i]}<small>${x}</small></span>`).join("")}</div><p class="muted" style="margin:0">${[128,64,32,16,8,4,2,1].filter((x, i) => bits[i] === "1").join(" + ") || "0"} = <b>${+d.value || 0}</b></p>`; };
+  const v6 = () => { const f = v6expand($("#v6in").value), o = $("#v6out");
+    o.innerHTML = f ? `<div class="calcgrid"><div><span>Full</span><b class="mono">${f.join(":")}</b></div><div><span>Shortest</span><b class="mono">${v6compress(f)}</b></div><div><span>Type</span><b>${/^fe[89ab]/.test(f[0]) ? "Link-local" : f.join("") === "0".repeat(31) + "1" ? "Loopback" : /^f[cd]/.test(f[0]) ? "Unique local (private)" : /^[23]/.test(f[0]) ? "Global unicast (public)" : /^ff/.test(f[0]) ? "Multicast" : "Other"}</b></div></div>` : `<p class="errmsg">That isn't a valid IPv6 address. Use 8 groups of up to 4 hex digits, with :: at most once.</p>`; };
+  $("#calcgo").addEventListener("click", calc); $("#calcip").addEventListener("keydown", e => { if (e.key === "Enter") calc(); }); $("#calcmask").addEventListener("keydown", e => { if (e.key === "Enter") { $("#calcip").value = $("#calcip").value.split("/")[0]; calc(); } });
+  $("#samego").addEventListener("click", same); $("#v6go").addEventListener("click", v6);
+  $("#bindec").addEventListener("input", () => bin("dec")); $("#binbin").addEventListener("input", () => bin("bin"));
+  v.addEventListener("click", e => {
+    const pd = e.target.closest("[data-pd]"); if (pd) { const q = PORT_DRILL.cur; if (q.done) return; q.done = true; q.pick = pd.dataset.pd; PORT_DRILL.n++; if (q.pick === q.ans) PORT_DRILL.ok++; $("#portdrill").innerHTML = portDrillHTML(); return; }
+    if (e.target.closest("[data-pdnext]")) { newPortQ(); $("#portdrill").innerHTML = portDrillHTML(); return; }
+    if (e.target.closest("[data-sdhint]")) { const h = v.querySelector(".sdhint"); if (h) h.hidden = false; return; }
+    if (e.target.closest("[data-sdcheck]")) { const q = SUB_DRILL.cur; const val = k => (v.querySelector(`[data-sd="${k}"]`).value || "").trim(); q.vals = {net: val("net"), bc: val("bc"), hosts: val("hosts")};
+      const res = [["Network", q.vals.net === ipStr(q.r.net), ipStr(q.r.net)], ["Broadcast", q.vals.bc === ipStr(q.r.bc), ipStr(q.r.bc)], ["Usable hosts", q.vals.hosts.replace(/,/g, "") === String(q.r.usable), q.r.usable.toLocaleString()]];
+      q.res = res; q.done = true; SUB_DRILL.n++; if (res.every(x => x[1])) SUB_DRILL.ok++; $("#subdrill").innerHTML = subDrillHTML(); return; }
+    if (e.target.closest("[data-sdnext]")) { newSubQ(); $("#subdrill").innerHTML = subDrillHTML(); const f = v.querySelector("[data-sd=net]"); if (f) f.focus(); return; }
+  });
+  v.querySelectorAll(".cjump a").forEach(a => a.addEventListener("click", e => { e.preventDefault(); const t = document.querySelector(a.getAttribute("href")); if (t) t.scrollIntoView({behavior:"smooth", block:"start"}); }));
+  calc(); same(); bin("dec"); v6();
+};
+
 // ---------- key-term flashcards ----------
 let FC = null;
 VIEWS.flash = function(arg){
@@ -13528,7 +13779,7 @@ VIEWS.settings = function(){
     <section class="panel setgrp"><h2>Appearance</h2>
       <fieldset><legend>Color mode</legend><div class="chips">${radio("theme","auto","Match my device",P0.theme)}${radio("theme","light","Light",P0.theme)}${radio("theme","dark","Dark",P0.theme)}</div></fieldset>
       <fieldset><legend>Accent color</legend><div class="chips">${ACC.map(([k,l]) => `<label class="chip accentchip"><input type="radio" name="accent" value="${k}" ${P0.accent===k?"checked":""}><span><i class="sw sw-${k}" aria-hidden="true"></i>${l}</span></label>`).join("")}</div></fieldset>
-      <fieldset><legend>Background tint</legend><div class="chips">${Object.entries(BG_TINTS).map(([k,t]) => `<label class="chip"><input type="radio" name="bgtint" value="${k}" ${P0.bgTint===k?"checked":""}><span><i class="sw" style="background:hsl(${t.h} ${t.sd}% 22%)" aria-hidden="true"></i>${t.label}</span></label>`).join("")}</div></fieldset>
+      <fieldset><legend>Background theme</legend>${["Blues","Grays","Colors"].map(gn => `<div class="tintrow"><span class="tintg">${gn}</span><div class="chips">${Object.entries(BG_TINTS).filter(([k,t]) => t.g===gn).map(([k,t]) => `<label class="chip"><input type="radio" name="bgtint" value="${k}" ${P0.bgTint===k?"checked":""}><span><i class="sw" style="background:hsl(${t.h} ${t.sd}% ${darkNow()?24:70}%)" aria-hidden="true"></i>${t.label}</span></label>`).join("")}</div></div>`).join("")}</fieldset>
       <fieldset><legend>Background shade</legend><div class="shade"><span class="muted">${darkNow()?"Darker":"Brighter"}</span><input type="range" id="bgshade" min="0" max="100" step="5" value="${+P0.bgShade||0}" aria-label="Background shade"><span class="muted">${darkNow()?"Lighter":"Dimmer"}</span><button type="button" class="btn small ghost" data-bgreset>Reset</button></div><p class="muted" style="margin:4px 0 0;font-size:.85rem">In dark mode, slide right for a lighter background so colors stand out more.</p></fieldset>
       <fieldset><legend>Text size</legend><div class="chips">${radio("size","normal","Normal",P0.size)}${radio("size","large","Large",P0.size)}</div></fieldset>
     </section>
@@ -13569,6 +13820,7 @@ VIEWS.settings = function(){
 };
 VIEWS.review = function(){
   const v = $("#view");
+  setTimeout(() => v.querySelectorAll("[data-hldel]").forEach(b => b.addEventListener("click", () => { removeHighlight(b.dataset.hldel); VIEWS.review(); })), 0);
   const missed = QS.filter(q => S.att[q.id] && S.att[q.id].last===0);
   const flagged = QS.filter(q => S.flag[q.id]);
   const seen = Object.keys(S.att).length;
@@ -13577,6 +13829,7 @@ VIEWS.review = function(){
     <div class="row">${missed.length?`<button class="btn primary" data-act="weak">Drill ${missed.length} missed</button>`:""}${flagged.length?`<button class="btn" data-act="drillflag">Drill ${flagged.length} flagged</button>`:""}</div></section>
     <section class="rgroup"><h2>Missed last time (${missed.length})</h2>${missed.length?missed.map(missedItem).join(""):`<div class="empty">Nothing missed yet.</div>`}</section>
     <section class="rgroup"><h2>Flagged (${flagged.length})</h2>${flagged.length?flagged.map(missedItem).join(""):`<div class="empty">Flag questions during practice to collect them here.</div>`}</section>
+    <section class="rgroup"><h2>Your highlights (${S.hl.length})</h2>${S.hl.length ? `<div class="hllist">${S.hl.slice().reverse().map(h => `<div class="hlitem"><mark class="hl hl-${h.c}">${esc(h.q.length > 220 ? h.q.slice(0, 217) + "…" : h.q)}</mark><div class="row"><span class="muted" style="font-size:.85rem">${esc(h.label || "")}</span>${h.note ? `<button class="btn small ghost" data-act="note" data-id="${esc(h.note)}">Open</button>` : (h.r && !/-run$/.test(h.r) ? `<button class="btn small ghost" data-go="${esc(h.r)}" ${h.a != null ? `data-arg="${esc(h.a)}"` : ""}>Open</button>` : "")}<button class="btn small ghost" data-hldel="${h.id}">Remove</button></div></div>`).join("")}</div>` : `<div class="empty">Select text anywhere in the app and tap 🖍 Highlight to save it here.</div>`}</section>
     <p class="muted">AI tutor options and resetting your progress are in <button class="lk-link" data-go="settings">Settings</button>.</p>`;
 };
 
@@ -13628,6 +13881,7 @@ async function aiGrade(){
 
 // ---------- tutor settings (website / installed app) ----------
 function openTutorSetup(){
+  $("#sheet").dataset.key = "";
   const inClaude = TUTOR_MODE === "claude"; const cur = TUTOR.provider || "gemini"; const pv = PROVIDERS[cur];
   $("#sheet").innerHTML = `<div class="spread"><span class="eyebrow">AI tutor</span><button class="btn small" data-act="close">Close</button></div>
     <h2>Tutor settings</h2>
@@ -13754,7 +14008,7 @@ document.addEventListener("click", e => {
     case "copyopen": try { navigator.clipboard.writeText(trimPrompt(LAST_PROMPT)); toast("Question copied. Paste it into the chat."); } catch(err) {} return; // link still opens
     case "copyprompt": try { navigator.clipboard.writeText(LAST_PROMPT).then(() => toast("Question copied. Paste it into Claude.")); } catch(e) { toast("Couldn't copy on this device."); } return;
     case "reset1": $("#resetrow").innerHTML = `<span>Delete all progress in this browser?</span><button class="btn small" data-act="reset2" style="border-color:var(--bad);color:var(--bad)">Yes, reset</button><button class="btn small" data-go="settings">Cancel</button>`; return;
-    case "reset2": S = {att:{}, flag:{}, exams:[], watched:{}, fc:{}, labs:{}, sims:{}, pref:S.pref, ytapp:S.ytapp, vorder:S.vorder}; save(); S.pref = Object.assign({}, S.pref || {}); toast("Progress cleared."); return go("settings");
+    case "reset2": S = {att:{}, flag:{}, exams:[], watched:{}, fc:{}, labs:{}, sims:{}, pref:S.pref, ytapp:S.ytapp, vorder:S.vorder, hl:S.hl}; save(); S.pref = Object.assign({}, S.pref || {}); toast("Progress cleared."); return go("settings");
   }
 });
 document.addEventListener("keydown", e => {
@@ -13822,10 +14076,11 @@ function placeBubble(rect){
   if (y + bh > vh - 8) y = Math.max(8, rect.top - bh - 8);
   b.style.left = x + "px"; b.style.top = y + "px";
 }
-function showChooser(term, rect){
-  ensureBubble(); bubbleTerm = term;
+function showChooser(term, rect, long, range){
+  ensureBubble(); bubbleTerm = term; bubble._range = range ? range.cloneRange() : null;
   bubble.classList.remove("open");
-  bubble.innerHTML = `<div class="lk-actions"><span class="lk-term">${esc(term.length>28?term.slice(0,27)+"…":term)}</span><button type="button" class="lk-btn" data-lk="define">Define</button><button type="button" class="lk-btn" data-lk="search">Search</button><button type="button" class="lk-btn lk-ex" data-lk="explain">Explain${SPEECH.ok?" 🔊":""}</button></div>`;
+  const canHl = !!(range && hlContainer(range));
+  bubble.innerHTML = `<div class="lk-actions"><span class="lk-term">${esc(term.length>28?term.slice(0,27)+"…":term)}</span>${long ? "" : `<button type="button" class="lk-btn" data-lk="define">Define</button><button type="button" class="lk-btn" data-lk="search">Search</button>`}${term.length <= 400 ? `<button type="button" class="lk-btn lk-ex" data-lk="explain">Explain${SPEECH.ok?" 🔊":""}</button>` : ""}${canHl ? `<button type="button" class="lk-btn lk-hl" data-lk="hlpick" aria-label="Highlight">🖍 Highlight</button>` : ""}</div>`;
   bubble._rect = rect; placeBubble(rect);
 }
 function showDefine(){
@@ -13890,16 +14145,18 @@ function selectionTerm(){
   const sel = window.getSelection(); if (!sel || sel.isCollapsed || !sel.rangeCount) return null;
   const node = sel.anchorNode && (sel.anchorNode.nodeType===1 ? sel.anchorNode : sel.anchorNode.parentElement);
   if (!node || !node.closest("#view, #sheet") || node.closest("input, textarea, .lookup, button")) return null;
-  const term = cleanTerm(sel.toString());
-  if (term.length < 2 || term.length > 140 || term.split(" ").length > 20) return null;
-  const rect = sel.getRangeAt(0).getBoundingClientRect(); if (!rect.width && !rect.height) return null;
-  return {term, rect};
+  const raw = sel.toString(); if (raw.length > 2000) return null;
+  const term = cleanTerm(raw);
+  if (term.length < 2) return null;
+  const long = term.length > 140 || term.split(" ").length > 20;
+  const range = sel.getRangeAt(0); const rect = range.getBoundingClientRect(); if (!rect.width && !rect.height) return null;
+  return {term, rect, long, range};
 }
 function onSelect(){
   clearTimeout(selTimer);
   selTimer = setTimeout(() => {
     if (bubble && bubble.classList.contains("open")) return;
-    const s = selectionTerm(); if (s) showChooser(s.term, s.rect); else hideBubble();
+    const s = selectionTerm(); if (s) showChooser(s.term, s.rect, s.long, s.range); else hideBubble();
   }, 220);
 }
 document.addEventListener("selectionchange", onSelect);
@@ -13911,6 +14168,11 @@ document.addEventListener("click", e => {
   const b = e.target.closest("[data-lk]"); if (!b) { if (e.target.closest(".lookup [data-act]")) hideBubble(); return; }
   const a = b.dataset.lk;
   if (a === "explain") return showExplain();
+  if (a === "hlpick") { bubble.querySelector(".lk-actions").innerHTML = `<span class="lk-term">Highlight</span>${HL_COLORS.map(([c,l]) => `<button type="button" class="hlsw hl-${c}" data-lk="hlmake" data-c="${c}" aria-label="${l}" title="${l}"></button>`).join("")}<button type="button" class="lk-link" data-lk="hlback">Back</button>`; placeBubble(bubble._rect); return; }
+  if (a === "hlback") return showChooser(bubbleTerm, bubble._rect, false, bubble._range);
+  if (a === "hlmake") { const r = bubble._range; hideBubble(); if (r) makeHighlight(r, b.dataset.c); window.getSelection().removeAllRanges(); return; }
+  if (a === "hlcolor") { const h = S.hl.find(x => x.id === b.dataset.id); if (h) { h.c = b.dataset.c; save(); document.querySelectorAll(`mark[data-hl="${h.id}"]`).forEach(m => { m.className = "hl hl-" + h.c; }); } hideBubble(); return; }
+  if (a === "hldel") { removeHighlight(b.dataset.id); hideBubble(); return; }
   if (a === "explainchat") { const t = bubbleTerm, ex = bubble._explain || ""; hideBubble(); SPEECH.stop(); openTutorChat();
     const box = $("#gout"); const f = $("#sheet").querySelector(".tfirst"); if (f) f.remove();
     if (box) { box._conv = {context: explainPrompt(t), turns:[{r:"you", t:"Explain \"" + t + "\" in simple terms."},{r:"tutor", t:ex}]}; chatRender(box); const inp = box.querySelector(".tfollow input"); if (inp) inp.focus(); }
@@ -13924,6 +14186,90 @@ document.addEventListener("click", e => {
     const r = search(bubbleTerm);
     runTutor(tutorPrompt("Define \"" + bubbleTerm + "\" in the context of CompTIA A+ in 2-4 sentences, then give one exam tip.", r.kb.map(x=>x.k)), box.querySelector(".out"));
   }
+});
+
+// ---------- highlights ----------
+const HL_COLORS = [["yellow","Yellow"],["green","Green"],["blue","Blue"],["pink","Pink"],["orange","Orange"]];
+function hlContainer(range){
+  const el = n => n && (n.nodeType === 1 ? n : n.parentElement);
+  const a = el(range.startContainer), b = el(range.endContainer); if (!a || !b) return null;
+  const ca = a.closest("#view, #sheet"), cb = b.closest("#view, #sheet");
+  if (!ca || ca !== cb || a.closest(".lookup, input, textarea") || b.closest(".lookup, input, textarea")) return null;
+  return hlKey(ca) ? ca : null;
+}
+function hlKey(c){
+  if (c.id === "sheet") return c.dataset.key || "";
+  const h = HIST[HI]; if (!h) return "";
+  let k = h.r + ":" + (h.arg == null ? "" : h.arg);
+  if ((h.r === "practice-run" || h.r === "exam-run") && P && P.ids) k += ":" + P.ids[P.i];
+  return k;
+}
+function hlLabel(c){
+  if (c.id === "sheet") { const t = c.querySelector("h2"); return (t ? t.textContent : "Note"); }
+  const h = HIST[HI]; const t = $("#view h1");
+  if (h && (h.r === "practice-run" || h.r === "exam-run") && P && P.ids) return "Question: " + ((QMAP[P.ids[P.i]] || {}).q || "").slice(0, 70);
+  return t ? t.textContent : "Page";
+}
+function textIndex(c){
+  const nodes = []; let pos = 0; const tw = document.createTreeWalker(c, NodeFilter.SHOW_TEXT, {acceptNode: n => n.parentElement && n.parentElement.closest("script, style, textarea, .lookup, svg") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT});
+  let n; while ((n = tw.nextNode())) { nodes.push({n, s:pos}); pos += n.nodeValue.length; }
+  return {nodes, text: nodes.map(x => x.n.nodeValue).join("")};
+}
+function globalOff(idx, node, off){
+  if (node.nodeType === 3) { const x = idx.nodes.find(y => y.n === node); return x ? x.s + off : -1; }
+  const after = node.childNodes[off] || null;
+  for (const x of idx.nodes) { if (after ? (after === x.n || after.contains(x.n) || (after.compareDocumentPosition(x.n) & Node.DOCUMENT_POSITION_FOLLOWING)) : (node.contains(x.n) ? false : (node.compareDocumentPosition(x.n) & Node.DOCUMENT_POSITION_FOLLOWING))) return x.s; }
+  return idx.text.length;
+}
+function wrapRange(c, start, end, h){
+  const idx = textIndex(c);
+  idx.nodes.forEach(({n, s:ns}) => {
+    const ne = ns + n.nodeValue.length; if (ne <= start || ns >= end) return;
+    let node = n; const a = Math.max(0, start - ns), b = Math.min(n.nodeValue.length, end - ns);
+    if (!n.nodeValue.slice(a, b).trim()) return;
+    if (b < node.nodeValue.length) node.splitText(b);
+    if (a > 0) node = node.splitText(a);
+    const m = document.createElement("mark"); m.className = "hl hl-" + h.c; m.dataset.hl = h.id; node.parentNode.insertBefore(m, node); m.appendChild(node);
+  });
+}
+let hlBusy = false;
+function applyHighlights(c){
+  const key = hlKey(c); if (!key) return; const recs = S.hl.filter(h => h.k === key); if (!recs.length) return;
+  hlBusy = true;
+  try { recs.forEach(h => {
+    if (c.querySelector(`mark[data-hl="${h.id}"]`)) return;
+    const idx = textIndex(c); let best = -1, i = idx.text.indexOf(h.q);
+    while (i >= 0) { if (best < 0) best = i; if (h.pre && idx.text.slice(Math.max(0, i - h.pre.length), i) === h.pre) { best = i; break; } i = idx.text.indexOf(h.q, i + 1); }
+    if (best >= 0) wrapRange(c, best, best + h.q.length, h);
+  }); } finally { hlBusy = false; }
+}
+function makeHighlight(range, color){
+  const c = hlContainer(range); if (!c) return toast("This text can't be highlighted.");
+  const idx = textIndex(c); const s0 = globalOff(idx, range.startContainer, range.startOffset), e0 = globalOff(idx, range.endContainer, range.endOffset);
+  if (s0 < 0 || e0 <= s0) return;
+  const q = idx.text.slice(s0, e0); if (!q.trim()) return;
+  const h = {id: "h" + Date.now().toString(36) + Math.random().toString(36).slice(2,5), k: hlKey(c), q, pre: idx.text.slice(Math.max(0, s0 - 40), s0), c: color, t: Date.now(), label: hlLabel(c)};
+  if (c.id === "sheet") h.note = (c.dataset.key || "").startsWith("note:") ? c.dataset.key.slice(5) : null;
+  else { const top = HIST[HI]; h.r = top.r; h.a = top.arg; }
+  S.hl.push(h); save(); hlBusy = true; try { wrapRange(c, s0, e0, h); } finally { hlBusy = false; }
+  toast("Highlighted. Tap it to change the color or remove it.");
+}
+function removeHighlight(id){
+  S.hl = S.hl.filter(h => h.id !== id); save();
+  document.querySelectorAll(`mark[data-hl="${id}"]`).forEach(m => { const p = m.parentNode; while (m.firstChild) p.insertBefore(m.firstChild, m); p.removeChild(m); p.normalize(); });
+}
+(function(){
+  let t = null; const run = () => { t = null; ["#view", "#sheet"].forEach(sel => { const c = $(sel); if (c && !(sel === "#sheet" && $("#modal").hidden)) applyHighlights(c); }); };
+  const mo = new MutationObserver(() => { if (hlBusy || t) return; t = setTimeout(run, 40); });
+  ["#view", "#sheet"].forEach(sel => mo.observe($(sel), {childList:true, subtree:true}));
+})();
+document.addEventListener("click", e => {
+  const m = e.target.closest("mark.hl"); if (!m || e.target.closest("button, a, label")) return;
+  if (!window.getSelection().isCollapsed) return;
+  const h = S.hl.find(x => x.id === m.dataset.hl); if (!h) return;
+  ensureBubble(); bubble.classList.remove("open"); bubbleTerm = h.q;
+  bubble.innerHTML = `<div class="lk-actions"><span class="lk-term">Highlight</span>${HL_COLORS.map(([c,l]) => `<button type="button" class="hlsw hl-${c}${c===h.c?" on":""}" data-lk="hlcolor" data-id="${h.id}" data-c="${c}" aria-label="${l}" title="${l}"></button>`).join("")}<button type="button" class="lk-link" data-lk="hldel" data-id="${h.id}">Remove</button></div>`;
+  const r = m.getBoundingClientRect(); bubble._rect = r; placeBubble(r);
 });
 
 go("home");
