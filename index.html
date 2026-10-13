@@ -27,18 +27,18 @@
   --f-display:"Archivo", "Helvetica Neue", Arial, sans-serif;
   --f-body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
   --f-mono:"IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
-  --r:10px;
+  --r:10px; --on-accent:#ffffff;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0b1322; --surface:#121c2f; --sunk:#0e1728; --ink:#e4eaf3; --muted:#93a1b7; --line:#24324b;
   --navy:#9dbcf2; --teal:#43c3b2; --amber:#efa448; --good:#4cc488; --bad:#f07575;
-  --good-bg:#12301f; --bad-bg:#371a1d; --amber-bg:#33250f; --teal-bg:#0f2d2a; --focus:#7aa7ff; color-scheme:dark }}
+  --good-bg:#12301f; --bad-bg:#371a1d; --amber-bg:#33250f; --teal-bg:#0f2d2a; --focus:#7aa7ff; --on-accent:#0b1322; color-scheme:dark }}
 :root[data-theme="dark"]{
   --bg:#0b1322; --surface:#121c2f; --sunk:#0e1728; --ink:#e4eaf3; --muted:#93a1b7; --line:#24324b;
   --navy:#9dbcf2; --teal:#43c3b2; --amber:#efa448; --good:#4cc488; --bad:#f07575;
-  --good-bg:#12301f; --bad-bg:#371a1d; --amber-bg:#33250f; --teal-bg:#0f2d2a; --focus:#7aa7ff; color-scheme:dark }
+  --good-bg:#12301f; --bad-bg:#371a1d; --amber-bg:#33250f; --teal-bg:#0f2d2a; --focus:#7aa7ff; --on-accent:#0b1322; color-scheme:dark }
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55}
+body{background-color:var(--bg);background-image:var(--bg-img,none);background-attachment:fixed;color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55}
 button,input,select,textarea{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--focus);outline-offset:2px}
 h1,h2,h3{font-family:var(--f-display);line-height:1.15;text-wrap:balance;margin:0}
@@ -79,6 +79,13 @@ p{margin:0}
 .nav button:hover{background:var(--sunk)}
 .nav button[aria-current="page"]{background:var(--teal-bg);color:var(--ink);font-weight:700;box-shadow:inset 3px 0 0 var(--teal)}
 /* settings */
+.bgsw-h{font-size:.8rem;color:var(--muted);margin:10px 0 4px;font-weight:600}
+.bgsw-group{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px}
+.bgsw{display:grid;gap:4px;justify-items:center;border:2px solid transparent;background:none;border-radius:12px;padding:4px;cursor:pointer;font:inherit;color:var(--ink)}
+.bgsw i{display:block;width:100%;height:46px;border-radius:9px;border:1px solid rgba(0,0,0,.25);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.bgsw span{font-size:.74rem;line-height:1.2;text-align:center}
+.bgsw.on{border-color:var(--teal);background:var(--teal-bg)}.bgsw:hover{border-color:var(--line)}
+.bgsw-default i{background:linear-gradient(135deg,#f2f4f7 50%,#0b1322 50%)}
 .tintrow .sw{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px;border:1px solid var(--line)}
 .tintrow{display:grid;grid-template-columns:62px 1fr;gap:8px;align-items:center;margin-bottom:6px}.tintg{font-size:.8rem;color:var(--muted)}
 @media (max-width:520px){.tintrow{grid-template-columns:1fr}}
@@ -536,7 +543,7 @@ mark{background:var(--amber-bg);color:inherit;padding:0 2px;border-radius:2px}
 .prow ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}.prow li small{display:block;color:var(--muted);font-size:.8rem}
 .pchips{display:grid;gap:6px}.pser{font-size:.8rem;color:var(--muted);margin-right:6px}
 .chipb{display:inline-block;font-family:var(--f-mono);font-weight:700;font-size:.82rem;padding:2px 8px;border-radius:6px;margin:2px 4px 2px 0;border:1.5px solid}
-.chipb.t-z{background:var(--teal);border-color:var(--teal);color:var(--bg)}.chipb.t-b{background:var(--good);border-color:var(--good);color:var(--bg)}.chipb.t-h{background:transparent;border-color:var(--muted);color:var(--ink)}.chipb.t-q{background:var(--amber);border-color:var(--amber);color:var(--bg)}
+.chipb.t-z{background:var(--teal);border-color:var(--teal);color:var(--on-accent)}.chipb.t-b{background:var(--good);border-color:var(--good);color:var(--on-accent)}.chipb.t-h{background:transparent;border-color:var(--muted);color:var(--ink)}.chipb.t-q{background:var(--amber);border-color:var(--amber);color:var(--on-accent)}
 .ptip{margin:0;font-size:.9rem;padding:8px 10px;border-radius:8px;background:var(--sunk)}
 @media (max-width:560px){.prow{grid-template-columns:1fr;gap:2px}}
 .pm{display:grid;gap:12px}.pm-start{display:grid;gap:10px}.pm-order{display:grid;gap:8px}.pm-q{display:grid;gap:10px}
@@ -12283,7 +12290,7 @@ const QUICK = {
   videos:{label:"Watch the video course", go:"videos"}, pictures:{label:"Pictures", go:"pictures"}, figures:{label:"Figure finder", go:"figures"},
   review:{label:"Review my weak spots", go:"review"}, tutor:{label:"Ask the AI tutor", act:"tutorchat", ai:true}};
 const QUICK_DEFAULT = ["warm","chapters","flash","labs","study","videos"];
-S.pref = Object.assign({theme:"auto", accent:"teal", size:"normal", quick:QUICK_DEFAULT.slice(), qorder:Object.keys(QUICK), bgTint:"navy", bgShade:0, voice:"", rate:1, voiceExplain:true, voiceChat:false}, S.pref || {});
+S.pref = Object.assign({theme:"auto", accent:"teal", size:"normal", quick:QUICK_DEFAULT.slice(), qorder:Object.keys(QUICK), bgTheme:"default", bgAdj:0, voice:"", rate:1, voiceExplain:true, voiceChat:false}, S.pref || {});
 Object.keys(QUICK).forEach(k => { if (!S.pref.qorder.includes(k)) S.pref.qorder.push(k); });
 S.pref.qorder = S.pref.qorder.filter(k => QUICK[k]); S.pref.quick = S.pref.quick.filter(k => QUICK[k]);
 function applyPrefs(){
@@ -12293,28 +12300,49 @@ function applyPrefs(){
   if (P0.size === "large") de.dataset.size = "large"; else delete de.dataset.size;
   applyBg();
 }
-// Background tint and shade (Settings → Appearance). 0 = the default look; higher = lighter (dark mode) or dimmer (light mode).
-const BG_TINTS = {
-  navy:{h:219, sd:48, sl:24, label:"Navy (default)", g:"Blues"}, midnight:{h:228, sd:55, sl:30, label:"Midnight", g:"Blues"}, ocean:{h:204, sd:58, sl:42, label:"Ocean", g:"Blues"}, royal:{h:226, sd:62, sl:45, label:"Royal", g:"Blues"}, steel:{h:210, sd:22, sl:18, label:"Steel", g:"Blues"},
-  silver:{h:220, sd:6, sl:8, label:"Silver", g:"Grays"}, charcoal:{h:220, sd:3, sl:3, label:"Charcoal", g:"Grays"}, graphite:{h:210, sd:10, sl:10, label:"Graphite", g:"Grays"},
-  forest:{h:150, sd:32, sl:24, label:"Forest green", g:"Colors"}, darkred:{h:352, sd:42, sl:34, label:"Dark red", g:"Colors"}, lavender:{h:262, sd:32, sl:48, label:"Lavender", g:"Colors"}, warm:{h:30, sd:14, sl:28, label:"Warm", g:"Colors"}};
-if (S.pref.bgTint === "slate") S.pref.bgTint = "steel";
+// Background themes (Settings → Appearance): real paint-chip colors and metallic gradients.
+// Text, cards and lines switch between light and dark automatically so every theme stays readable.
+const BG_THEMES = [
+  ["Blues", [["midnight","Midnight","#0f1b33"],["navyblue","Navy Blue","#1b2a4a"],["denim","Denim","#2e4a6b"],["steelblue","Steel Blue","#4a6a8a"],["slategray","Slate Gray","#657383"],["silverstorm","Silver Storm","#8599a8"],["cadet","Cadet Gray","#91a3b0"],["bluegray","Blue Gray","#98afc7"],["bluesilver","Blue Silver","#ccddff"],["chrome","Chrome Gray","#dbe2e9"]]],
+  ["Grays & silvers", [["gunmetal","Gun Metal","#2a3439"],["porpoise","Porpoise Gray","#4d4d5c"],["eveningdove","Evening Dove","#525866"],["dimgray","Dim Gray","#696969"],["grayshower","Gray Shower","#6e7176"],["englewood","Englewood Cliffs","#7f8385"],["oldsilver","Old Silver","#848482"],["sweatshirt","Sweatshirt Gray","#9298a0"],["pigeon","Pigeon Gray","#a8acb2"],["silverlining","Silver Lining","#c5c9cd"],["silver","Silver","#c0c0c0"],["gainsboro","Gainsboro","#dcdcdc"],["pearl","Pearl River","#dde0de"]]],
+  ["Gray-greens & greens", [["medteal","Mediterranean Teal","#4a5858"],["millstone","Millstone Gray","#6b7169"],["nighttrain","Night Train","#7b8680"],["puritan","Puritan Gray","#98a09a"],["silverlake","Silver Lake","#c2c9c9"],["cucumber","Garden Cucumber","#455a53"],["vineyard","Martha's Vineyard","#536452"],["verdigris","Verdigris","#5d736e"],["herb","Herb Garden","#67764f"],["lehigh","Lehigh Green","#7d9481"],["mountain","Mountain Lane","#979b6f"],["appalachian","Appalachian Trail","#a8bdb0"],["etched","Etched Glass","#b6cdbe"],["meadow","Spring Meadow","#c8ccae"]]],
+  ["Reds", [["darkpurple","Dark Purple","#1d0515"],["blackbean","Black Bean","#350616"],["cosmos","Chocolate Cosmos","#550816"],["rosewood","Rosewood","#6a040f"],["maroon","Maroon","#800000"],["darkred","Dark Red","#8b0000"],["carmine","Carmine","#9a0d1b"],["firebrick","Firebrick","#b22222"],["indianred","Indian Red","#cd5c5c"],["salmon","Dark Salmon","#e9967a"]]],
+  ["Lavenders & mauves", [["deeplav","Deep Lavender","#2e2546"],["dove","Dove Gray","#7c6e7f"],["coolgray","Cool Gray","#9090c0"],["purplegray","Purple Gray","#a7a6ba"],["dusty","Dusty Gray","#b29ca2"],["pinksilver","Pink Silver","#c4aead"],["lavgray","Lavender Gray","#c4c3d0"],["lavender","Lavender","#d8ccef"],["pinkgray","Pink Gray","#e7dada"]]],
+  ["Metallics", [["m-whitesilver","White Silver","#d9dcdf",["#bfc4c8","#f4f5f6","#a9aeb3"]],["m-silver","Silver","#9ea2a6",["#6f7377","#d4d6d8","#7d8185"]],["m-champagne","Champagne Gold","#c9a27a",["#a77d56","#ead2b6","#9b6f48"]],["m-gold","Gold","#d4a64a",["#a9782a","#f3d98c","#b98a35"]],["m-rose","Rose Gold","#d79a9a",["#b97474","#f2c9c4","#a96565"]],["m-copper","Copper","#b8622f",["#8a3e17","#e3884f","#7c3714"]],["m-emerald","Emerald Metallic","#0f5a58",["#063b3a","#1d8a86","#073f3e"]],["m-navy","Navy Metallic","#1a2233",["#0b0f18","#47526a","#0d121c"]],["m-black","Black Metallic","#16181b",["#050607","#4a4d52","#080909"]]]]
+];
+const BG_MAP = {}; BG_THEMES.forEach(([g, list]) => list.forEach(([id, name, hex, grad]) => BG_MAP[id] = {id, name, hex, grad, g}));
+if (!S.pref.bgTheme || (S.pref.bgTheme !== "default" && !BG_MAP[S.pref.bgTheme])) S.pref.bgTheme = "default";
+if (typeof S.pref.bgAdj !== "number") S.pref.bgAdj = 0;
 if (!Array.isArray(S.hl)) S.hl = [];
-const darkNow = () => S.pref.theme === "dark" || (S.pref.theme !== "light" && window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches);
+const hexRgb = h => { h = h.replace("#",""); return [0,2,4].map(i => parseInt(h.slice(i, i+2), 16)); };
+const rgbHex = c => "#" + c.map(x => Math.round(Math.max(0, Math.min(255, x))).toString(16).padStart(2, "0")).join("");
+const mixC = (a, b, t) => a.map((x, i) => x + (b[i] - x) * t);
+const lumC = c => { const f = v => { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); }; return .2126 * f(c[0]) + .7152 * f(c[1]) + .0722 * f(c[2]); };
+const contrastC = (a, b) => { const x = lumC(a), y = lumC(b); return (Math.max(x, y) + .05) / (Math.min(x, y) + .05); };
+let BG_DARK = null; // true/false when a theme is active
+const darkNow = () => BG_DARK != null ? BG_DARK : (S.pref.theme === "dark" || (S.pref.theme !== "light" && window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches));
 function applyBg(){
-  const de = document.documentElement, t = Math.max(0, Math.min(100, +S.pref.bgShade || 0)) / 100, tint = BG_TINTS[S.pref.bgTint] || BG_TINTS.navy;
-  const vars = ["--bg","--surface","--sunk","--line"];
-  if (S.pref.bgTint === "navy" && t === 0) { vars.forEach(v => de.style.removeProperty(v)); return; }
-  const hsl = (sat, l) => `hsl(${tint.h} ${Math.round(sat)}% ${l.toFixed(1)}%)`;
-  if (darkNow()) {
-    const sat = tint.sd * (1 - .35 * t), bg = 9 + 16 * t;
-    de.style.setProperty("--bg", hsl(sat, bg)); de.style.setProperty("--surface", hsl(sat * .9, bg + 4.5)); de.style.setProperty("--sunk", hsl(sat, bg + 2)); de.style.setProperty("--line", hsl(sat * .75, bg + 13));
-  } else {
-    const sat = tint.sl, bg = 96 - 12 * t;
-    de.style.setProperty("--bg", hsl(sat, bg)); de.style.setProperty("--surface", hsl(sat * .6, 100 - 7 * t)); de.style.setProperty("--sunk", hsl(sat, bg - 3)); de.style.setProperty("--line", hsl(sat * .8, bg - 10));
-  }
+  const de = document.documentElement, vars = ["--bg","--surface","--sunk","--line","--ink","--muted","--bg-img","--on-accent"];
+  const th = BG_MAP[S.pref.bgTheme];
+  if (!th) { vars.forEach(v => de.style.removeProperty(v)); BG_DARK = null; return; }
+  const adj = Math.max(-1, Math.min(1, (+S.pref.bgAdj || 0) / 50));
+  const shade = c => adj < 0 ? mixC(c, [0,0,0], -adj * .55) : mixC(c, [255,255,255], adj * .55);
+  const base = shade(hexRgb(th.hex));
+  const white = [255,255,255], black = [0,0,0];
+  const dark = contrastC(base, white) >= contrastC(base, black);
+  BG_DARK = dark;
+  de.dataset.theme = dark ? "dark" : "light";
+  const ink = dark ? [241,244,248] : [16,22,32];
+  const surface = dark ? mixC(base, white, .09) : mixC(base, white, lumC(base) > .6 ? .55 : .32);
+  const set = (k, v) => de.style.setProperty(k, v);
+  set("--bg", rgbHex(base)); set("--ink", rgbHex(ink));
+  set("--surface", rgbHex(surface)); set("--sunk", rgbHex(dark ? mixC(base, white, .05) : mixC(base, white, .18)));
+  set("--line", rgbHex(mixC(surface, ink, dark ? .22 : .2)));
+  let muted = mixC(ink, base, .32); if (contrastC(muted, base) < 4.5) muted = mixC(ink, base, .18); set("--muted", rgbHex(muted));
+  set("--on-accent", dark ? "#0b1322" : "#ffffff");
+  set("--bg-img", th.grad ? `linear-gradient(135deg, ${th.grad.map(c => rgbHex(shade(hexRgb(c)))).join(", ")})` : "none");
 }
-if (window.matchMedia) { const mq = matchMedia("(prefers-color-scheme: dark)"); const f = () => applyBg(); if (mq.addEventListener) mq.addEventListener("change", f); else if (mq.addListener) mq.addListener(f); }
+if (window.matchMedia) { const mq = matchMedia("(prefers-color-scheme: dark)"); const f = () => { if (!BG_MAP[S.pref.bgTheme]) applyPrefs(); }; if (mq.addEventListener) mq.addEventListener("change", f); else if (mq.addListener) mq.addListener(f); }
 // ---------- voice (text-to-speech in the browser) ----------
 const SPEECH = (function(){
   const ok = typeof window.speechSynthesis !== "undefined" && typeof window.SpeechSynthesisUtterance !== "undefined";
@@ -13779,8 +13807,12 @@ VIEWS.settings = function(){
     <section class="panel setgrp"><h2>Appearance</h2>
       <fieldset><legend>Color mode</legend><div class="chips">${radio("theme","auto","Match my device",P0.theme)}${radio("theme","light","Light",P0.theme)}${radio("theme","dark","Dark",P0.theme)}</div></fieldset>
       <fieldset><legend>Accent color</legend><div class="chips">${ACC.map(([k,l]) => `<label class="chip accentchip"><input type="radio" name="accent" value="${k}" ${P0.accent===k?"checked":""}><span><i class="sw sw-${k}" aria-hidden="true"></i>${l}</span></label>`).join("")}</div></fieldset>
-      <fieldset><legend>Background theme</legend>${["Blues","Grays","Colors"].map(gn => `<div class="tintrow"><span class="tintg">${gn}</span><div class="chips">${Object.entries(BG_TINTS).filter(([k,t]) => t.g===gn).map(([k,t]) => `<label class="chip"><input type="radio" name="bgtint" value="${k}" ${P0.bgTint===k?"checked":""}><span><i class="sw" style="background:hsl(${t.h} ${t.sd}% ${darkNow()?24:70}%)" aria-hidden="true"></i>${t.label}</span></label>`).join("")}</div></div>`).join("")}</fieldset>
-      <fieldset><legend>Background shade</legend><div class="shade"><span class="muted">${darkNow()?"Darker":"Brighter"}</span><input type="range" id="bgshade" min="0" max="100" step="5" value="${+P0.bgShade||0}" aria-label="Background shade"><span class="muted">${darkNow()?"Lighter":"Dimmer"}</span><button type="button" class="btn small ghost" data-bgreset>Reset</button></div><p class="muted" style="margin:4px 0 0;font-size:.85rem">In dark mode, slide right for a lighter background so colors stand out more.</p></fieldset>
+      <fieldset><legend>Background color</legend>
+        <p class="muted" style="margin:0 0 8px;font-size:.88rem">Pick any color. Text and cards switch to light or dark automatically so everything stays readable.${BG_MAP[P0.bgTheme] ? " (Color mode above is set by the background while a color is chosen.)" : ""}</p>
+        <div class="bgsw-group"><button type="button" class="bgsw bgsw-default${P0.bgTheme==="default"?" on":""}" data-bgt="default" aria-pressed="${P0.bgTheme==="default"}"><i aria-hidden="true"></i><span>App default</span></button></div>
+        ${BG_THEMES.map(([g, list]) => `<div class="bgsw-h">${esc(g)}</div><div class="bgsw-group">${list.map(([id, name, hex, grad]) => `<button type="button" class="bgsw${P0.bgTheme===id?" on":""}" data-bgt="${id}" aria-pressed="${P0.bgTheme===id}" title="${esc(name)}"><i aria-hidden="true" style="background:${grad ? `linear-gradient(135deg, ${grad.join(", ")})` : hex}"></i><span>${esc(name)}</span></button>`).join("")}</div>`).join("")}
+      </fieldset>
+      <fieldset><legend>Fine-tune the color</legend><div class="shade"><span class="muted">Darker</span><input type="range" id="bgadj" min="-50" max="50" step="5" value="${+P0.bgAdj||0}" aria-label="Darker or lighter" ${BG_MAP[P0.bgTheme]?"":"disabled"}><span class="muted">Lighter</span><button type="button" class="btn small ghost" data-bgreset>Reset</button></div></fieldset>
       <fieldset><legend>Text size</legend><div class="chips">${radio("size","normal","Normal",P0.size)}${radio("size","large","Large",P0.size)}</div></fieldset>
     </section>
     <section class="panel setgrp"><h2>Home screen buttons</h2><p class="muted" style="margin:0">Choose the quick-access buttons on your Home screen and their order. The first one is highlighted.</p>
@@ -13802,14 +13834,14 @@ VIEWS.settings = function(){
     <section class="panel setgrp"><h2>Progress</h2><p class="muted" style="margin:0">Reset clears answer history, flags, flashcard and lab progress, and simulator scores in this browser. Your settings stay.</p>
       <div class="row" id="resetrow"><button class="btn small" data-act="reset1">Reset progress…</button></div></section>`;
   const bind = (name, fn) => v.querySelectorAll(`input[name=${name}]`).forEach(i => i.addEventListener("change", () => { fn(i.value); save(); }));
-  bind("theme", x => { S.pref.theme = x; applyPrefs(); });
+  bind("theme", x => { S.pref.theme = x; if (BG_MAP[S.pref.bgTheme]) { S.pref.bgTheme = "default"; toast("Background set back to the app default so the color mode can apply."); } applyPrefs(); const y = window.scrollY; VIEWS.settings(); window.scrollTo({top:y}); });
   bind("accent", x => { S.pref.accent = x; applyPrefs(); });
   bind("size", x => { S.pref.size = x; applyPrefs(); });
   bind("ytapp", x => { S.ytapp = x === "yt"; toast(S.ytapp ? "Videos will open in YouTube on this device." : "Videos will play inside the app."); });
   bind("vorder", x => { S.vorder = x; });
-  bind("bgtint", x => { S.pref.bgTint = x; applyBg(); });
-  const sh = v.querySelector("#bgshade"); if (sh) sh.addEventListener("input", () => { S.pref.bgShade = +sh.value; applyBg(); save(); });
-  const br = v.querySelector("[data-bgreset]"); if (br) br.addEventListener("click", () => { S.pref.bgShade = 0; S.pref.bgTint = "navy"; save(); applyBg(); const y = window.scrollY; VIEWS.settings(); window.scrollTo({top:y}); });
+  v.querySelectorAll("[data-bgt]").forEach(btn => btn.addEventListener("click", () => { S.pref.bgTheme = btn.dataset.bgt; S.pref.bgAdj = 0; save(); applyPrefs(); const y = window.scrollY; VIEWS.settings(); window.scrollTo({top:y}); }));
+  const sh = v.querySelector("#bgadj"); if (sh) sh.addEventListener("input", () => { S.pref.bgAdj = +sh.value; applyBg(); save(); });
+  const br = v.querySelector("[data-bgreset]"); if (br) br.addEventListener("click", () => { S.pref.bgAdj = 0; S.pref.bgTheme = "default"; save(); applyPrefs(); const y = window.scrollY; VIEWS.settings(); window.scrollTo({top:y}); });
   const vs = v.querySelector("#voicesel"); if (vs) { fillVoices(vs); vs.addEventListener("change", () => { S.pref.voice = vs.value; save(); }); }
   const vt = v.querySelector("[data-voicetest]"); if (vt) vt.addEventListener("click", () => SPEECH.speak("Hi! This is how the tutor will sound. A chipset is like a traffic controller on the motherboard, directing data between the processor and everything else."));
   const vr = v.querySelector("#voicerate"); if (vr) vr.addEventListener("input", () => { S.pref.rate = +vr.value; $("#ratev").textContent = (+vr.value).toFixed(2) + "×"; save(); });
