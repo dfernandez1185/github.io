@@ -649,6 +649,16 @@ mark{background:var(--amber-bg);color:inherit;padding:0 2px;border-radius:2px}
 @media (max-width:640px){.top-in{flex-wrap:nowrap;gap:6px;padding-inline:10px}.brand{flex:1 1 auto;padding-left:2px}.brand b{overflow:hidden;text-overflow:ellipsis}}
 @media (max-width:400px){.top-in .iconbtn{width:38px;height:38px}.brand b{font-size:1.02rem}}
 @media (max-width:340px){.brand{display:none}#nbbtn{margin-left:auto}}
+/* chapter review: book sections list */
+.tocl{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:2px}
+.tocbtn{display:flex;justify-content:space-between;gap:12px;width:100%;border:0;background:none;font:inherit;color:inherit;text-align:left;padding:6px 8px;border-radius:6px}
+button.tocbtn{cursor:pointer}
+button.tocbtn:hover{background:var(--sunk)}
+button.tocbtn .toct{text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
+button.tocbtn:hover .toct{color:var(--teal);text-decoration-color:var(--teal)}
+.toc3 .tocbtn{font-weight:700;margin-top:4px}
+.toc4 .tocbtn{padding-left:22px;font-size:.95rem}
+.tocl .pg{color:var(--teal);font-size:.82rem;white-space:nowrap}
 /* links into the lessons */
 .ref.reflink{border:0;background:none;padding:2px 0;font:inherit;color:inherit;text-align:left;cursor:pointer;border-radius:6px}
 .ref.reflink .sec{color:var(--ink);text-decoration:underline;text-decoration-color:var(--teal);text-underline-offset:3px}
@@ -817,8 +827,10 @@ svg .xaccentt{fill:var(--teal);font-family:var(--f-body)} svg .xwarnt{fill:var(-
 
 <script>
 // App version and update history (newest first). Bump APP_VERSION and add an entry for every release.
-const APP_VERSION = "1.22 beta 3";
+const APP_VERSION = "1.22 beta 4";
 const CHANGELOG = [
+  {v:"1.22 beta 4", date:"Oct 2026", items:[
+    "Simpler menu: the Book map is now part of Chapter review. Each chapter shows its key points, every section of the book with its page number (tap one to open it in the lesson), plus its study notes, questions, labs and figures"]},
   {v:"1.22 beta 3", date:"Oct 2026", items:[
     "Book references are now links: tap any “Read more in your book” entry or chapter review heading to jump to that exact spot in the Chapter lessons",
     "The tutor's replies link to the lesson section they mention, plus related study notes under each answer",
@@ -20823,12 +20835,13 @@ function save(){ try { localStorage.setItem(STORE, JSON.stringify(S)); } catch(e
 const QUICK = {
   warm:{label:"Start a 10-question warm-up", act:"quick"}, practice:{label:"Practice by topic", go:"practice"}, exam:{label:"Exam simulator", go:"exam"},
   chapters:{label:"Chapter reviews", go:"chapters"}, flash:{label:"Flashcards", go:"flash"}, labs:{label:"Virtual labs", go:"labs"},
-  study:{label:"Search a topic", go:"study"}, lessons:{label:"Chapter lessons", go:"lessons"}, book:{label:"Book map", go:"book"}, platforms:{label:"Chipsets & CPUs", go:"platforms"}, netsheet:{label:"Networking cheat sheet", go:"netsheet"},
+  study:{label:"Search a topic", go:"study"}, lessons:{label:"Chapter lessons", go:"lessons"}, platforms:{label:"Chipsets & CPUs", go:"platforms"}, netsheet:{label:"Networking cheat sheet", go:"netsheet"},
   videos:{label:"Watch the video course", go:"videos"}, pictures:{label:"Pictures", go:"pictures"}, figures:{label:"Figure finder", go:"figures"},
   review:{label:"Review my weak spots", go:"review"}, tutor:{label:"Ask the AI tutor", act:"tutorchat", ai:true}, tour:{label:"App tour", go:"tour"}};
 const QUICK_DEFAULT = ["warm","chapters","flash","labs","study","videos"];
 S.pref = Object.assign({theme:"auto", accent:"teal", size:"normal", quick:QUICK_DEFAULT.slice(), qorder:Object.keys(QUICK), bgTheme:"default", bgAdj:0, voice:"", rate:1, voiceExplain:true, voiceChat:false}, S.pref || {});
 Object.keys(QUICK).forEach(k => { if (!S.pref.qorder.includes(k)) S.pref.qorder.push(k); });
+if (S.pref.quick.includes("book") && !S.pref.quick.includes("chapters")) S.pref.quick.push("chapters");
 S.pref.qorder = S.pref.qorder.filter(k => QUICK[k]); S.pref.quick = S.pref.quick.filter(k => QUICK[k]);
 function applyPrefs(){
   const de = document.documentElement, P0 = S.pref;
@@ -21327,11 +21340,11 @@ function domainStats(ex){
 // ---------- render: nav ----------
 const NAV = [
   {label:"Home", items:[["home","Home (Dashboard)"],["tour","App tour"]]},
-  {label:"Study", items:[["study","Study & search"],["lessons","Chapter lessons"],["book","Book map"],["chapters","Chapter review"],["flash","Flashcards"],["platforms","Chipsets & CPUs"],["netsheet","Networking cheat sheet"]]},
+  {label:"Study", items:[["study","Study & search"],["lessons","Chapter lessons"],["chapters","Chapter review"],["flash","Flashcards"],["platforms","Chipsets & CPUs"],["netsheet","Networking cheat sheet"]]},
   {label:"Practice & exams", items:[["practice","Practice"],["exam","Exam simulator"],["labs","Labs"],["review","Review"]]},
   {label:"Media", items:[["explainers","Video explainers"],["videos","Videos"],["pictures","Pictures"],["figures","Figures"]]},
   {label:"Settings", items:[["settings","Settings"]], acts:[["notebook","Notebook"]]}];
-const navKey = r => r==="sim" ? "labs" : r==="watch" ? "explainers" : r;
+const navKey = r => r==="sim" ? "labs" : r==="watch" ? "explainers" : r==="book" ? "chapters" : r;
 const groupOf = r => NAV.find(g => g.items.some(i => i[0]===navKey(r))) || NAV[0];
 (function buildNav(){
   $("#nav").innerHTML = NAV.map(g => `<div class="navgroup"><span class="navh">${esc(g.label)}</span>${g.items.map(([k,l]) => `<button data-go="${k}">${esc(l)}</button>`).join("")}${(g.acts||[]).map(([k,l]) => `<button data-act="${k}">${esc(l)}</button>`).join("")}</div>`).join("");
@@ -21454,7 +21467,7 @@ VIEWS.home = function(){
     <h3>How the app maps to your book</h3>
     <p class="muted" style="max-width:70ch">Chapters 1–10 of the 12th edition cover Core 1 and Chapters 11–21 cover Core 2. Every question and study note shows the chapter, section and page that teach it, so you can open the book to the right spot. The bank holds ${counts[1]} Core 1 and ${counts[2]} Core 2 items, including ${sa} written short-answer questions and ordering questions modeled on performance-based items.</p>
     <p class="muted" style="max-width:70ch">Each chapter also has a review of key points based on the textbook's chapter summary, with ${REVQ.length} review questions. The ${TCQS.length} Thinking Critically practice questions, ${LABS.length} troubleshooting labs, ${FLASH_ALL.length} key-term flashcards and an index of the book's ${Object.values(FIGS).flat().length} figures are organized by chapter too.</p>
-    <div class="row"><button class="btn small" data-go="book">Open the book map</button><button class="btn small" data-go="chapters">Chapter reviews</button></div>
+    <div class="row"><button class="btn small" data-go="chapters">Chapter review: key points, sections and pages</button></div>
   </section>`;
   v.innerHTML = html;
 };
@@ -21849,21 +21862,35 @@ function openReview(ch){
   $("#modal").hidden = false;
   $("#sheet").scrollTop = 0;
 }
-VIEWS.chapters = function(){
+VIEWS.chapters = function(arg){
   const v = $("#view");
-  let html = `<section class="hero"><span class="eyebrow">Chapter reviews · 12th edition</span><h1>Chapter reviews</h1>
-    <p>Key points from each chapter's summary, rewritten for study, with section page numbers. ${REVQ.length} review questions are built from these points. They also show up in practice sets and the exam simulator.</p>
-    <div class="row"><button class="btn primary" data-act="practicereview">Practice all ${REVQ.length} review questions</button></div></section><div class="mods">`;
+  const sectionsHTML = ch => { const toc = BOOK_TOC[String(ch)] || []; if (!toc.length) return "";
+    return `<ul class="tocl">${toc.map(([lv, t, pg]) => { const l = typeof ch === "number" ? lessonLoc(ch, t, pg) : null;
+      const inner = `<span class="toct">${esc(t)}</span>${pg != null ? `<span class="pg mono">p.&nbsp;${pg}</span>` : ""}`;
+      return `<li class="toc${lv}">${l && l.si != null ? `<button type="button" class="tocbtn" data-go="lessons" data-arg="${locArg(l)}" title="Open in the lesson">${inner}</button>` : `<span class="tocbtn">${inner}</span>`}</li>`; }).join("")}</ul>`; };
+  let html = `<section class="hero"><span class="eyebrow">CompTIA A+ Guide to IT Technical Support · 12th edition</span><h1>Chapter review</h1>
+    <p>Everything for each chapter in one place: the key points from its summary, every section of the book with its page number (tap a section to open it in the lesson), and the study notes, review questions, labs and figures that go with it.</p>
+    <div class="row"><button class="btn primary" data-act="practicereview">Practice all ${REVQ.length} review questions</button></div></section><div class="mods chrev">`;
   let part = "";
-  REV_CHS.forEach(ch => {
-    const m = MODMAP[String(ch)];
-    if (m.part !== part) { part = m.part; html += `<div class="part">${part} · ${part==="Core 1"?"220-1201":"220-1202"}</div>`; }
-    const nq = REVQ.filter(q=>q.ch===ch).length;
-    html += `<details><summary><span class="no">CH ${ch}</span><span>${esc(m.t)}</span><span class="count">p. ${m.p} · ${CH_REVIEW[ch].reduce((a,s)=>a+s.pts.length,0)} points · ${nq} Q</span></summary>
-      <div class="inner"><div class="revbox">${reviewHTML(ch)}</div><div class="row"><button class="btn small primary" data-act="practicereview" data-ch="${ch}">Practice ${nq} review questions</button>${chExtrasHTML(ch)}<button class="btn small" data-act="practicemodule" data-m="${ch}">All ${modLabel(ch)} questions</button></div></div></details>`;
+  MODULES.forEach(m => {
+    const ch = m.n; if (m.part !== part) { part = m.part; html += `<div class="part">${part==="Appendix"?"Appendixes":part+" · "+(part==="Core 1"?"220-1201":"220-1202")}</div>`; }
+    const notes = KB.filter(k => String(k.m) === String(ch));
+    const nq = QS.filter(q => String(q.m) === String(ch)).length, nrq = REVQ.filter(q => q.ch === ch).length;
+    const npts = CH_REVIEW[ch] ? CH_REVIEW[ch].reduce((a, x) => a + x.pts.length, 0) : 0;
+    const nsec = (BOOK_TOC[String(ch)] || []).length;
+    const open = String(arg) === String(ch);
+    html += `<details id="chrev-${ch}"${open ? " open" : ""}><summary><span class="no">${typeof ch==="number"?"CH "+ch:"APP "+ch}</span><span>${esc(m.t)}</span><span class="count">p. ${m.p}${npts ? " · " + npts + " points" : ""}${nq ? " · " + nq + " Q" : ""}</span></summary>
+      <div class="inner">
+        ${npts ? `<details class="revd" open><summary>Key points from the chapter summary</summary><div class="revbox">${reviewHTML(ch)}</div></details>` : ""}
+        ${nsec ? `<details class="revd"${npts ? "" : " open"}><summary>Every section in the book, with page numbers (${nsec})</summary>${sectionsHTML(ch)}</details>` : ""}
+        ${notes.length ? `<div><span class="eyebrow">Study notes</span><div class="linklist" style="margin-top:6px">${notes.map(k => `<button class="btn small" data-act="note" data-id="${k.id}">${esc(k.title)}</button>`).join("")}</div></div>` : ""}
+        <div class="row">${nrq ? `<button class="btn small primary" data-act="practicereview" data-ch="${ch}">Practice ${nrq} review questions</button>` : ""}${nq ? `<button class="btn small" data-act="practicemodule" data-m="${ch}">All ${nq} ${typeof ch==="number"?"chapter":"appendix"} questions</button>` : ""}${chExtrasHTML(ch)}</div>
+        ${FIGS[ch] ? `<details class="revd"><summary>Figures in this chapter (${FIGS[ch].length})</summary>${figListHTML(ch)}</details>` : ""}</div></details>`;
   });
   v.innerHTML = html + `</div>`;
+  if (arg != null) setTimeout(() => { const d = document.getElementById("chrev-" + arg); if (d) d.scrollIntoView({block:"start"}); }, 40);
 };
+VIEWS.book = VIEWS.chapters; // the old Book map now lives inside Chapter review
 
 // ---------- chapter extras: Thinking Critically, labs, flashcards, figures ----------
 function chExtrasHTML(ch, noLesson){
@@ -22303,25 +22330,6 @@ function fcListHTML(){
   return `<div class="panel"><div class="acro fclist">${list.map(c=>`<b>${esc(c.term)}<small class="mono">CH ${c.ch}</small></b><span>${esc(c.def)}</span>`).join("")}</div></div>`;
 }
 
-// ---------- book map ----------
-VIEWS.book = function(){
-  const v = $("#view");
-  let html = `<section class="hero"><span class="eyebrow">CompTIA A+ Guide to IT Technical Support · 12th Edition · ©2027</span><h1>Book map</h1>
-    <p>Andrews, Shelton, Schmelz and Jaqua Jr. · ISBN 979-82-14-40966-5. Each chapter lists its sections with page numbers from the eTextbook, plus the study notes and practice questions that line up with it.</p></section><div class="mods">`;
-  let part = "";
-  MODULES.forEach(m => {
-    if (m.part !== part) { part = m.part; html += `<div class="part">${part==="Appendix"?"Appendixes":part+" · "+(part==="Core 1"?"220-1201":"220-1202")}</div>`; }
-    const notes = KB.filter(k => String(k.m)===String(m.n));
-    const nq = QS.filter(q => String(q.m)===String(m.n)).length;
-    html += `<details><summary><span class="no">${typeof m.n==="number"?"CH "+m.n:"APP "+m.n}</span><span>${esc(m.t)}</span><span class="count">p. ${m.p} · ${notes.length} notes · ${nq} Q</span></summary>
-      <div class="inner">${CH_REVIEW[m.n]?`<details class="revd"><summary>Chapter review: key points from the chapter summary</summary><div class="revbox">${reviewHTML(m.n)}<div class="row"><button class="btn small" data-act="practicereview" data-ch="${m.n}">Practice ${REVQ.filter(q=>q.ch===m.n).length} review questions</button></div></div></details>`:""}${(BOOK_TOC[String(m.n)]||[]).length?`<ol class="toc">${BOOK_TOC[String(m.n)].map(s=>`<li class="lv${s[0]}"><span>${esc(s[1])}</span><span class="pg">${s[2]?s[2]:""}</span></li>`).join("")}</ol>`:""}
-      ${notes.length?`<span class="eyebrow">Study notes</span><div class="linklist">${notes.map(k=>`<button class="btn small" data-act="note" data-id="${k.id}">${esc(k.title)}</button>`).join("")}</div>`:`<p class="muted">${m.n==="C"?"Acronyms are searchable in Study & search.":"No notes for this section."}</p>`}
-      ${nq?`<div class="row"><button class="btn small primary" data-act="practicemodule" data-m="${m.n}">Practice ${nq} questions from this ${typeof m.n==="number"?"chapter":"appendix"}</button>${chExtrasHTML(m.n)}</div>`:""}
-      ${FIGS[m.n]?`<details class="revd"><summary>Figures in this chapter (${FIGS[m.n].length})</summary>${figListHTML(m.n)}</details>`:""}</div></details>`;
-  });
-  v.innerHTML = html + `</div>`;
-};
-
 // ---------- picture guide ----------
 function setCard(it){
   const [file, name, cue] = it;
@@ -22632,7 +22640,7 @@ const TOUR = [
   {t:"The ☰ menu, sub-tabs and the ← → buttons", d:"The ☰ button at the top left opens the menu with every page, grouped into Home, Study, Practice and exams, Media and Settings. Under the top bar, tabs let you jump between pages in the same group. The ← and → arrows work like a browser's back and forward buttons.", act:"openmenu", btn:"Open the menu"},
   {t:"Study and search", d:"Search any term, port number, command or question. Results show matching study notes, acronyms, chapter review points, videos and practice questions, each with the chapter and page of your book. You can also browse every study note by chapter.", go:"study"},
   {t:"Chapter lessons", d:"Every chapter of your book explained in plain English, section by section, with page numbers and exam tips. Tap 🔊 Listen on any part, or have a whole section read to you while you follow along.", go:"lessons"},
-  {t:"Chapter review and the Book map", d:"Chapter review gives the key points from each chapter summary, with review questions built from them. The Book map lists every section of the book with page numbers, plus the notes, questions, labs and figures for each chapter.", go:"chapters"},
+  {t:"Chapter review", d:"One place per chapter: the key points from the chapter summary, every section of the book with its page number (tap one to open it in the lesson), plus the study notes, review questions, labs and figures for that chapter.", go:"chapters"},
   {t:"Flashcards", d:"Key terms from each chapter as flip cards. Mark the ones you know, and the rest come back until you've learned them. Pick one chapter or study them all.", go:"flash"},
   {t:"Chipsets and CPUs, and the Platform Matcher", d:"A guide to Intel and AMD processor families, chipsets and sockets from oldest to newest, with what works with what. The Platform Matcher quizzes you on matching processors, sockets and chipsets.", go:"platforms"},
   {t:"Networking cheat sheet", d:"Ports and protocols, private IP ranges, binary conversion and subnetting step by step. It also has a subnet calculator, port and subnet drills, and an IPv6 shortening tool.", go:"netsheet"},
@@ -23145,7 +23153,7 @@ document.addEventListener("click", e => {
     case "notebook": if ($("#drawer").classList.contains("open")) setDrawer(false); return nbOpen(b.dataset.tab);
     case "whatsnew": return openWhatsNew(false);
     case "openmenu": return setDrawer(true);
-    case "tourhl": { if (examLock()) return; go(hasLesson(LESSON_CHS[0]) ? "lessons" : "book", hasLesson(LESSON_CHS[0]) ? String(LESSON_CHS[0]) : undefined); return toast("Select a few words on this page to see the bubble."); }
+    case "tourhl": { if (examLock()) return; go(hasLesson(LESSON_CHS[0]) ? "lessons" : "chapters", hasLesson(LESSON_CHS[0]) ? String(LESSON_CHS[0]) : undefined); return toast("Select a few words on this page to see the bubble."); }
     case "tutorsave": return tutorSave();
     case "tutormodels": { const provider = $("#tprov").value, key = ($("#tkey").value||"").trim(), out = $("#ttest"); if (!key) { out.textContent = "Paste your key first."; return; }
       out.textContent = "Asking " + PROVIDERS[provider].name + " which models your key can use…";
