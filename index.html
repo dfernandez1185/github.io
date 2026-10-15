@@ -644,6 +644,38 @@ mark{background:var(--amber-bg);color:inherit;padding:0 2px;border-radius:2px}
 .article .body,.revbox,.panel p,.inner p,.lk-def{overflow-wrap:anywhere}
 
 
+
+/* header: one row on phones */
+@media (max-width:640px){.top-in{flex-wrap:nowrap;gap:6px;padding-inline:10px}.brand{flex:1 1 auto;padding-left:2px}.brand b{overflow:hidden;text-overflow:ellipsis}}
+@media (max-width:400px){.top-in .iconbtn{width:38px;height:38px}.brand b{font-size:1.02rem}}
+@media (max-width:340px){.brand{display:none}#nbbtn{margin-left:auto}}
+/* links into the lessons */
+.ref.reflink{border:0;background:none;padding:2px 0;font:inherit;color:inherit;text-align:left;cursor:pointer;border-radius:6px}
+.ref.reflink .sec{color:var(--ink);text-decoration:underline;text-decoration-color:var(--teal);text-underline-offset:3px}
+.ref.reflink:hover .sec{color:var(--teal)}
+.refgo{color:var(--teal);font-weight:700}
+.rseclink{border:0;background:none;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer}
+.rseclink b{text-decoration:underline;text-decoration-color:var(--teal);text-underline-offset:3px}
+.rseclink:hover b{color:var(--teal)}
+.lsec,.lsub{scroll-margin-top:118px}
+.lsflash{animation:lsflash 2.2s ease-out}
+@keyframes lsflash{0%,30%{box-shadow:0 0 0 3px var(--amber)}100%{box-shadow:0 0 0 0 transparent}}
+.tlink{border:0;background:none;padding:0;font:inherit;color:var(--teal);text-decoration:underline;text-underline-offset:3px;cursor:pointer;text-align:left;display:inline}
+.trel{display:grid;gap:6px;margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)}
+.trel .row{gap:6px}
+.trel .btn{white-space:normal;text-align:left}
+/* tutor minimize chevron */
+.tpmin svg{transition:transform .2s}
+.tpanel.min .tpmin svg{transform:rotate(180deg)}
+/* collapsible settings */
+details.setgrp{gap:0;padding:0}
+details.setgrp>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 18px;cursor:pointer}
+details.setgrp>summary::-webkit-details-marker{display:none}
+details.setgrp>summary:hover h2{color:var(--teal)}
+details.setgrp .sgchev{color:var(--muted);transition:transform .2s;flex:none}
+details.setgrp[open] .sgchev{transform:rotate(180deg)}
+details.setgrp[open]>summary{border-bottom:1px solid var(--line)}
+details.setgrp .sgbody{display:grid;gap:12px;padding:14px 18px 18px}
 /* tutor side panel */
 .tpscrim{position:fixed;inset:0;background:rgba(5,10,20,.35);z-index:57}
 .tpanel{position:fixed;top:0;right:0;bottom:0;width:min(400px,94vw);background:var(--surface);color:var(--ink);border-left:1px solid var(--line);z-index:58;transform:translateX(104%);visibility:hidden;transition:transform .2s ease,visibility 0s linear .2s;display:flex;flex-direction:column;box-shadow:-4px 0 24px rgba(0,0,0,.22);padding-top:env(safe-area-inset-top,0px);padding-right:env(safe-area-inset-right,0px)}
@@ -767,6 +799,7 @@ svg .xaccentt{fill:var(--teal);font-family:var(--f-body)} svg .xwarnt{fill:var(-
 <body>
 <header class="top"><div class="top-in">
   <button class="iconbtn" id="menubtn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="drawer"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+  <button class="iconbtn" id="homebtn" type="button" data-go="home" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true"><path d="M3.5 11.2 12 4l8.5 7.2M6 9.5V20h4.5v-5.5h3V20H18V9.5" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   <button class="iconbtn" id="histback" type="button" aria-label="Back" title="Back" disabled><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   <button class="iconbtn" id="histfwd" type="button" aria-label="Forward" title="Forward" disabled><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   <button class="brand" type="button" data-go="home" aria-label="A+ Study Bench home"><b>A+ Study Bench</b><span>220-1201 · 220-1202</span></button>
@@ -784,8 +817,14 @@ svg .xaccentt{fill:var(--teal);font-family:var(--f-body)} svg .xwarnt{fill:var(-
 
 <script>
 // App version and update history (newest first). Bump APP_VERSION and add an entry for every release.
-const APP_VERSION = "1.22 beta 2";
+const APP_VERSION = "1.22 beta 3";
 const CHANGELOG = [
+  {v:"1.22 beta 3", date:"Oct 2026", items:[
+    "Book references are now links: tap any “Read more in your book” entry or chapter review heading to jump to that exact spot in the Chapter lessons",
+    "The tutor's replies link to the lesson section they mention, plus related study notes under each answer",
+    "A Home button is now at the top left of every screen",
+    "Settings sections fold open and closed",
+    "The tutor's minimize button is a proper centered arrow"]},
   {v:"1.22 beta 2", date:"Oct 2026", items:[
     "Video explainers now play right inside the Chapter 3 lesson: every topic has a 🎬 Watch this part button, and each section ends with 🎬 Watch the whole section",
     "Every Chapter 3 topic is covered, including a new scene on DDR3 triple channel and SPD. The Chapter 3 study notes have the explainers too",
@@ -20700,7 +20739,24 @@ KB.forEach(k => { const r = BOOK_REFS[k.id]; if (r && r[0]) k.m = r[0][0]; });
 const KBMAP = Object.fromEntries(KB.map(k => [k.id, k]));
 const refsFor = id => BOOK_REFS[id] || [];
 const refText = r => modLabel(r[0]) + " › " + r[1] + (r[2] ? ", p. " + r[2] : "");
-const refHTML = r => `<span class="ref"><span class="mod">${modLabel(r[0])}</span> <span class="sec">${esc(r[1])}</span>${r[2]?` <span class="pg">p.&nbsp;${esc(r[2])}</span>`:""}</span>`;
+const refHTML = r => { const l = lessonLoc(r[0], r[1], r[2]); const inner = `<span class="mod">${modLabel(r[0])}</span> <span class="sec">${esc(r[1])}</span>${r[2]?` <span class="pg">p.&nbsp;${esc(r[2])}</span>`:""}`;
+  return l ? `<button type="button" class="ref reflink" data-go="lessons" data-arg="${locArg(l)}" title="Open this part of the ${esc(modLabel(r[0]))} lesson">${inner}<span class="refgo" aria-hidden="true">›</span></button>` : `<span class="ref">${inner}</span>`; };
+// find where a book section lives in the Chapter lessons (by heading, then by page)
+function lessonLoc(ch, title, page){
+  ch = +ch; const L = typeof LESSONS !== "undefined" && LESSONS[ch]; if (!L || !L.length) return null;
+  const t = lsNorm(title || "");
+  if (t) {
+    for (let si = 0; si < L.length; si++) { if (lsNorm(L[si].s) === t) return {ch, si, xi:null};
+      const subs = L[si].sub || []; for (let xi = 0; xi < subs.length; xi++) { const h = subs[xi].h; if (lsNorm(h) === t || lsNorm(h.split(/:\s/).pop()) === t) return {ch, si, xi}; } }
+    for (let si = 0; si < L.length; si++) { const subs = L[si].sub || []; for (let xi = 0; xi < subs.length; xi++) if (t.length > 6 && lsNorm(subs[xi].h).includes(t)) return {ch, si, xi}; }
+  }
+  const pg = parseInt(page, 10);
+  if (pg) { const pageOf = lessonPages(ch); let best = null, bp = -1;
+    L.forEach((sec, si) => { const sp = pageOf(sec.s); if (sp != null && sp <= pg && sp > bp) { best = {ch, si, xi:null}; bp = sp; } (sec.sub || []).forEach((x, xi) => { const p2 = pageOf(x.h); if (p2 != null && p2 <= pg && p2 > bp) { best = {ch, si, xi}; bp = p2; } }); });
+    if (best) return best; }
+  return {ch, si:null, xi:null};
+}
+const locArg = l => l.ch + (l.si != null ? "-" + l.si + (l.xi != null ? "-" + l.xi : "") : "");
 const MODMAP = Object.fromEntries(MODULES.map(m => [String(m.n), m]));
 const QS = [];
 [[Q1A,"1a",1],[Q1B,"1b",1],[Q2A,"2a",2],[Q2B,"2b",2],[QSA,"sa",null]].forEach(([arr,p,ex]) => {
@@ -20726,8 +20782,8 @@ const FLASHMAP = {}; FLASH_ALL.forEach(c => { const t = c.term.toLowerCase(); co
 const QMAP = Object.fromEntries(QS.map(q => [q.id, q]));
 // ---------- chapter reviews (key points from each chapter summary, in this app's words) ----------
 const REV_CHS = Object.keys(CH_REVIEW).map(Number).sort((a,b)=>a-b);
-function reviewSecHTML(s){ return `<div class="rsec"><div class="rsec-h"><b>${esc(s.s)}</b><span class="mono">p.&nbsp;${esc(s.p)}</span></div><ul>${s.pts.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`; }
-function reviewHTML(ch){ return (CH_REVIEW[ch]||[]).map(reviewSecHTML).join(""); }
+function reviewSecHTML(s, ch){ const l = ch ? lessonLoc(ch, s.s, s.p) : null; return `<div class="rsec"><div class="rsec-h">${l ? `<button type="button" class="rseclink" data-go="lessons" data-arg="${locArg(l)}" title="Open this section in the lesson"><b>${esc(s.s)}</b> <span class="refgo" aria-hidden="true">›</span></button>` : `<b>${esc(s.s)}</b>`}<span class="mono">p.&nbsp;${esc(s.p)}</span></div><ul>${s.pts.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`; }
+function reviewHTML(ch){ return (CH_REVIEW[ch]||[]).map(x => reviewSecHTML(x, ch)).join(""); }
 function reviewSecFor(ch, page){ const secs = CH_REVIEW[ch]||[]; const pg = parseInt(page,10); if (!secs.length) return null; if (!pg) return null; let best = null; secs.forEach(s => { if (s.p <= pg) best = s; }); return best || secs[0]; }
 // ---------- Professor Messer videos ----------
 const STANDALONE = !!window.__APLUS_STANDALONE__;
@@ -21022,9 +21078,22 @@ async function runTutor(prompt, outEl, stopBtn){
   outEl._conv = {context: prompt, turns: ask ? [{r:"you", t: ask}] : [], stopBtn};
   return tutorTurn(outEl);
 }
+function tutorLinkify(text){
+  return esc(text).replace(/Chapter (\d{1,2})(?:(?:\s*[–—-]\s*[^(\n<]{1,90}?)?\s*\(p(?:p|age)?\.?\s*(\d+)[^)]*\))?(?=[\s.,;:)]|$)/g, (m, ch, pg) => {
+    const l = lessonLoc(+ch, null, pg); if (!l) return m;
+    return `<button type="button" class="tlink" data-go="lessons" data-arg="${locArg(l)}" title="Open in Chapter lessons">${m}</button>`; });
+}
+function tutorRelHTML(c, i){
+  const t = c.turns[i]; if (!t || /^Thinking…$/.test(t.t) || /couldn't|isn't available|Stopped\.$/.test(t.t.slice(-40)) && t.t.length < 160) return "";
+  if (!t.rel) { const q = (c.turns.slice(0, i).reverse().find(x => x.r === "you") || {t:""}).t; const r = q ? search(q) : {kb:[]};
+    const notes = r.kb.slice(0, 2).map(x => x.k); const ref = notes.length ? refsFor(notes[0].id)[0] : null; const l = ref ? lessonLoc(ref[0], ref[1], ref[2]) : null;
+    t.rel = {notes: notes.map(k => [k.id, k.title]), lesson: l ? [locArg(l), modLabel(l.ch) + (ref ? " › " + ref[1] : "")] : null}; }
+  const R = t.rel; if (!R.notes.length && !R.lesson) return "";
+  return `<div class="trel"><span class="eyebrow">In the app</span><div class="row">${R.lesson ? `<button type="button" class="btn small ghost" data-go="lessons" data-arg="${R.lesson[0]}">📖 ${esc(R.lesson[1])}</button>` : ""}${R.notes.map(([id, title]) => `<button type="button" class="btn small ghost" data-act="note" data-id="${id}">📝 ${esc(title)}</button>`).join("")}</div></div>`;
+}
 function chatRender(box){
   const c = box._conv; if (!c) return;
-  box.innerHTML = `<div class="tchat">${c.turns.map((t,i) => `<div class="tmsg ${t.r}"><span class="who">${t.r==="you"?"You":"Tutor"}${t.r==="tutor" && SPEECH.ok && !c.busy ? ` <button type="button" class="spk" data-speak-i="${i}" aria-label="Read this reply aloud" title="Read aloud">🔊</button>` : ""}</span><div class="txt">${esc(t.t)}</div></div>`).join("")}</div>`
+  box.innerHTML = `<div class="tchat">${c.turns.map((t,i) => `<div class="tmsg ${t.r}"><span class="who">${t.r==="you"?"You":"Tutor"}${t.r==="tutor" && SPEECH.ok && !c.busy ? ` <button type="button" class="spk" data-speak-i="${i}" aria-label="Read this reply aloud" title="Read aloud">🔊</button>` : ""}</span><div class="txt">${t.r === "tutor" ? tutorLinkify(t.t) : esc(t.t)}</div>${t.r === "tutor" && !c.busy ? tutorRelHTML(c, i) : ""}</div>`).join("")}</div>`
     + (c.busy ? "" : `<form class="tfollow"><input type="text" placeholder="Reply to the tutor or ask a follow-up…" aria-label="Reply to the tutor"><button class="btn small teal" type="submit">Send</button></form>`);
 }
 async function tutorTurn(box){
@@ -21074,7 +21143,7 @@ function tpBody(){
 }
 function tpBuild(){
   const pn = $("#tpanel");
-  pn.innerHTML = `<div class="nb-h tp-h"><b><span aria-hidden="true">💬</span> AI tutor</b><div class="row" style="gap:4px"><button type="button" class="iconbtn tpmin" data-tp="min" aria-label="Minimize the tutor" title="Minimize">▾</button><button type="button" class="iconbtn tppin" data-tp="pin" aria-pressed="${TP.pinned}" title="${TP.pinned ? "Unpin" : "Pin: keep the tutor open while you move around"}" aria-label="${TP.pinned ? "Unpin the tutor panel" : "Pin the tutor panel open"}">📌</button><button type="button" class="iconbtn" data-tp="close" aria-label="Close the tutor (your chat is kept)" title="Close (your chat is kept)"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button></div></div>
+  pn.innerHTML = `<div class="nb-h tp-h"><b><span aria-hidden="true">💬</span> AI tutor</b><div class="row" style="gap:4px"><button type="button" class="iconbtn tpmin" data-tp="min" aria-label="Minimize the tutor" title="Minimize"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" class="iconbtn tppin" data-tp="pin" aria-pressed="${TP.pinned}" title="${TP.pinned ? "Unpin" : "Pin: keep the tutor open while you move around"}" aria-label="${TP.pinned ? "Unpin the tutor panel" : "Pin the tutor panel open"}">📌</button><button type="button" class="iconbtn" data-tp="close" aria-label="Close the tutor (your chat is kept)" title="Close (your chat is kept)"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button></div></div>
     <div class="tp-tools"><button type="button" class="btn small ghost" data-tp="save">💾 Save to notes</button><button type="button" class="btn small ghost" data-tp="new">＋ New chat</button><button type="button" class="btn small ghost" data-act="tutorsetup">⚙ Settings</button>${xvChs().length ? `<button type="button" class="btn small ghost" data-tp="xv">🎬 Explainers</button>` : ""}</div>
     <div class="tp-body"></div>`;
   tpBody();
@@ -21094,14 +21163,15 @@ function openTutorChat(){
   TP.open = true; tpLayout(); hideBubble();
   setTimeout(() => { const i = pn.querySelector("#gq") || pn.querySelector(".tfollow input"); if (i) i.focus(); tpScroll(); }, 60);
 }
-function tpClose(){ if (!TP.open) return; TP.open = false; const pn = $("#tpanel"); pn.classList.remove("min"); document.body.classList.remove("tp-min"); const mb = pn.querySelector("[data-tp=min]"); if (mb) mb.textContent = "▾"; tpLayout(); }
+function tpClose(){ if (!TP.open) return; TP.open = false; const pn = $("#tpanel"); pn.classList.remove("min"); document.body.classList.remove("tp-min"); const mb = pn.querySelector("[data-tp=min]"); if (mb) { mb.setAttribute("aria-label", "Minimize the tutor"); mb.title = "Minimize"; } tpLayout(); }
 (function(){
   const pn = $("#tpanel"); if (!pn) return;
   pn.addEventListener("click", e => {
     if (e.target.closest("[data-act=tutorsetup]") && !TP.pinned) { tpClose(); return; }
+    if (e.target.closest("[data-act=note]") && !TP.pinned) { tpClose(); return; }
     const b = e.target.closest("[data-tp]"); if (!b) return; const a = b.dataset.tp;
     if (a === "close") return tpClose();
-    if (a === "min") { const m = !pn.classList.contains("min"); pn.classList.toggle("min", m); document.body.classList.toggle("tp-min", m); b.textContent = m ? "▴" : "▾"; b.setAttribute("aria-label", m ? "Expand the tutor" : "Minimize the tutor"); if (!m) setTimeout(tpScroll, 0); return; }
+    if (a === "min") { const m = !pn.classList.contains("min"); pn.classList.toggle("min", m); document.body.classList.toggle("tp-min", m); b.setAttribute("aria-label", m ? "Expand the tutor" : "Minimize the tutor"); b.title = m ? "Expand" : "Minimize"; if (!m) setTimeout(tpScroll, 0); return; }
     if (a === "pin") { TP.pinned = !TP.pinned; S.pref.tutorPin = TP.pinned; save(); tpLayout(); const it = pn.querySelector(".tp-intro"); if (it) tpBody(); return toast(TP.pinned ? "Pinned: the tutor stays open while you move around the app." : "Unpinned: the tutor closes when you tap outside it. Your chat is kept."); }
     if (a === "new") { const box = $("#tpout"); if (box && box._conv && box._conv.busy && tutorCtl) tutorCtl.abort(); S.tchat = {context:"", turns:[]}; save(); tpBody(); const i = pn.querySelector("#gq"); if (i) i.focus(); return; }
     if (a === "xv") { if (!TP.pinned) tpClose(); return go("explainers"); }
@@ -21749,7 +21819,7 @@ function openNote(id){
     <p class="muted" style="font-size:.88rem">${k.ex===1?"Core 1 (220-1201)":"Core 2 (220-1202)"} · Domain ${k.d}.0 ${esc(domName(k.ex,k.d))}</p>
     <div class="body tablewrap">${k.body}</div></article>
     <div class="bookref"><span class="eyebrow">Read more in your book</span><div class="refs">${refsFor(id).map(refHTML).join("")}</div></div>
-    ${(() => { const r0 = refsFor(id)[0]; const sec = r0 ? reviewSecFor(r0[0], r0[2]) : null; return sec ? `<div class="revbox"><span class="eyebrow">${modLabel(r0[0])} review · key points</span>${reviewSecHTML(sec)}<div class="row"><button class="btn small" data-act="chreview" data-ch="${r0[0]}">Full ${modLabel(r0[0])} review</button>${REVQ.some(q=>q.ch===r0[0])?`<button class="btn small ghost" data-act="practicereview" data-ch="${r0[0]}">Review questions</button>`:""}</div></div>` : ""; })()}
+    ${(() => { const r0 = refsFor(id)[0]; const sec = r0 ? reviewSecFor(r0[0], r0[2]) : null; return sec ? `<div class="revbox"><span class="eyebrow">${modLabel(r0[0])} review · key points</span>${reviewSecHTML(sec, r0[0])}<div class="row"><button class="btn small" data-act="chreview" data-ch="${r0[0]}">Full ${modLabel(r0[0])} review</button>${REVQ.some(q=>q.ch===r0[0])?`<button class="btn small ghost" data-act="practicereview" data-ch="${r0[0]}">Review questions</button>`:""}</div></div>` : ""; })()}
     ${id==="cpu"||id==="mb-components"?`<div class="classlink"><span class="eyebrow">Reference</span><span>Chipsets &amp; CPUs guide: chipset generations, sockets, and how to read processor names.</span><button class="btn small teal" data-go="platforms">Open the guide</button></div>`:""}
     ${noteExtraHTML(id)}
     ${noteXvHTML(id)}
@@ -22344,11 +22414,16 @@ document.addEventListener("change", e => {
 });
 
 // ---------- review ----------
+const SET_OPEN = new Set();
+function setCollapse(html){
+  return html.replace(/<section class="panel setgrp"><h2>([^<]+)<\/h2>([\s\S]*?)<\/section>/g, (m, t, body) =>
+    `<details class="panel setgrp" data-sg="${t}"${SET_OPEN.has(t) ? " open" : ""}><summary><h2>${t}</h2><svg class="sgchev" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="sgbody">${body}</div></details>`);
+}
 VIEWS.settings = function(){
   const v = $("#view"); const P0 = S.pref;
   const radio = (name, val, label, cur) => `<label class="chip"><input type="radio" name="${name}" value="${val}" ${cur===val?"checked":""}><span>${label}</span></label>`;
   const ACC = [["teal","Teal"],["blue","Blue"],["purple","Purple"],["orange","Orange"],["rose","Rose"],["green","Green"]];
-  v.innerHTML = `<section class="hero"><span class="eyebrow">Settings</span><h1>Settings</h1><p>Your choices are saved in this browser on this device.</p></section>
+  v.innerHTML = setCollapse(`<section class="hero"><span class="eyebrow">Settings</span><h1>Settings</h1><p>Your choices are saved in this browser on this device. Tap a section to open it.</p></section>
     <section class="panel setgrp"><h2>Appearance</h2>
       <fieldset><legend>Color mode</legend><div class="chips">${radio("theme","auto","Match my device",P0.theme)}${radio("theme","light","Light",P0.theme)}${radio("theme","dark","Dark",P0.theme)}</div></fieldset>
       <fieldset><legend>Accent color</legend><div class="chips">${ACC.map(([k,l]) => `<label class="chip accentchip"><input type="radio" name="accent" value="${k}" ${P0.accent===k?"checked":""}><span><i class="sw sw-${k}" aria-hidden="true"></i>${l}</span></label>`).join("")}</div></fieldset>
@@ -22379,7 +22454,8 @@ VIEWS.settings = function(){
     <section class="panel setgrp"><h2>Progress</h2><p class="muted" style="margin:0">Reset clears answer history, flags, flashcard and lab progress, and simulator scores in this browser. Your settings stay.</p>
       <div class="row" id="resetrow"><button class="btn small" data-act="reset1">Reset progress…</button></div></section>
     <section class="panel setgrp"><h2>About</h2><p class="muted" style="margin:0">A+ Study Bench · <b style="color:var(--ink)">Version ${esc(APP_VERSION)}</b>${(CHANGELOG[0]||{}).date ? " · " + esc(CHANGELOG[0].date) : ""}</p>
-      <div class="row"><button class="btn small" data-act="whatsnew">What's new</button><button class="btn small ghost" data-go="tour">App tour</button></div></section>`;
+      <div class="row"><button class="btn small" data-act="whatsnew">What's new</button><button class="btn small ghost" data-go="tour">App tour</button></div></section>`);
+  v.querySelectorAll("details.setgrp").forEach(d => d.addEventListener("toggle", () => { const k = d.dataset.sg; if (d.open) SET_OPEN.add(k); else SET_OPEN.delete(k); }));
   const bind = (name, fn) => v.querySelectorAll(`input[name=${name}]`).forEach(i => i.addEventListener("change", () => { fn(i.value); save(); }));
   bind("theme", x => { S.pref.theme = x; if (BG_MAP[S.pref.bgTheme]) { S.pref.bgTheme = "default"; toast("Background set back to the app default so the color mode can apply."); } applyPrefs(); const y = window.scrollY; VIEWS.settings(); window.scrollTo({top:y}); });
   bind("accent", x => { S.pref.accent = x; applyPrefs(); });
@@ -22614,7 +22690,10 @@ function lessonPages(ch){
 const subSpeech = x => [x.h + ".", ...(x.body || []), ...(x.pts || []).map(p => p.replace(/[.;:]?$/, ".")), ...((x.steps || []).length ? ["Steps:", ...x.steps.map((st, i) => "Step " + (i + 1) + ". " + st.replace(/[.;:]?$/, "."))] : []), ...(x.tip ? ["Exam tip: " + x.tip] : [])].join(" ");
 VIEWS.lessons = function(arg){
   const v = $("#view");
-  const ch = arg != null && arg !== "" && !isNaN(+arg) ? +arg : null;
+  const aparts = String(arg == null ? "" : arg).split("-");
+  const ch = aparts[0] !== "" && !isNaN(+aparts[0]) ? +aparts[0] : null;
+  const tgt = aparts.length > 1 && aparts[1] !== "" ? {si:+aparts[1], xi: aparts[2] != null && aparts[2] !== "" ? +aparts[2] : null} : null;
+  if (tgt && ch != null && hasLesson(ch)) setTimeout(() => { const el = document.getElementById(tgt.xi != null ? `ls-${tgt.si}-${tgt.xi}` : `ls-${tgt.si}`); if (!el) return; el.scrollIntoView({block:"start"}); el.classList.add("lsflash"); setTimeout(() => el.classList.remove("lsflash"), 2400); }, 40);
   if (ch == null || !hasLesson(ch)) {
     const chs = MODULES.filter(m => typeof m.n === "number" && m.n >= 1 && m.n <= 21);
     let part = "", rows = "";
