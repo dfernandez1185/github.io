@@ -642,6 +642,125 @@ mark{background:var(--amber-bg);color:inherit;padding:0 2px;border-radius:2px}
 /* overflow guards: grid children may shrink, long words wrap */
 .panel,.rgroup,.article,.inner,.revbox,.lab,.drill,.boardsec,.noteextra{min-width:0}
 .article .body,.revbox,.panel p,.inner p,.lk-def{overflow-wrap:anywhere}
+
+
+/* tutor side panel */
+.tpscrim{position:fixed;inset:0;background:rgba(5,10,20,.35);z-index:57}
+.tpanel{position:fixed;top:0;right:0;bottom:0;width:min(400px,94vw);background:var(--surface);color:var(--ink);border-left:1px solid var(--line);z-index:58;transform:translateX(104%);visibility:hidden;transition:transform .2s ease,visibility 0s linear .2s;display:flex;flex-direction:column;box-shadow:-4px 0 24px rgba(0,0,0,.22);padding-top:env(safe-area-inset-top,0px);padding-right:env(safe-area-inset-right,0px)}
+.tpanel.open{transform:none;visibility:visible;transition:transform .2s ease}
+.tpanel.pinned{z-index:54}
+.tppin{font-size:1.05rem;opacity:.55;filter:grayscale(1)}
+.tppin[aria-pressed="true"]{opacity:1;filter:none;border-color:var(--teal);background:var(--teal-bg)}
+.tp-tools{display:flex;flex-wrap:wrap;gap:6px;padding:8px 12px;border-bottom:1px solid var(--line)}
+.tp-body{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:14px 14px calc(24px + env(safe-area-inset-bottom,0px));display:grid;gap:12px;align-content:start}
+.tp-intro{margin:0;font-size:.92rem}
+.tfirst{display:grid;gap:8px}
+.tfirst textarea{min-height:76px;resize:vertical}
+.tpanel .tfollow{position:sticky;bottom:-24px;background:var(--surface);padding:8px 0 4px}
+body.tp-open .tutorfab{display:none!important}
+@media (min-width:1000px){body.tp-pinned{padding-right:400px}body.tp-pinned .modal{right:400px}body.tp-pinned .tpanel{box-shadow:none}}
+@media (max-width:999px){.tpanel.pinned{top:auto;left:0;width:auto;height:min(56vh,520px);border-left:0;border-top:2px solid var(--teal);transform:translateY(104%)}.tpanel.pinned.open{transform:none}body.tp-pinned{padding-bottom:min(56vh,520px)}}
+.tpmin{display:none}
+@media (max-width:999px){.tpanel.pinned .tpmin{display:inline-flex}.tpanel.pinned.min{height:auto}.tpanel.pinned.min .tp-tools,.tpanel.pinned.min .tp-body{display:none}body.tp-pinned.tp-min{padding-bottom:64px}}
+@media (prefers-reduced-motion:reduce){.tpanel,.tpanel.open{transition:none}}
+/* inline explainers in lessons and notes */
+.xvhost:empty{display:none}
+.xvhost{margin-top:10px}
+.xvplayer.inline{border:1px solid var(--teal);border-radius:var(--r);padding:12px;background:var(--surface);box-shadow:0 4px 18px rgba(0,0,0,.12)}
+.xvhead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.xvhead-t{display:grid;gap:2px;min-width:0}
+.xvhead-t b{overflow-wrap:anywhere}
+.xvdur{font-weight:500;opacity:.8;font-size:.82em;margin-left:4px}
+.lsubact{gap:8px}
+.xvsec{display:grid;gap:0;padding:4px 0 6px}
+.xvsecbtn{justify-self:start}
+.xvnotebox{display:grid;gap:8px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--r);background:var(--sunk)}
+.xvend{gap:8px}
+@media (max-width:440px){.xvratel{display:none}.xvctl{gap:4px}.xvctl .btn.small{padding-left:9px;padding-right:9px}}
+/* video explainers (beta) */
+.xvtip{display:none;margin:0;font-size:.85rem}
+@media (max-width:600px) and (orientation:portrait){.xvtip{display:block}}
+body.xvfullon{overflow:hidden}
+.xvplayer.xvfull{position:fixed;inset:0;z-index:300;background:var(--bg);padding:8px 10px calc(8px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:6px}
+.xvfull .xvstage{flex:1 1 auto;aspect-ratio:auto;min-height:0;border:0;background:var(--surface)}
+.xvfull .xvtip{display:none}
+.xvfull .xvcap{position:absolute;left:12px;right:12px;bottom:calc(64px + env(safe-area-inset-bottom));min-height:0;max-height:34vh;overflow:auto;background:color-mix(in srgb,var(--sunk) 88%,transparent);box-shadow:0 4px 18px rgba(0,0,0,.25);font-size:1rem;z-index:2}
+.xvfull .xvcap.idle{display:none}
+.xvfull .xvctl{flex-wrap:nowrap;overflow-x:auto}
+@media (orientation:portrait){.xvfull .xvstage{flex:0 0 auto;aspect-ratio:16/9;margin-top:auto}.xvfull .xvcap{position:static;max-height:none}.xvfull .xvctl{margin-bottom:auto}}
+
+.xvplayer{display:grid;gap:10px;min-width:0}
+.xvstage{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;aspect-ratio:16/9;min-width:0}
+.xvsvg,.xvsvg svg{width:100%;height:100%;display:block}
+.xvbig{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:76px;height:76px;border-radius:50%;border:0;background:var(--teal);color:var(--on-accent);font-size:30px;cursor:pointer;box-shadow:0 6px 24px rgba(0,0,0,.3);opacity:.94}
+.xvbig:hover{opacity:1;transform:translate(-50%,-50%) scale(1.05)}
+.xvbig[hidden]{display:none}
+.xvstage.paused .xvsvg{filter:saturate(.85)}
+.xvscn{position:absolute;left:10px;top:8px;font:600 .74rem var(--f-mono);color:var(--muted);background:var(--surface);padding:2px 8px;border-radius:999px;border:1px solid var(--line);max-width:calc(100% - 20px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.xvbar{display:flex;gap:4px}
+.xvseg{flex:1;height:10px;border:0;padding:0;border-radius:5px;background:var(--line);cursor:pointer;overflow:hidden;position:relative}
+.xvseg i{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--teal);transition:width .5s}
+.xvseg.cur{outline:2px solid var(--teal);outline-offset:1px}
+.xvctl{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.xvctl .xvsp{flex:1}
+.xvctl .xvplay{min-width:96px}
+.xvrate{display:flex;align-items:center;gap:6px;font-size:.85rem;color:var(--muted)}
+.xvrate select{padding:4px 6px}
+.xvcap{min-height:3.6em;background:var(--sunk);border-radius:var(--r);padding:12px 14px;font-size:1.06rem;line-height:1.5;border-left:4px solid var(--teal)}
+.xvcap.idle{color:var(--muted)}
+.xvcap.off{display:none}
+.xvmore{display:grid;gap:10px}
+.xvnote{margin:0;font-size:.85rem}
+.xvmore .btn.pulse{animation:xvbtn 1.2s ease-in-out 3}
+@keyframes xvbtn{50%{transform:scale(1.06)}}
+.xvcta{margin:2px 0 10px}
+.xvmini{border:0;background:none;cursor:pointer;font-size:1rem;padding:0 6px;margin-left:4px}
+.xvcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin:10px 0}
+.xvcard{display:grid;gap:0;text-align:left;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);padding:0;cursor:pointer;overflow:hidden;color:inherit;font:inherit;min-width:0}
+.xvcard:hover{border-color:var(--teal)}
+.xvthumb{display:block;aspect-ratio:16/9;background:var(--sunk);border-bottom:1px solid var(--line)}
+.xvthumb svg{width:100%;height:100%;display:block}
+.xvct{display:grid;gap:2px;padding:10px 12px}
+.xvct .no{font-size:.75rem;color:var(--teal)}
+.xvct .muted{font-size:.82rem}
+.xvsvg svg [data-b],.xvthumb svg [data-b]{opacity:0;transition:opacity .6s}
+.xvsvg svg [data-b].on,.xvthumb svg [data-b].on{opacity:1}
+.xvsvg svg [data-x],.xvthumb svg [data-x]{transition:opacity .6s}
+.xvsvg svg [data-x].off,.xvthumb svg [data-x].off{opacity:0}
+.xvsvg svg [data-m]{transform:translate(var(--dx,0px),var(--dy,0px)) rotate(var(--rot,0deg)) scale(var(--sc,1));transform-box:fill-box;transform-origin:center;transition:opacity .6s,transform 1.4s cubic-bezier(.3,.7,.3,1)}
+.xvsvg svg [data-m].go{transform:none}
+.xvthumb svg [data-m]{transform-box:fill-box}
+.xvsvg svg [data-h]{opacity:0;transition:opacity .3s}
+.xvsvg svg [data-h].hl{opacity:1;animation:xvpulse 1.1s ease-in-out infinite alternate}
+.xvthumb svg [data-h]{display:none}
+@keyframes xvpulse{from{opacity:1}to{opacity:.35}}
+@media (prefers-reduced-motion:reduce){.xvsvg svg [data-m]{transition:opacity .3s}.xvsvg svg [data-h].hl{animation:none}}
+svg .xcard{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+svg .xsunk{fill:var(--sunk);stroke:var(--line);stroke-width:1}
+svg .xblk{fill:var(--teal-bg);stroke:var(--teal);stroke-width:1.5}
+svg .xbad{fill:var(--bad-bg);stroke:var(--bad);stroke-width:1.5}
+svg .xgood{fill:var(--good-bg);stroke:var(--good);stroke-width:1.5}
+svg .xring{fill:none;stroke:var(--amber);stroke-width:4}
+svg .xline{stroke:var(--muted);stroke-width:1.5;fill:none}
+svg .xarrow{stroke:var(--teal);stroke-width:2.5;fill:none}
+svg .xarrow2{stroke:var(--muted);stroke-width:2;fill:none}
+svg .xheadfill{fill:var(--teal)}
+svg .xok{stroke:var(--good);stroke-width:4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+svg .xno{stroke:var(--bad);stroke-width:4;fill:none;stroke-linecap:round}
+svg .xcutfill{fill:var(--surface)}
+.xvthumb svg .xcutfill{fill:var(--sunk)}
+svg .xtag{fill:var(--teal-bg);stroke:var(--teal);stroke-width:1}
+svg .xtagbad{fill:var(--bad-bg);stroke:var(--bad);stroke-width:1}
+svg .xtagt{fill:var(--ink);font-family:var(--f-body)}
+svg .xdash{stroke:#f59e0b;stroke-width:2;stroke-dasharray:6 5}
+svg .xcable{stroke:#e5e7eb;stroke-width:3;fill:none}
+svg .xchain{stroke:var(--muted);stroke-width:4;stroke-dasharray:8 4}
+svg .xwave{stroke:var(--ink);stroke-width:2.5;fill:none}
+svg .xbus{stroke:var(--line);stroke-width:6;fill:none;stroke-linecap:round}
+svg .xbuson{stroke:var(--teal);stroke-width:6;fill:none;stroke-linecap:round}
+svg .xgoodt{fill:var(--good);font-family:var(--f-body)} svg .xbadt{fill:var(--bad);font-family:var(--f-body)}
+svg .xaccentt{fill:var(--teal);font-family:var(--f-body)} svg .xwarnt{fill:var(--amber);font-family:var(--f-body)}
+@media (max-width:600px){.xvcap{font-size:1rem;padding:10px 12px}.xvbig{width:60px;height:60px;font-size:24px}.xvctl .xvsp{display:none}.xvrate{margin-left:auto}}
 </style>
 
 </head>
@@ -659,12 +778,23 @@ mark{background:var(--amber-bg);color:inherit;padding:0 2px;border-radius:2px}
 <main id="view" aria-live="polite"></main>
 <div class="nbscrim" id="nbscrim" hidden></div>
 <aside class="nbpanel" id="nbpanel" aria-label="Notebook" inert></aside>
+<div class="tpscrim" id="tpscrim" hidden></div>
+<aside class="tpanel" id="tpanel" aria-label="AI tutor" inert></aside>
 <div id="modal" class="modal" hidden role="dialog" aria-modal="true"><div class="sheet" id="sheet"></div></div>
 
 <script>
 // App version and update history (newest first). Bump APP_VERSION and add an entry for every release.
-const APP_VERSION = "1.21";
+const APP_VERSION = "1.22 beta 2";
 const CHANGELOG = [
+  {v:"1.22 beta 2", date:"Oct 2026", items:[
+    "Video explainers now play right inside the Chapter 3 lesson: every topic has a 🎬 Watch this part button, and each section ends with 🎬 Watch the whole section",
+    "Every Chapter 3 topic is covered, including a new scene on DDR3 triple channel and SPD. The Chapter 3 study notes have the explainers too",
+    "The AI tutor now opens in a side panel. Pin it (📌) to keep it open while you move around the app; on phones it docks at the bottom and can be minimized",
+    "Your tutor chat is kept until you start a New chat, and 💾 Save to notes copies it into your notebook"]},
+  {v:"1.22 beta", date:"Oct 2026", items:[
+    "New (beta): video explainers. Narrated animations that build a diagram step by step while the voice explains each section. Pilot: all 5 sections of Chapter 3",
+    "Watch from the 🎬 buttons in the Chapter 3 lesson, from Media › Video explainers, or from the tutor",
+    "The player has play/pause, scene jumping, captions, speed control and a full-screen mode (turn your phone sideways for a bigger picture)"]},
   {v:"1.21", date:"Oct 2026", items:[
     "Define now covers every acronym in the app: about 500 more added after a page-by-page scan (AAAA, SLAAC, ACK, SYN, QoS, VoIP, GHz, DHCPv6, ReFS, CoC, LEO and many more)",
     "Define explains model numbers too: every chipset and socket (Z790, B650, LGA1700, AM5, TRX40), motherboard models, CPU models (i7-14700K, 7800X3D, 245K) and memory labels (DDR5-6000, CL16, LPDDR5)",
@@ -2311,6 +2441,549 @@ GLOSSARY_LAST.push(
 ["Wi-Fi","Wireless networking (IEEE 802.11)","Wireless local networking: Wi-Fi 4 = 802.11n, Wi-Fi 5 = 802.11ac, Wi-Fi 6/6E = 802.11ax, Wi-Fi 7 = 802.11be."]
 );
 GLOSSARY_LAST.push(["OneDrive","Microsoft OneDrive","Microsoft's cloud file storage and sync service, built into Windows and Microsoft 365."],["Entra","Microsoft Entra ID","Microsoft's cloud identity service (formerly Azure Active Directory) for work and school accounts."],["Contoso","Contoso (example company)","A made-up company name Microsoft and this app use in examples and labs."],["Fabrikam","Fabrikam (example company)","A made-up company name used in examples and labs."]);
+
+// Animated video explainers: drawing helpers. All artwork is original, drawn as inline SVG (viewBox 640 x 360).
+// Animation is driven by beats (one narration line each):
+//   data-b="n"  fades in at beat n and stays     data-x="n"  fades out at beat n
+//   data-h="n m" visible (pulsing) only during those beats (highlight rings / arrows)
+//   data-m="n"  moves from its starting offset (--dx/--dy/--rot/--sc in style) to its drawn position at beat n
+const XA = (() => {
+  const e = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  const at = o => Object.entries(o || {}).filter(([, v]) => v != null && v !== "").map(([k, v]) => ` ${k}="${v}"`).join("");
+  const T = (x, y, s, o = {}) => `<text x="${x}" y="${y}" class="${o.c || "dt"}" font-size="${o.fs || 15}"${o.a ? ` text-anchor="${o.a}"` : ""}${o.w ? ` font-weight="${o.w}"` : ""}${o.fill ? ` style="fill:${o.fill}"` : ""}>${e(s)}</text>`;
+  const G = (o, inner) => `<g${at(o)}>${inner}</g>`;
+  const B = (n, inner, style) => G({"data-b": n, style}, inner);
+  const H = (n, inner) => G({"data-h": n}, inner);
+  const X = (n, inner) => G({"data-x": n}, inner);
+  const M = (n, style, inner, b) => G({"data-m": n, "data-b": b, style}, inner);
+  const R = (x, y, w, h, o = {}) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${o.rx ?? 6}"${o.c ? ` class="${o.c}"` : ""}${o.f ? ` fill="${o.f}"` : ""}${o.s ? ` stroke="${o.s}" stroke-width="${o.sw || 2}"` : ""}${o.dash ? ` stroke-dasharray="${o.dash}"` : ""}/>`;
+  const C = (x, y, r, o = {}) => `<circle cx="${x}" cy="${y}" r="${r}"${o.c ? ` class="${o.c}"` : ""}${o.f ? ` fill="${o.f}"` : ""}${o.s ? ` stroke="${o.s}" stroke-width="${o.sw || 2}"` : ""}/>`;
+  const L = (x1, y1, x2, y2, c = "xline") => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" class="${c}"/>`;
+  const P = (d, c = "xline", f) => `<path d="${d}" class="${c}"${f ? ` fill="${f}"` : ""}/>`;
+  // multi-line text: lines array
+  const TL = (x, y, lines, o = {}) => lines.map((s, i) => T(x, y + i * (o.lh || (o.fs || 15) * 1.3), s, o)).join("");
+  // labelled card
+  const card = (x, y, w, h, title, sub, o = {}) => R(x, y, w, h, {c: o.c || "xcard", rx: 10}) +
+    T(x + w / 2, y + (sub ? h / 2 - 3 : h / 2 + 5), title, {a: "middle", w: 700, fs: o.fs || 15, c: o.tc}) +
+    (sub ? (Array.isArray(sub) ? TL(x + w / 2, y + h / 2 + 16, sub, {a: "middle", c: "dm", fs: o.sfs || 12, lh: 15}) : T(x + w / 2, y + h / 2 + 16, sub, {a: "middle", c: "dm", fs: o.sfs || 12})) : "");
+  const ring = (n, x, y, w, h, rx = 10) => H(n, `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}" class="xring"/>`);
+  const dot = (n, x, y, r = 16) => H(n, `<circle cx="${x}" cy="${y}" r="${r}" class="xring"/>`);
+  const arrow = (x1, y1, x2, y2, c = "xarrow") => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" class="${c}" marker-end="url(#xvhead)"/>`;
+  const check = (x, y, s = 1) => `<path d="M${x - 9 * s} ${y} l${6 * s} ${7 * s} l${13 * s} -${15 * s}" class="xok"/>`;
+  const cross = (x, y, s = 1) => `<path d="M${x - 8 * s} ${y - 8 * s} l${16 * s} ${16 * s} M${x + 8 * s} ${y - 8 * s} l-${16 * s} ${16 * s}" class="xno"/>`;
+  // motherboard (top-down)
+  const board = (x, y, w, h) => R(x, y, w, h, {f: "#1f5a3d", rx: 8}) + R(x + 6, y + 6, w - 12, h - 12, {f: "none", s: "#2d7552", sw: 1, rx: 6}) +
+    [0.25, 0.5, 0.75].map(f => `<line x1="${x + 10}" y1="${y + h * f}" x2="${x + w - 10}" y2="${y + h * f}" stroke="#2a6a49" stroke-width="1"/>`).join("");
+  // LGA socket: frame + pin field
+  const lga = (x, y, s) => R(x, y, s, s, {f: "#3b3d42", rx: 4}) + R(x + s * 0.1, y + s * 0.1, s * 0.8, s * 0.8, {f: "#b38b3a", rx: 2}) +
+    `<rect x="${x + s * 0.1}" y="${y + s * 0.1}" width="${s * 0.8}" height="${s * 0.8}" fill="url(#xvpins)"/>`;
+  // CPU top (heat spreader)
+  const cpu = (x, y, s, label, o = {}) => R(x, y, s, s, {f: "#2f6b45", rx: 4}) + R(x + s * 0.09, y + s * 0.09, s * 0.82, s * 0.82, {f: "#c9ccd1", rx: 5}) +
+    (label ? T(x + s / 2, y + s / 2 + 5, label, {a: "middle", w: 700, fs: o.fs || Math.max(11, s / 7), fill: "#30343a"}) : "") +
+    (o.tri !== false ? `<path d="M${x + 3} ${y + s - 3} l${s * 0.14} 0 l-${s * 0.14} -${s * 0.14} z" fill="#d4a72c"/>` : "") +
+    (o.notch ? `<path d="M${x} ${y + s * 0.22} a${s * 0.05} ${s * 0.05} 0 0 0 0 ${s * 0.1}" class="xcutfill"/><path d="M${x + s} ${y + s * 0.22} a${s * 0.05} ${s * 0.05} 0 0 1 0 ${s * 0.1}" class="xcutfill"/>` : "");
+  // DIMM module, front view. type: ddr3 | ddr4 | ddr5 | so4 | so5 | so3
+  const NOTCH = {ddr3: 0.6, ddr4: 0.545, ddr5: 0.5, so3: 0.4, so4: 0.42, so5: 0.44};
+  const dimm = (x, y, w, type = "ddr4", o = {}) => {
+    const h = o.h || w * 0.2, n = o.chips || (o.ecc ? 9 : 8), nf = NOTCH[type] || 0.5;
+    let s = R(x, y, w, h, {f: o.pcb || "#2c7a4b", rx: 3});
+    const cw = (w - 16) / n * 0.78, gap = (w - 16) / n;
+    for (let i = 0; i < n; i++) s += R(x + 8 + i * gap + (gap - cw) / 2, y + h * 0.14, cw, h * 0.5, {f: o.ecc && i === n - 1 ? "#7a1f1f" : "#1b1c1f", rx: 2});
+    s += R(x + 4, y + h * 0.78, w - 8, h * 0.16, {f: "#d4a72c", rx: 1});
+    s += R(x + w * nf - 3, y + h * 0.72, 6, h * 0.3, {c: "xcutfill", rx: 1});
+    if (o.label) s += R(x + w * 0.3, y + h * 0.2, w * 0.4, h * 0.36, {f: "#f4f1e8", rx: 2}) + T(x + w / 2, y + h * 0.43, o.label, {a: "middle", fs: o.lfs || 10, w: 700, fill: "#222"});
+    return s;
+  };
+  // DIMM slot (top-down, vertical)
+  const slotV = (x, y, h, col) => R(x, y, 12, h, {f: col, rx: 3}) + R(x + 4, y + 6, 4, h - 12, {f: "#111", rx: 1});
+  const dimmV = (x, y, h) => R(x - 3, y + 2, 18, h - 4, {f: "#2c7a4b", rx: 2}) + R(x + 1, y + 10, 10, h * 0.18, {f: "#1b1c1f", rx: 1}) + R(x + 1, y + h * 0.4, 10, h * 0.18, {f: "#1b1c1f", rx: 1}) + R(x + 1, y + h * 0.7, 10, h * 0.18, {f: "#1b1c1f", rx: 1});
+  // fan header + small chip label
+  const tag = (x, y, s, o = {}) => { const w = Math.max(o.w || 0, s.length * 7 + 22); return R(x, y, w, 22, {c: o.c || "xtag", rx: 11}) + T(x + w / 2, y + 15, s, {a: "middle", fs: 12, w: 700, c: o.tc || "xtagt"}); };
+  const svg = (inner, label) => `<svg viewBox="0 0 640 360" role="img" aria-label="${e(label || "Animated diagram")}"><defs>
+    <marker id="xvhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="xheadfill"/></marker>
+    <pattern id="xvpins" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.2" fill="#6b5320"/></pattern>
+    <pattern id="xvholes" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="3.5" cy="3.5" r="1.6" fill="#1a1a1a"/></pattern>
+    <pattern id="xvpgapins" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="3.5" cy="3.5" r="1.7" fill="#d4a72c"/></pattern></defs>${inner}</svg>`;
+  return {e, T, TL, G, B, H, X, M, R, C, L, P, card, ring, dot, arrow, check, cross, board, lga, cpu, dimm, slotV, dimmV, tag, svg};
+})();
+
+// Chapter 3 video explainers (beta). One explainer per lesson section; each scene = drawing + narrated beats.
+const EXPLAINERS = {};
+EXPLAINERS[3] = (() => {
+  const {T, TL, B, H, X, M, R, C, L, P, card, ring, dot, arrow, check, cross, board, lga, cpu, dimm, slotV, dimmV, tag, svg} = XA;
+  const GRAY = "#9aa0a6", BLACK = "#2b2b2b";
+  return [
+  // ───────────────────────── 1. Introduction
+  {sec: 0, title: "Introduction", parts: [[0, 1]], scenes: [
+    {t: "The two key parts", svg: svg(
+      board(40, 30, 300, 300) + lga(85, 80, 120) +
+      [235, 260, 285, 310].map((x, i) => slotV(x, 70, 210, i % 2 ? GRAY : BLACK)).join("") +
+      M(2, "--dy:-60px;--sc:1.15", cpu(97, 92, 96, "CPU"), 2) +
+      M(3, "--dy:-50px", dimmV(260, 70, 210) + dimmV(310, 70, 210), 3) +
+      ring(1, 34, 24, 312, 312) + ring(2, 79, 74, 132, 132) + ring(3, 226, 62, 106, 226) +
+      B(2, card(380, 70, 230, 90, "Processor (CPU)", ["The brain: runs every", "instruction. Sits in a socket."])) +
+      B(3, card(380, 190, 230, 90, "Memory (RAM)", ["Short-term workspace for", "data the CPU is using now."])),
+      "Motherboard with a processor socket and four memory slots"),
+      beats: [
+        "Chapter 3 is about the two most important parts that sit on the motherboard: the processor and the memory.",
+        "The processor, or CPU, is the brain of the system. It sits in a socket, and it has to match the motherboard.",
+        "Memory, or RAM, holds the data and instructions the processor is working on right now. It comes on modules that snap into slots next to the processor."]},
+    {t: "What this chapter covers", svg: svg(
+      cpu(60, 40, 90, "CPU") + dimm(190, 58, 200, "ddr4") +
+      B(1, tag(70, 140, "FRU", {w: 70}) + tag(255, 112, "FRU", {w: 70})) +
+      B(2, card(430, 45, 180, 90, "Upgrade", ["can make a slow PC", "feel much faster"])) +
+      [["Types of", "processors"], ["Selecting &", "installing"], ["Memory", "technologies"], ["Upgrading", "memory"]].map(([a, b], i) =>
+        B(3, card(20 + i * 155, 210, 135, 74, (i + 1) + ". " + a, b, {fs: 14, sfs: 13}))).join("") +
+      B(3, [0, 1, 2].map(i => arrow(157 + i * 155, 247, 173 + i * 155, 247)).join("")) +
+      ring(4, 324, 204, 302, 86),
+      "Processor and memory module tagged as field replaceable units, and the four parts of the chapter"),
+      beats: [
+        "Both processors and memory modules are field replaceable units, or FRUs. That means a technician can replace or upgrade them on the job.",
+        "A faster processor, or more memory, can make a slow computer feel dramatically faster.",
+        "Here's the plan: first the types of processors, then choosing and installing one, then memory technologies, and finally how to upgrade memory.",
+        "Memory has changed a lot over the years. Knowing both current and older module types will save you a lot of research on the job."]}
+  ]},
+  // ───────────────────────── 2. Types and Characteristics of Processors
+  {sec: 1, title: "Types and Characteristics of Processors", parts: [[0], [1], [2], [3], [4], [4], [4]], scenes: [
+    {t: "What sets processors apart", svg: svg(
+      cpu(260, 110, 120, "CPU") +
+      [[30, 50, "Speed", "3 to 6+ GHz", 1, 230, 140], [30, 150, "Process size", "5 to 14 nm (smaller = better)", 2, 230, 170], [30, 250, "Socket + chipset", "must match the board", 3, 230, 200],
+       [410, 50, "Memory support", "DDR3/4/5, size, channels", 4, 410, 140], [410, 150, "Virtualization", "enable in BIOS/UEFI", 5, 410, 170], [410, 250, "Overclocking", "if CPU and board allow", 5, 410, 200]]
+        .map(([x, y, a, b, n, lx, ly]) => B(n, card(x, y, 200, 62, a, b, {sfs: 12}) + L(x < 300 ? x + 200 : x, y + 31, x < 300 ? 260 : 380, ly, "xline"))).join("") +
+      ring(3, 24, 244, 212, 74) + ring(4, 404, 44, 212, 74),
+      "Processor in the center with six features around it: speed, process size, socket and chipset, memory support, virtualization, overclocking"),
+      beats: [
+        "Several features set processors apart. The first is speed, or frequency, measured in gigahertz. Today's chips run from about 3 to over 6 gigahertz.",
+        "Next is the manufacturing process, measured in nanometers. Current processors range from about 5 to 14 nanometers, and smaller is generally faster and better.",
+        "The processor must fit the motherboard's socket and chipset. Intel and AMD sockets are never interchangeable.",
+        "The processor also decides which memory works: DDR3, DDR4, or DDR5, how much, how fast, and how many channels.",
+        "Finally, virtualization support, which you turn on in BIOS/UEFI setup, and overclocking, if both the processor and the motherboard allow it."]},
+    {t: "Cores and threads", svg: svg(
+      R(40, 40, 320, 280, {f: "#2f6b45", rx: 8}) + R(60, 60, 280, 240, {f: "#c9ccd1", rx: 6}) + T(200, 82, "Processor package", {a: "middle", fs: 13, w: 700, fill: "#30343a"}) +
+      [[75, 95], [210, 95], [75, 200], [210, 200]].map(([x, y], i) => B(1, R(x, y, 115, 85, {f: "#3b4a5c", rx: 6}) + T(x + 57, y + 24, "Core " + (i + 1), {a: "middle", fs: 13, w: 700, fill: "#fff"})) +
+        B(2, R(x + 10, y + 36, 95, 16, {f: "#14b8a6", rx: 8}) + T(x + 57, y + 48, "thread A", {a: "middle", fs: 11, fill: "#06302b", w: 700}) +
+          R(x + 10, y + 58, 95, 16, {f: "#f59e0b", rx: 8}) + T(x + 57, y + 70, "thread B", {a: "middle", fs: 11, fill: "#3b2503", w: 700}))).join("") +
+      B(3, card(390, 40, 230, 80, "4 cores × 2 threads", "= 8 logical processors", {sfs: 14})) +
+      B(4, card(390, 140, 110, 70, "Intel", "Hyper-Threading", {sfs: 11}) + card(510, 140, 110, 70, "AMD", "SMT", {sfs: 12}) + T(505, 230, "Enable in BIOS/UEFI", {a: "middle", c: "dm", fs: 12})) +
+      B(5, R(390, 245, 230, 90, {c: "xcard", rx: 10}) + T(505, 266, "Dual-processor board", {a: "middle", w: 700, fs: 15}) + cpu(450, 276, 30, "", {tri: false}) + cpu(530, 276, 30, "", {tri: false}) + T(505, 326, "server CPUs (e.g., Xeon)", {a: "middle", c: "dm", fs: 11})) +
+      ring(3, 384, 34, 242, 92),
+      "Processor package with four cores, each running two threads"),
+      beats: [
+        "Inside the processor are cores. Each core is a complete processing unit, with parts like arithmetic logic units that carry out instructions. Several cores in one package is called multicore processing.",
+        "A thread is a single task Windows hands the processor. With multithreading, each core juggles two threads at once, using extra registers to switch between them.",
+        "So a quad-core processor with two threads per core shows up in Windows as eight logical processors.",
+        "Intel calls this Hyper-Threading. AMD calls it simultaneous multithreading, or SMT. It has to be enabled in BIOS/UEFI setup, and the operating system must support it.",
+        "Some server motherboards even have two processor sockets. That's a dual-processor platform, and the processors, such as Intel Xeon, must be rated for it."]},
+    {t: "Memory cache", svg: svg(
+      R(25, 60, 380, 220, {f: "#2f6b45", rx: 8}) + T(215, 80, "Processor package", {a: "middle", fs: 12, w: 700, fill: "#e9f5ee"}) +
+      R(45, 95, 165, 165, {f: "#c9ccd1", rx: 6}) + T(127, 115, "Die (the chip)", {a: "middle", fs: 12, w: 700, fill: "#30343a"}) +
+      R(60, 130, 135, 70, {f: "#3b4a5c", rx: 6}) + T(127, 152, "Core", {a: "middle", fs: 13, w: 700, fill: "#fff"}) +
+      B(1, R(82, 162, 90, 28, {f: "#14b8a6", rx: 5}) + T(127, 181, "L1", {a: "middle", fs: 13, w: 700, fill: "#06302b"})) +
+      B(2, R(225, 110, 70, 150, {f: "#5eead4", rx: 6}) + T(260, 190, "L2", {a: "middle", fs: 15, w: 700, fill: "#06302b"}) +
+        R(305, 100, 85, 170, {f: "#99f6e4", rx: 6}) + T(347, 190, "L3", {a: "middle", fs: 15, w: 700, fill: "#06302b"})) +
+      B(2, arrow(410, 170, 455, 170) + card(460, 120, 160, 100, "Main memory", ["RAM on the board", "(slowest of these)"])) +
+      B(2, arrow(60, 310, 600, 310, "xarrow2") + T(60, 300, "faster, smaller", {fs: 12, c: "dm"}) + T(600, 300, "bigger, slower", {fs: 12, c: "dm", a: "end"})) +
+      B(3, tag(40, 22, "Cache = SRAM: no refresh, very fast", {w: 270})) +
+      B(4, tag(378, 236, "RAM = DRAM: refreshed constantly", {w: 230})) + H(4, C(540, 170, 92, {c: "xring"})) +
+      ring(1, 76, 156, 102, 40, 8) + ring(3, 40, 90, 356, 176),
+      "Cache levels L1 on the die, L2 and L3 in the package, and main memory farther away"),
+      beats: [
+        "To avoid waiting on slow main memory, processors keep a memory cache built into the package. L1 cache is on the processor die itself, usually 16 to 64 kilobytes per core.",
+        "L2 cache is bigger and a bit slower, and L3 is bigger and slower still. But every level of cache is faster than the main memory on the motherboard.",
+        "Cache is made of static RAM, or SRAM. It doesn't need refreshing, so it's very fast.",
+        "Main memory uses dynamic RAM, or DRAM, which leaks its charge and must be refreshed constantly. Both kinds are volatile: they lose everything when the power goes off."]},
+    {t: "32-bit vs. 64-bit", svg: svg(
+      B(1, tag(155, 18, "Today's CPUs: hybrid x86-64 (32 or 64 bits)", {w: 250})) +
+      B(2, R(30, 60, 270, 205, {c: "xcard", rx: 10}) + T(165, 86, "32-bit OS", {a: "middle", w: 700, fs: 16}) +
+        R(55, 105, 40, 100, {c: "xsunk", rx: 4}) + R(55, 185, 40, 20, {f: "#f59e0b", rx: 4}) + T(105, 200, "4 GB max RAM", {fs: 13, w: 700})) +
+      B(3, R(340, 60, 270, 205, {c: "xcard", rx: 10}) + T(475, 86, "64-bit OS", {a: "middle", w: 700, fs: 16}) +
+        R(365, 105, 40, 100, {c: "xsunk", rx: 4}) + R(365, 110, 40, 95, {f: "#14b8a6", rx: 4}) + T(415, 135, "Up to 2 TB", {fs: 13, w: 700}) + T(415, 152, "(Windows 11 Pro)", {fs: 12, c: "dm"})) +
+      B(4, T(55, 232, "32-bit apps", {fs: 13}) + check(160, 228, 0.8) + T(185, 232, "64-bit apps", {fs: 13}) + cross(285, 228, 0.7) +
+        T(365, 232, "32-bit apps", {fs: 13}) + check(470, 228, 0.8) + T(495, 232, "64-bit apps", {fs: 13}) + check(594, 228, 0.8)) +
+      B(5, R(110, 285, 420, 58, {c: "xcard", rx: 8}) + T(125, 307, "Settings › System › About", {fs: 12, c: "dm"}) + T(125, 330, "System type: 64-bit operating system, x64-based processor", {fs: 13, w: 700})) +
+      ring(5, 104, 279, 432, 70),
+      "A 32-bit OS limited to 4 GB of RAM next to a 64-bit OS that can use far more"),
+      beats: [
+        "Today's desktop processors are hybrids, called x86-64. They can handle data 32 or 64 bits at a time.",
+        "Windows or Linux is installed as either 32-bit or 64-bit. A 32-bit installation can use no more than 4 gigabytes of RAM.",
+        "A 64-bit installation can use far more: up to 2 terabytes on Windows 11 Pro. That's why you choose 64-bit whenever you can.",
+        "A 64-bit operating system runs both 32-bit and 64-bit apps. A 32-bit operating system can't run 64-bit apps at all.",
+        "To check a PC, open Settings, then System, then About. The System type line says something like: 64-bit operating system, x64-based processor."]},
+    {t: "Intel, AMD, and ARM", svg: svg(
+      R(20, 20, 190, 320, {c: "xcard", rx: 10}) + T(115, 46, "Intel", {a: "middle", w: 700, fs: 17}) +
+      [["Xeon", "servers", 3], ["Core Ultra", "newest top line", 3], ["Core i7 / i9", "high end", 2], ["Core i5", "mainstream", 2], ["Core i3", "entry", 1], ["Pentium · Celeron · Atom", "low end", 1]]
+        .map(([a, b, n], i) => B(1, R(32, 58 + i * 40, 166, 35, {c: n === 3 ? "xblk" : "xsunk", rx: 6}) + T(115, 73 + i * 40, a, {a: "middle", fs: 12, w: 700}) + T(115, 87 + i * 40, b, {a: "middle", fs: 11, c: "dm"}))).join("") +
+      B(2, tag(36, 304, "K = unlocked (245K)", {w: 150})) +
+      R(225, 20, 190, 320, {c: "xcard", rx: 10}) + T(320, 46, "AMD", {a: "middle", w: 700, fs: 17}) +
+      [["EPYC", "servers, up to 64 cores"], ["Threadripper", "up to 64 cores"], ["Ryzen", "desktops & laptops"], ["Athlon", "budget"]]
+        .map(([a, b], i) => B(3, R(237, 60 + i * 50, 166, 42, {c: i < 2 ? "xblk" : "xsunk", rx: 6}) + T(320, 78 + i * 50, a, {a: "middle", fs: 13, w: 700}) + T(320, 94 + i * 50, b, {a: "middle", fs: 11, c: "dm"}))).join("") +
+      B(4, R(237, 270, 166, 58, {c: "xbad", rx: 6}) + T(320, 293, "Different sockets:", {a: "middle", fs: 12, w: 700}) + T(320, 311, "a board fits one brand", {a: "middle", fs: 12})) +
+      R(430, 20, 190, 320, {c: "xcard", rx: 10}) + T(525, 46, "ARM", {a: "middle", w: 700, fs: 17}) +
+      B(5, TL(445, 76, ["Designs licensed to", "Apple, Samsung,", "Qualcomm, Nvidia…"], {fs: 13, lh: 18}) +
+        tag(445, 140, "low cost", {w: 80}) + tag(530, 140, "low power", {w: 82}) + tag(445, 170, "runs cool", {w: 80}) +
+        TL(445, 220, ["Phones, tablets,", "Apple M-series Macs,", "even supercomputers"], {fs: 13, lh: 18})) +
+      ring(2, 24, 298, 182, 34, 12) + ring(4, 231, 264, 178, 70),
+      "Three columns comparing Intel families, AMD families, and ARM"),
+      beats: [
+        "Intel sorts its processors by generation and family. Pentium, Celeron, and Atom are low end. Core i3 is entry level, i5 is mainstream, and i7 and i9 are high end. Core Ultra is Intel's newest top line, and Xeon is for servers.",
+        "An unlocked Intel processor, often with a K at the end, like the Core Ultra 5 245K, can be overclocked. You can look up any Intel model in its ARK database.",
+        "AMD's desktop lines include Athlon, Ryzen, and Ryzen Threadripper, with up to 64 cores. EPYC is for servers. AMD is popular with gamers and often costs less.",
+        "Remember: Intel and AMD use different sockets, so a motherboard supports one brand or the other, never both.",
+        "ARM is different. Arm Limited licenses its designs to companies like Apple, Samsung, and Qualcomm. ARM chips are low cost, low power, and run cool, so they're in phones, tablets, and Apple's M-series Macs."]}
+  ]},
+  // ───────────────────────── 3. Selecting and Installing a Processor
+  {sec: 2, title: "Selecting and Installing a Processor", parts: [[0], [0, 1], [2, 3, 4], [2], [3], [5], [4]], scenes: [
+    {t: "Match the processor to the board", svg: svg(
+      board(30, 40, 230, 260) + lga(95, 80, 100) + T(145, 210, "LGA1851", {a: "middle", fs: 13, w: 700, fill: "#e9f5ee"}) +
+      TL(145, 240, ["ATX · Z890 chipset", "Core Ultra · up to 256 GB DDR5"], {a: "middle", fs: 12, fill: "#e9f5ee", lh: 17}) +
+      ring(1, 24, 34, 242, 272) +
+      B(1, T(300, 40, "Need: light business use, moderate budget", {fs: 13, w: 700})) +
+      [["Core Ultra 9", "too expensive", 2, false], ["Core Ultra 7", "good fit", 3, true], ["Core Ultra 5", "too weak for the job", 2, false]].map(([a, b, n, ok], i) =>
+        B(1, R(300, 60 + i * 70, 220, 56, {c: "xcard", rx: 8}) + T(318, 84 + i * 70, a, {fs: 15, w: 700})) +
+        B(n, T(318, 104 + i * 70, b, {fs: 12, c: ok ? "xgoodt" : "xbadt", w: 700}) + (ok ? check(552, 88 + i * 70, 1.2) : cross(552, 88 + i * 70, 1.1)))).join("") +
+      ring(3, 294, 124, 284, 68) +
+      B(4, R(300, 280, 320, 50, {c: "xblk", rx: 8}) + T(315, 302, "Is “Core Ultra 7 265T” on the board's", {fs: 13, w: 700}) + T(315, 320, "supported CPU list?  ✓ Check the maker's site", {fs: 13})),
+      "A Z890 LGA1851 motherboard next to three processor choices"),
+      beats: [
+        "If you already have the motherboard, the processor must be one the board supports. Say the board has a Z890 chipset and an LGA1851 socket, and supports Core Ultra processors.",
+        "The user needs a light business system on a moderate budget. So you rule out the expensive Core Ultra 9, and the weakest Core Ultra 5.",
+        "That leaves a Core Ultra 7, such as the Core Ultra 7 265T.",
+        "Last step: confirm that exact model number is on the board maker's supported CPU list."]},
+    {t: "Balance the whole system", svg: svg(
+      [["Clock speed", "GHz"], ["Work per cycle", "efficiency"], ["Cache size", "MB"]].map(([a, b], i) => B(1, card(30 + i * 200, 25, 180, 64, a, b))).join("") +
+      B(2, card(30, 115, 270, 70, "Web browsing", "runs fine on one core") + card(330, 115, 280, 70, "Premiere Pro, AutoCAD, Excel, games", "use every core", {fs: 13})) +
+      [["CPU", "fast"], ["RAM", "fast"], ["Drive", "slow HDD"], ["GPU", "powerful"]].map(([a, b], i) =>
+        B(3, R(40 + i * 150, 220, 110, 64, {c: i === 2 ? "xbad" : "xcard", rx: 10}) + T(95 + i * 150, 248, a, {a: "middle", w: 700, fs: 15}) + T(95 + i * 150, 268, b, {a: "middle", fs: 12, c: i === 2 ? "xbadt" : "dm"}) +
+          (i < 3 ? `<line x1="${150 + i * 150}" y1="252" x2="${190 + i * 150}" y2="252" class="xchain"/>` : ""))).join("") +
+      B(3, T(320, 210, "One weak link slows everything: a bottleneck", {a: "middle", fs: 13, w: 700})) + ring(3, 334, 214, 122, 76) +
+      B(4, tag(150, 310, "Read benchmark reviews · plan a cooler + thermal paste", {w: 340})),
+      "Processor performance factors and a chain of components with one weak link"),
+      beats: [
+        "For the best performance, use the fastest processor the board supports. Performance depends on clock speed, how much work it does per clock cycle, and cache size.",
+        "Extra cores help only if the software is written to use them. Web browsing runs fine on one core. Video editing, CAD, Excel, and many games use them all.",
+        "Balance the whole system. A powerful graphics card paired with a weak processor or a slow drive just creates a bottleneck that slows everything down.",
+        "Read benchmark reviews, accept that you may trade some performance for cost, and remember a cooler and thermal paste if they aren't included."]},
+    {t: "Install an Intel processor", svg: svg(
+      board(30, 30, 320, 300) + lga(90, 80, 200) +
+      `<circle cx="113" cy="143" r="5" fill="#f59e0b"/><circle cx="267" cy="143" r="5" fill="#f59e0b"/><path d="M96 286 l14 0 l-14 -14 z" fill="#f4f1e8"/>` +
+      X(2, R(84, 74, 212, 212, {f: "none", s: "#c9ccd1", sw: 9, rx: 4})) + B(5, R(84, 74, 212, 212, {f: "none", s: "#c9ccd1", sw: 9, rx: 4})) +
+      X(5, M(2, "transform-box:view-box;transform-origin:318px 296px;--rot:38deg", `<g transform="rotate(-38 318 296)"><rect x="313" y="86" width="10" height="210" rx="5" fill="#d7dade"/><rect x="309" y="80" width="22" height="14" rx="4" fill="#d7dade"/></g>`)) +
+      B(5, `<rect x="313" y="86" width="10" height="210" rx="5" fill="#d7dade"/><rect x="309" y="80" width="22" height="14" rx="4" fill="#d7dade"/>`) +
+      M(4, "--dy:-46px;--sc:1.12", cpu(110, 100, 160, "INTEL", {notch: true}), 3) +
+      dot(3, 110, 143, 13) + dot(3, 270, 143, 13) + dot(3, 102, 280, 16) + ring(2, 300, 70, 40, 236, 12) + ring(1, 84, 74, 212, 212, 6) +
+      [["1", "Keep the socket cover; never", "touch the pins"], ["2", "Lever down and out, then lift:", "the load plate opens"], ["3", "Notches ↔ posts,", "gold triangle ↔ corner mark"], ["4", "Lower straight down:", "no tilting or sliding"], ["5", "Close the plate under the", "screw head, lock the lever"]]
+        .map(([n, a, b], i) => B(i + 1, R(375, 28 + i * 62, 250, 54, {c: "xcard", rx: 8}) + C(395, 55 + i * 62, 12, {f: "#14b8a6"}) + T(395, 60 + i * 62, n, {a: "middle", fs: 13, w: 700, fill: "#06302b"}) +
+          T(415, 50 + i * 62, a, {fs: 12, w: 700}) + T(415, 67 + i * 62, b, {fs: 12, c: "dm"}))).join(""),
+      "Intel LGA socket with the lever opening, the processor lining up with posts and dropping in"),
+      beats: [
+        "Here's an Intel LGA socket. The pins are in the socket, not on the processor, so never touch them. Keep the plastic socket cover in case you ever remove the processor.",
+        "Push the lever down and slightly out to release it, then lift it. That raises the load plate.",
+        "Find the two notches on the edges of the processor and the gold triangle on one corner. They line up with the two posts in the socket and the corner mark.",
+        "Hold the processor by its edges and lower it straight down. No tilting, no sliding.",
+        "Check that it's fully seated, close the load plate so it catches under the screw head, then push the lever down and lock it."]},
+    {t: "Thermal paste and the cooler", svg: svg(
+      board(20, 30, 300, 300) + cpu(70, 80, 200, "CPU") +
+      B(1, `<ellipse cx="170" cy="180" rx="11" ry="10" fill="#e5e7eb" stroke="#9ca3af"/>`) + dot(1, 170, 180, 22) +
+      M(3, "--dy:-50px;--sc:1.08", R(55, 65, 230, 230, {f: "#8d939b", rx: 8}) + [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => `<line x1="${68 + i * 23}" y1="70" x2="${68 + i * 23}" y2="290" stroke="#6b7179" stroke-width="3"/>`).join("") +
+        C(170, 180, 92, {f: "#24262b"}) + [0, 60, 120, 180, 240, 300].map(a => `<path d="M170 180 q 40 -20 70 ${-8}" stroke="#3d4148" stroke-width="16" fill="none" stroke-linecap="round" transform="rotate(${a} 170 180)"/>`).join("") + C(170, 180, 22, {f: "#4b5058"}), 3) +
+      B(4, [["1", 70, 80], ["2", 270, 280], ["3", 270, 80], ["4", 70, 280]].map(([n, x, y]) => C(x, y, 15, {f: "#f59e0b"}) + T(x, y + 5, n, {a: "middle", fs: 14, w: 700, fill: "#3b2503"})).join("") + `<line x1="82" y1="92" x2="258" y2="268" class="xdash"/><line x1="258" y1="92" x2="82" y2="268" class="xdash"/>`) +
+      B(5, R(258, 34, 46, 18, {f: "#f4f1e8", rx: 3}) + T(281, 47, "CPU_FAN", {a: "middle", fs: 8, w: 700, fill: "#222"}) + P("M250 70 C 270 60 270 55 270 52", "xcable")) + ring(5, 252, 28, 58, 30, 8) +
+      T(475, 32, "Side view", {a: "middle", fs: 12, c: "dm", w: 700}) +
+      R(380, 140, 190, 22, {f: "#2f6b45", rx: 3}) + R(395, 120, 160, 20, {f: "#c9ccd1", rx: 3}) +
+      B(1, X(3, `<ellipse cx="475" cy="113" rx="16" ry="8" fill="#e5e7eb" stroke="#9ca3af"/>`)) + B(3, R(395, 114, 160, 6, {f: "#e5e7eb", rx: 2})) +
+      M(3, "--dy:-34px", R(385, 94, 180, 20, {f: "#9aa0a8", rx: 3}) + [0, 1, 2, 3, 4, 5, 6, 7, 8].map(i => R(392 + i * 20, 44, 8, 50, {f: "#b4b9c0", rx: 2})).join("")) +
+      B(3, T(475, 186, "Pressure spreads it thin, filling air gaps", {a: "middle", fs: 12})) +
+      B(1, card(335, 205, 140, 58, "Pea-size dot", "in the center", {fs: 13})) +
+      B(2, card(485, 205, 140, 58, "Never reuse paste", "clean: dry cloth/filter", {fs: 13, sfs: 11})) +
+      B(4, card(335, 272, 140, 58, "Opposite corners", "a little at a time", {fs: 13})) +
+      B(5, card(485, 272, 140, 58, "Fan cable", "→ 4-pin CPU fan header", {fs: 13, sfs: 11})),
+      "Thermal paste dot on the processor, the cooler lowering on top, and a side view of the paste spreading"),
+      beats: [
+        "Next, thermal compound. If the cooler doesn't have it pre-applied, put a dot about the size of a small pea in the center of the processor.",
+        "Too much can ooze out onto the board. And never reuse old paste: clean it off with a soft, dry cloth or a coffee filter first.",
+        "Set the cooler straight down without sliding it. The pressure spreads the paste into a thin layer that fills the tiny air gaps and carries heat away.",
+        "For a screw-down cooler, tighten opposite corners a little at a time, rotating among all four, so the pressure stays even.",
+        "Plug the cooler's fan into the 4-pin CPU fan header right next to the socket."]},
+    {t: "Install an AMD processor", svg: svg(
+      T(115, 30, "AMD PGA processor (underside)", {a: "middle", fs: 12, w: 700, c: "dm"}) +
+      R(30, 45, 170, 170, {f: "#2f6b45", rx: 4}) + `<rect x="42" y="57" width="146" height="146" fill="url(#xvpgapins)"/>` + `<path d="M33 212 l26 0 l-26 -26 z" fill="#f4f1e8"/>` +
+      B(1, tag(30, 228, "Pins on the CPU bend easily", {w: 186})) +
+      R(290, 50, 220, 220, {f: "#ece6d8", rx: 6}) + `<rect x="310" y="70" width="180" height="180" fill="url(#xvholes)"/>` + `<path d="M293 267 l22 0 l-22 -22 z" fill="#b38b3a"/>` +
+      X(5, M(2, "transform-box:view-box;transform-origin:528px 262px;--rot:80deg", `<g transform="rotate(-80 528 262)"><rect x="522" y="60" width="12" height="204" rx="6" fill="#d7dade"/></g>`)) +
+      B(5, `<rect x="522" y="60" width="12" height="204" rx="6" fill="#d7dade"/>`) +
+      M(4, "--dy:-44px;--sc:1.1", cpu(320, 80, 160, "RYZEN"), 3) +
+      dot(3, 46, 200, 22) + dot(3, 302, 256, 18) + dot(3, 334, 228, 18) + ring(2, 500, 40, 60, 236, 12) +
+      B(5, card(40, 280, 260, 60, "Clamp, paste, cooler", "hook one clip, snap the other", {fs: 14})) +
+      B(6, card(320, 290, 300, 54, "AM5 is LGA (pins in socket)", "Threadripper: its own steps", {fs: 13})),
+      "AMD processor with pins underneath and a socket with holes and a lever"),
+      beats: [
+        "Many AMD processors use PGA: the pins are on the bottom of the processor, and the socket has the holes. Those pins bend easily, so never touch them.",
+        "Lift the socket lever all the way up and remove any protective cover.",
+        "Match the gold triangle on the processor's corner to the triangle on the socket, so the missing pins line up with the filled holes.",
+        "Lower it straight down. You'll feel the pins drop into place. Never force it: if it doesn't sit flat, the pins aren't lined up.",
+        "Press the lever down to clamp it. Then add thermal paste, set the cooler inside the retention frame, hook one clip, and press the opposite clip down until it snaps.",
+        "One note: AMD's newer AM5 socket is LGA, with the pins in the socket like Intel. And Threadripper sockets have their own installation steps."]},
+    {t: "Verify the installation", svg: svg(
+      B(1, card(240, 18, 160, 50, "⏻  Power on", "")) +
+      B(2, arrow(290, 68, 110, 116) + R(20, 120, 185, 130, {c: "xbad", rx: 10}) + T(112, 145, "Fans spin, lights on,", {a: "middle", fs: 13, w: 700}) + T(112, 163, "nothing else", {a: "middle", fs: 13, w: 700}) +
+        TL(112, 192, ["CPU not seated, or a", "power cable loose/missing"], {a: "middle", fs: 12, c: "dm", lh: 16})) +
+      B(3, arrow(320, 68, 320, 116) + R(228, 120, 185, 130, {c: "xbad", rx: 10}) + T(320, 145, "Starts booting,", {a: "middle", fs: 13, w: 700}) + T(320, 163, "then shuts off", {a: "middle", fs: 13, w: 700}) +
+        TL(320, 192, ["Overheating: cooler", "not installed right"], {a: "middle", fs: 12, c: "dm", lh: 16})) +
+      B(4, arrow(350, 68, 530, 116) + R(435, 120, 185, 130, {c: "xgood", rx: 10}) + T(527, 145, "Boots normally", {a: "middle", fs: 13, w: 700}) +
+        TL(527, 175, ["In BIOS/UEFI check:", "CPU identified correctly,", "temps and fan speeds OK"], {a: "middle", fs: 12, c: "dm", lh: 16})) +
+      B(3, tag(100, 262, "Power off · unplug · hold power button · recheck", {w: 330})) +
+      B(5, R(100, 298, 440, 46, {c: "xblk", rx: 8}) + T(320, 318, "Max safe temp is in the CPU's datasheet (ark.intel.com)", {a: "middle", fs: 13, w: 700}) + T(320, 335, "e.g., a Core i5-8600K halts above 100 °C", {a: "middle", fs: 12, c: "dm"})),
+      "Flowchart of three results after powering on"),
+      beats: [
+        "Now power on, and watch what happens.",
+        "If the fans spin and the lights glow but nothing else happens, the processor probably isn't seated solidly, or a power cable is loose or missing.",
+        "If it starts to boot and then suddenly shuts off, the processor is likely overheating because the cooler isn't installed correctly. Either way: power off, unplug, hold the power button, and recheck.",
+        "If it boots, enter BIOS/UEFI setup. Make sure the processor is identified correctly, and that temperatures and fan speeds look normal.",
+        "Each processor has a maximum safe temperature, listed in its datasheet. A Core i5-8600K, for example, halts if it goes above 100 degrees Celsius."]}
+  ]},
+  // ───────────────────────── 4. Memory Technologies
+  {sec: 3, title: "Memory Technologies", parts: [[0], [0, 1], [2], [1, 3], [4], [4], [5], [6]], scenes: [
+    {t: "DIMMs and their notches", svg: svg(
+      dimm(30, 24, 340, "ddr3") + dimm(30, 112, 340, "ddr4") + dimm(30, 200, 340, "ddr5") +
+      B(3, T(395, 52, "DDR3", {fs: 17, w: 700}) + T(395, 72, "240 pins · offset notch", {fs: 13, c: "dm"})) +
+      B(4, T(395, 140, "DDR4", {fs: 17, w: 700}) + T(395, 160, "288 pins", {fs: 13, c: "dm"}) +
+        T(395, 228, "DDR5", {fs: 17, w: 700}) + T(395, 248, "288 pins · notch nearer center", {fs: 13, c: "dm"}) + T(395, 266, "fastest, lowest voltage", {fs: 13, c: "dm"})) +
+      dot(3, 30 + 340 * 0.6, 84, 15) + dot(4, 30 + 340 * 0.545, 172, 15) + dot(4, 30 + 340 * 0.5, 260, 15) +
+      B(2, tag(395, 92, "Dual = pins on both sides", {w: 200}) + tag(395, 178, "64-bit data path", {w: 140})) + ring(2, 24, 106, 352, 80) +
+      B(5, dimm(30, 288, 175, "so5") + T(220, 310, "SODIMM (laptops)", {fs: 14, w: 700}) + T(220, 328, "same DDR generations", {fs: 12, c: "dm"})) +
+      B(1, tag(380, 300, "RAM = DRAM, refreshed constantly", {w: 210})),
+      "DDR3, DDR4 and DDR5 memory modules with their notch positions, and a smaller SODIMM"),
+      beats: [
+        "RAM holds the data and instructions the processor is working on. It's DRAM, so the memory controller refreshes it thousands of times every second.",
+        "Desktops use DIMMs: dual inline memory modules. Dual means separate pins on both sides of the edge connector. Every DIMM has a 64-bit data path.",
+        "Each generation puts its notch in a different spot, so a module can't go into the wrong slot. DDR3 has 240 pins and an offset notch.",
+        "DDR4 and DDR5 both have 288 pins, but DDR5's notch sits closer to the center, so it won't fit a DDR4 slot. DDR5 is the fastest and uses the lowest voltage.",
+        "Laptops use the smaller SODIMM, which comes in the same DDR generations. JEDEC is the organization that sets these memory standards."]},
+    {t: "Double data rate and speed numbers", svg: svg(
+      T(30, 40, "Motherboard clock", {fs: 13, c: "dm", w: 700}) +
+      P("M40 130 " + [0, 1, 2, 3, 4, 5].map(i => `L${40 + i * 92} 130 L${40 + i * 92} 70 L${86 + i * 92} 70 L${86 + i * 92} 130`).join(" ") + " L592 130", "xwave") +
+      B(1, [0, 1, 2, 3, 4, 5].map(i => C(40 + i * 92, 100, 8, {f: "#14b8a6"})).join("") + T(40, 165, "Older memory: 1 transfer per beat", {fs: 13, c: "xaccentt", w: 700})) +
+      B(2, [0, 1, 2, 3, 4, 5].map(i => C(86 + i * 92, 100, 8, {f: "#f59e0b"})).join("") + T(330, 165, "DDR: 2 transfers per beat", {fs: 13, c: "xwarnt", w: 700})) +
+      B(3, card(40, 200, 170, 70, "3000 MHz", "actual clock") + T(240, 242, "× 2  =", {a: "middle", fs: 18, w: 700}) + card(270, 200, 170, 70, "6000 MT/s", "transfers per second", {c: "xblk"})) +
+      B(4, card(460, 200, 160, 70, "Sold as", "“6000 MHz” · DDR5-6000", {sfs: 11})) +
+      B(4, T(320, 310, "Everyone labels it the same way, so you can still compare.", {a: "middle", fs: 13, c: "dm"})),
+      "A clock wave with transfers on rising edges only, then on both edges"),
+      beats: [
+        "DDR stands for double data rate. Older memory moved data once per beat of the motherboard clock.",
+        "DDR moves data on both the rising and the falling edge of each beat, so it doubles the transfers.",
+        "That's why there are two speed numbers. Frequency is the clock in megahertz, and transfer rate is in megatransfers per second. A DDR5 module with a 3000 megahertz clock moves 6000 megatransfers per second.",
+        "Makers usually advertise that module as 6000 megahertz anyway. Since everyone labels it the same way, you can still compare modules directly."]},
+    {t: "Memory channels", svg: svg(
+      R(25, 120, 150, 120, {f: "#2f6b45", rx: 8}) + R(38, 133, 124, 94, {f: "#c9ccd1", rx: 6}) + TL(100, 172, ["Memory", "controller"], {a: "middle", fs: 13, w: 700, fill: "#30343a"}) +
+      T(286, 46, "Channel 1", {a: "middle", fs: 13, w: 700}) + T(406, 46, "Channel 2", {a: "middle", fs: 13, w: 700}) +
+      `<path d="M175 160 H 330" class="xbus"/><path d="M175 205 H 450" class="xbus"/>` +
+      B(3, `<path d="M175 160 H 312" class="xbuson"/><path d="M175 205 H 432" class="xbuson"/>`) +
+      slotV(260, 60, 240, BLACK) + slotV(300, 60, 240, GRAY) + slotV(380, 60, 240, BLACK) + slotV(420, 60, 240, GRAY) +
+      M(3, "--dy:-40px", dimmV(300, 60, 240) + dimmV(420, 60, 240), 3) +
+      M(4, "--dy:-40px", dimmV(260, 60, 240) + dimmV(380, 60, 240), 4) +
+      ring(2, 248, 52, 76, 256) + ring(2, 368, 52, 76, 256) +
+      B(1, card(470, 30, 155, 62, "Single channel", "1 module at a time", {fs: 14})) +
+      B(3, card(470, 104, 155, 62, "Dual channel", "2 at once ≈ 2× access", {fs: 14, c: "xblk"})) +
+      B(4, card(470, 178, 155, 62, "2nd pair", "needn't match the 1st", {fs: 14})) +
+      B(5, card(470, 252, 155, 62, "Triple · Quad", "servers: 6, 8, even 12", {fs: 14})) +
+      B(6, tag(40, 318, "Mismatched pair → board falls back to single channel", {w: 380, c: "xtagbad"})) +
+      B(3, T(100, 270, "gray = 2nd & 4th slots", {a: "middle", fs: 12, c: "dm"}) + T(100, 286, "(often A2 and B2)", {a: "middle", fs: 12, c: "dm"})),
+      "Memory controller connected to two channels, each with a gray and a black slot"),
+      beats: [
+        "Memory channels decide how many modules the memory controller can talk to at the same time. Single channel means just one at a time.",
+        "This board has four slots: two gray and two black. One gray and one black slot form channel 1. The other pair is channel 2.",
+        "Put a matching pair of modules in the two gray slots, and they sit on different channels. On most boards those are the second and fourth slots from the processor, often labeled A2 and B2, but always check the manual. The controller reaches both modules at once. That's dual channel, roughly double the access speed.",
+        "Later, a second matching pair can go in the black slots. It doesn't have to match the first pair, because those slots work independently.",
+        "Triple channel, used by DDR3, needs three matching modules, and quad channel needs four. Some servers and workstations go to six, eight, or even twelve channels. The board, the processor, and the modules must all support it.",
+        "Modules sharing a channel setup must match in size, speed, and features. If they don't, the board falls back to single channel."]},
+    {t: "PC ratings: bandwidth math", svg: svg(
+      B(1, tag(150, 18, "PC rating = total bandwidth in MB per second", {w: 340})) +
+      B(2, T(30, 82, "DDR5", {fs: 16, w: 700}) + card(100, 55, 150, 60, "4800", "MT/s") + T(275, 92, "×", {a: "middle", fs: 24, w: 700}) +
+        card(300, 55, 130, 60, "8 bytes", "64-bit path") + T(455, 92, "=", {a: "middle", fs: 24, w: 700}) + card(480, 55, 140, 60, "38,400", "MB/s", {c: "xblk"})) +
+      B(3, R(200, 135, 240, 56, {c: "xcard", rx: 10}) + T(284, 172, "PC", {a: "end", fs: 26, w: 700, c: "mono dt"}) + T(296, 172, "5", {a: "middle", fs: 26, w: 700, c: "mono xaccentt"}) + T(308, 172, "-38400", {fs: 26, w: 700, c: "mono dt"})) +
+      H(3, `<rect x="284" y="145" width="24" height="38" rx="5" class="xring"/>`) + B(3, T(320, 212, "the digit after PC = DDR generation", {a: "middle", fs: 12, c: "dm"})) +
+      B(4, T(30, 262, "DDR4", {fs: 16, w: 700}) + card(100, 235, 150, 60, "3000", "MT/s") + T(275, 272, "×", {a: "middle", fs: 24, w: 700}) +
+        card(300, 235, 130, 60, "8 bytes", "") + T(455, 272, "=", {a: "middle", fs: 24, w: 700}) + card(480, 235, 140, 60, "PC4-24000", "24,000 MB/s", {c: "xblk", fs: 14})),
+      "Worked bandwidth math: 4800 times 8 equals 38,400, written PC5-38400"),
+      beats: [
+        "Memory modules also get a PC rating: their total bandwidth, in megabytes per second.",
+        "Take the advertised speed and multiply by 8, because the 64-bit data path moves 8 bytes per transfer. DDR5 at 4800, times 8, is 38,400.",
+        "So that module is written PC5-38400. The digit right after PC tells you the DDR generation.",
+        "Same math for DDR4 at 3000: 3000 times 8 is 24,000, so it's PC4-24000."]},
+    {t: "ECC and registered memory", svg: svg(
+      T(30, 30, "Non-ECC", {fs: 14, w: 700}) + dimm(30, 40, 300, "ddr4") + T(345, 75, "8 chips · 64-bit path", {fs: 13, c: "dm"}) +
+      B(1, T(30, 140, "ECC (error-correcting code)", {fs: 14, w: 700}) + dimm(30, 150, 300, "ddr4", {ecc: true})) +
+      B(2, T(345, 185, "9th chip · 72-bit path", {fs: 13, w: 700}) + T(345, 203, "(8 extra bits for checking)", {fs: 12, c: "dm"})) +
+      ring(2, 288, 150, 40, 40, 6) +
+      B(3, card(30, 235, 185, 56, "1-bit error", "found and fixed ✓", {fs: 14}) + card(225, 235, 185, 56, "2-bit error", "detected, not fixed ⚠", {fs: 14})) +
+      B(4, R(430, 230, 190, 66, {c: "xbad", rx: 10}) + T(525, 256, "ECC + non-ECC", {a: "middle", fs: 14, w: 700}) + T(525, 278, "can't mix: won't work", {a: "middle", fs: 12})) +
+      B(5, tag(30, 312, "UDIMM = unbuffered (desktops) · RDIMM = registered (servers) · never mix", {w: 500})) +
+      B(1, tag(430, 28, "servers, medical, finance", {w: 180})),
+      "A regular memory module with 8 chips next to an ECC module with a ninth chip"),
+      beats: [
+        "In servers and critical systems, like medical or financial data centers, memory errors aren't acceptable. So they use ECC: error-correcting code memory.",
+        "An ECC module has an extra chip, usually a ninth. The data path grows from 64 to 72 bits, with 8 bits used for checking.",
+        "ECC can find and fix a single-bit error, and detect, but not fix, a 2-bit error. It's slightly slower and costs more, but it's more reliable.",
+        "The motherboard and every module must support ECC. You can't mix ECC and non-ECC modules: the system won't work.",
+        "Server memory may also be registered, called RDIMM, which boosts the signal before data is written. Normal desktop memory is unbuffered: UDIMM. Never mix those either."]},
+    {t: "CAS latency", svg: svg(
+      R(110, 30, 420, 90, {f: "#f4f1e8", rx: 8}) + T(320, 62, "DDR4-3000 · 16 GB · 1.35 V", {a: "middle", fs: 16, w: 700, fill: "#222"}) +
+      T(274, 98, "15", {a: "end", fs: 26, w: 700, fill: "#222", c: "mono"}) + T(274, 98, "-17-17-35", {fs: 26, w: 700, fill: "#222", c: "mono"}) +
+      H(2, `<rect x="236" y="72" width="42" height="36" rx="6" class="xring"/>`) + B(2, T(320, 140, "first number = CAS latency (CL15)", {a: "middle", fs: 14, w: 700})) +
+      B(1, T(320, 175, "Clock cycles to read or write a column of data: lower is faster", {a: "middle", fs: 13, c: "dm"})) +
+      B(3, T(40, 222, "CL30", {fs: 15, w: 700}) + R(100, 206, 300, 24, {f: "#14b8a6", rx: 6}) + T(410, 224, "a bit faster", {fs: 13}) +
+        T(40, 268, "CL40", {fs: 15, w: 700}) + R(100, 252, 400, 24, {f: "#f59e0b", rx: 6}) + T(510, 270, "may cost less", {fs: 13})) +
+      B(3, tag(150, 310, "When in doubt: use what the board maker recommends", {w: 340})),
+      "A memory label with the timing string 15-17-17-35, and bars comparing CL30 and CL40"),
+      beats: [
+        "CAS latency, or CL, is the number of clock cycles the module takes to read or write a column of data. Lower is faster. CAS stands for column address strobe.",
+        "On a label, it's the first number in the timing string. In 15-17-17-35, the CAS latency is 15.",
+        "So CL30 memory is a bit quicker than CL40, though the CL40 kit may cost less. When selecting memory, use the type the motherboard maker recommends."]},
+    {t: "Laptop memory: SODIMMs", svg: svg(
+      B(1, dimm(30, 40, 260, "so5")) + B(1, dimm(30, 130, 260, "so4")) + B(3, dimm(30, 220, 250, "so3")) +
+      B(2, T(320, 62, "DDR5 SODIMM · 262 pins", {fs: 16, w: 700}) + T(320, 82, "high-performance & gaming laptops", {fs: 13, c: "dm"}) +
+        T(320, 152, "DDR4 SODIMM · 260 pins", {fs: 16, w: 700}) + T(320, 172, "mainstream laptops", {fs: 13, c: "dm"})) +
+      B(3, T(320, 242, "DDR3 SODIMM · 204 pins", {fs: 16, w: 700}) + T(320, 262, "older or refurbished laptops", {fs: 13, c: "dm"})) +
+      B(4, tag(30, 312, "A laptop takes only its own type: pins and notch prevent mistakes", {w: 440})) +
+      dot(4, 30 + 260 * 0.44, 82, 13) + dot(4, 30 + 260 * 0.42, 172, 13) + dot(4, 30 + 250 * 0.4, 262, 13),
+      "DDR5, DDR4 and DDR3 SODIMMs with pin counts"),
+      beats: [
+        "Laptops use SODIMMs: small outline DIMMs, pronounced sew-dims. They come in the same DDR generations as desktop memory.",
+        "DDR5 SODIMMs have 262 pins and show up in high-performance and gaming laptops. DDR4 SODIMMs have 260 pins and are the mainstream choice.",
+        "DDR3 SODIMMs have 204 pins and are a bit shorter. You'll find them in older or refurbished laptops.",
+        "A laptop accepts only the memory type it was designed for. The pin count and notch position stop you from inserting the wrong one."]}
+  ]},
+  // ───────────────────────── 5. How to Upgrade Memory
+  {sec: 4, title: "How to Upgrade Memory", parts: [[0], [1], [2], [3, 4], [3], [4], [5], [6], [7]], scenes: [
+    {t: "Five questions, in order", svg: svg(
+      B(1, R(460, 40, 160, 110, {c: "xbad", rx: 10}) + T(540, 70, "⚠ Insufficient", {a: "middle", fs: 14, w: 700}) + T(540, 90, "memory", {a: "middle", fs: 14, w: 700}) + TL(540, 115, ["slow PC, apps", "won't load"], {a: "middle", fs: 12, c: "dm", lh: 15})) +
+      [["How much do I need, and how much is installed?", 2], ["What type is already installed?", 2], ["How many and what kind fit the motherboard?", 3], ["How do I choose and buy the right modules?", 3], ["How do I install them?", 4]]
+        .map(([s, n], i) => B(n, R(25, 30 + i * 62, 420, 52, {c: "xcard", rx: 10}) + C(52, 56 + i * 62, 14, {f: "#14b8a6"}) + T(52, 61 + i * 62, String(i + 1), {a: "middle", fs: 14, w: 700, fill: "#06302b"}) + T(76, 61 + i * 62, s, {fs: 14, w: 700}))).join(""),
+      "Five upgrade questions listed in order"),
+      beats: [
+        "Adding memory can fix slow performance, apps that won't load, or an Insufficient memory error. Work through five questions, in order.",
+        "One: how much memory do I need, and how much is installed? Two: what type is already installed?",
+        "Three: how many and what kind of modules fit the motherboard? Four: how do I choose and buy the right ones?",
+        "And five: how do I install them? Let's go through them."]},
+    {t: "How much memory?", svg: svg(
+      [["Motherboard", "its max (manual)"], ["Processor", "Intel / AMD site"], ["Operating system", "32- or 64-bit"]].map(([a, b], i) => B(1, card(25 + i * 202, 20, 186, 60, a, b))).join("") +
+      B(2, tag(25, 98, "Windows: 4 GB minimum", {w: 180}) + tag(215, 98, "32-bit: 4 GB max", {w: 140}) + tag(365, 98, "Win 11 Pro 64-bit: up to 2 TB", {w: 250})) +
+      B(3, R(25, 140, 300, 190, {c: "xcard", rx: 10}) + R(25, 140, 300, 30, {c: "xsunk", rx: 10}) + T(40, 160, "System Information (msinfo32)", {fs: 12, w: 700}) +
+        [["OS Name", "Windows 11 Pro"], ["System Type", "x64-based PC"], ["Installed Physical Memory", "16.0 GB"], ["Total Virtual Memory", "18.4 GB"]].map(([a, b], i) => T(40, 196 + i * 32, a, {fs: 12, c: "dm"}) + T(310, 196 + i * 32, b, {fs: 12, w: 700, a: "end"})).join("")) +
+      ring(3, 32, 238, 286, 30, 6) +
+      B(4, R(345, 140, 270, 190, {c: "xcard", rx: 10}) + T(480, 162, "BIOS/UEFI setup", {a: "middle", fs: 13, w: 700}) +
+        [0, 1, 2, 3].map(i => slotV(390 + i * 50, 180, 110, i % 2 ? GRAY : BLACK) + (i % 2 ? dimmV(390 + i * 50, 180, 110) : "") + T(396 + i * 50, 310, i % 2 ? "8 GB" : "empty", {a: "middle", fs: 11, c: i % 2 ? "dt" : "dm", w: 700})).join("") +
+        T(480, 325, "3000 MT/s · dual channel", {a: "middle", fs: 11, c: "dm"})),
+      "Memory limits, the System Information window showing 16 GB, and setup showing slots"),
+      beats: [
+        "How much do you need? Usually, as much as you can get. The limit is set by the motherboard, the processor, and the operating system.",
+        "Windows needs at least 4 gigabytes. A 32-bit installation can't use more than 4, and 64-bit Windows 11 Pro supports up to 2 terabytes.",
+        "To see what's installed, run msinfo32. System Information shows the Installed Physical Memory.",
+        "BIOS/UEFI setup shows more: how many slots there are, which are filled and with what size modules, the memory speed, and the channel mode."]},
+    {t: "What type is installed?", svg: svg(
+      dimm(30, 40, 420, "ddr4") +
+      R(150, 54, 180, 44, {f: "#f4f1e8", rx: 4}) + T(240, 72, "16GB 2Rx8 PC4-24000", {a: "middle", fs: 12, w: 700, fill: "#222"}) + T(240, 89, "CL15-17-17-35 1.35V", {a: "middle", fs: 11, fill: "#222"}) +
+      B(1, tag(250, 8, "Open the case: count slots and how many are filled", {w: 300})) +
+      B(2, arrow(190, 105, 120, 170) + card(30, 175, 160, 56, "16 GB", "size", {fs: 15}) +
+        arrow(255, 105, 300, 170) + card(210, 175, 200, 56, "PC4-24000", "= DDR4 at 3000", {fs: 15}) +
+        arrow(300, 100, 520, 170) + card(430, 175, 190, 56, "CL15", "CAS latency", {fs: 15})) +
+      B(3, R(30, 260, 590, 76, {c: "xblk", rx: 10}) + T(48, 286, "Find the board's maker and model printed on it (e.g., ASUS PRIME Z370-P),", {fs: 13, w: 700}) +
+        T(48, 308, "then read its manual online: supported types, sizes, speeds, channels.", {fs: 13}) + T(48, 326, "Stuck? Take the board and modules to a computer store to match.", {fs: 12, c: "dm"})),
+      "A memory module label read part by part: size, PC rating and CAS latency"),
+      beats: [
+        "Next, find out what's installed. Open the case, count the slots, and see how many are filled.",
+        "Remove a module and read its label. Here: 16 gigabytes, PC4-24000, which is DDR4 at 3000, with a CAS latency of 15.",
+        "Then find the motherboard's maker and model, printed on the board, and look up its documentation online to see which memory types and channel setups it supports. Try to match the new modules to the ones already there."]},
+    {t: "Example: adding memory to a DDR4 board", svg: svg(
+      board(25, 25, 300, 310) + lga(55, 90, 110) + T(110, 225, "Core i5-8600K", {a: "middle", fs: 12, w: 700, fill: "#e9f5ee"}) +
+      [0, 1, 2, 3].map(i => slotV(195 + i * 32, 60, 240, i % 2 ? GRAY : BLACK)).join("") +
+      B(2, dimmV(227, 60, 240) + dimmV(291, 60, 240)) + M(3, "--dy:-40px", dimmV(195, 60, 240) + dimmV(259, 60, 240), 3) +
+      ring(2, 217, 52, 32, 256, 6) + ring(2, 281, 52, 32, 256, 6) + ring(3, 185, 52, 32, 256, 6) + ring(3, 249, 52, 32, 256, 6) +
+      B(1, card(345, 25, 275, 70, "ASUS Prime Z370-P", ["4 DDR4 slots · unbuffered, non-ECC", "dual channel · 1.35 V max"], {fs: 14, sfs: 11})) +
+      B(2, card(345, 105, 275, 66, "Installed: 2 × 8 GB (A2 + B2)", ["Corsair Vengeance DDR4-3000", "CL15, 1.35 V"], {fs: 14, sfs: 11})) +
+      B(3, card(345, 181, 275, 74, "Add 2 matching (A1 + B1)", ["same brand & line, CL15,", "unbuffered, non-ECC → 32 GB"], {fs: 14, sfs: 11, c: "xblk"})) +
+      B(4, card(345, 265, 275, 66, "CPU limit: 2666 MHz", ["faster modules run at 2666", "(ark.intel.com)"], {fs: 14, sfs: 11})),
+      "Motherboard with two modules in the gray slots and two new matching modules going into the black slots"),
+      beats: [
+        "Here's an example: an ASUS Prime Z370-P with four DDR4 slots. It takes unbuffered, non-ECC modules in dual channel, at 1.35 volts or less, and all modules must share the same CAS latency.",
+        "Two 8 gigabyte modules sit in the gray slots, the second and fourth from the processor, labeled A2 and B2: Corsair Vengeance, DDR4 at 3000, CAS latency 15.",
+        "To reach 32 gigabytes with full dual-channel speed, buy two more matching modules, the same brand and line, CL15, unbuffered and non-ECC, and install them in the two black slots, A1 and B1.",
+        "The processor sets the top speed. This board's Core i5-8600K supports up to 2666 megahertz, so the new modules need to be at least that fast."]},
+    {t: "DDR3 triple channel and SPD", svg: svg(
+      board(20, 25, 290, 310) + lga(42, 110, 96) + T(90, 230, "CPU", {a: "middle", fs: 12, w: 700, fill: "#e9f5ee"}) +
+      [0, 1, 2, 3].map(i => slotV(170 + i * 32, 45, 250, i < 3 ? "#2f6fd6" : BLACK)).join("") +
+      T(170, 316, "near CPU", {fs: 11, fill: "#e9f5ee"}) + T(290, 316, "far", {fs: 11, fill: "#e9f5ee", a: "end"}) +
+      M(2, "--dy:-40px", dimmV(170, 45, 250) + dimmV(202, 45, 250) + dimmV(234, 45, 250), 2) +
+      B(3, X(4, dimmV(266, 45, 250))) + ring(3, 256, 37, 32, 266, 6) + ring(1, 160, 37, 96, 266, 6) +
+      B(2, card(330, 25, 290, 58, "Triple channel", "3 matching DDR3 modules in the 3 blue slots", {fs: 14, sfs: 11, c: "xblk"})) +
+      B(3, R(330, 92, 290, 50, {c: "xbad", rx: 10}) + T(475, 113, "4th (black) slot filled too", {a: "middle", fs: 13, w: 700}) + T(475, 131, "→ no longer triple channel", {a: "middle", fs: 12})) +
+      B(4, R(330, 151, 140, 88, {c: "xcard", rx: 10}) + T(400, 173, "Dual", {a: "middle", fs: 14, w: 700}) + TL(400, 193, ["2 matching, in the", "2 blue slots", "farthest from CPU"], {a: "middle", fs: 11, c: "dm", lh: 15}) +
+        R(480, 151, 140, 88, {c: "xcard", rx: 10}) + T(550, 173, "Single", {a: "middle", fs: 14, w: 700}) + TL(550, 193, ["1 module, in the", "blue slot farthest", "from the CPU"], {a: "middle", fs: 11, c: "dm", lh: 15})) +
+      B(5, R(330, 247, 290, 86, {c: "xcard", rx: 10}) + dimm(345, 258, 120, "ddr3") + R(345 + 96, 258 + 13, 12, 8, {f: "#d4a72c", rx: 1}) + T(405, 320, "SPD chip", {a: "middle", fs: 11, w: 700}) +
+        TL(478, 268, ["Serial Presence", "Detect: reports size,", "speed, voltage, width", "to BIOS/UEFI at boot"], {fs: 11, lh: 15})) + dot(5, 447, 275, 12),
+      "DDR3 board with three blue slots and one black slot; triple, dual and single channel rules; the SPD chip"),
+      beats: [
+        "Older DDR3 boards could run triple channel. This example board has three blue slots and one black slot.",
+        "Three matching modules in the three blue slots give triple channel: the controller reaches all three at once.",
+        "Fill the fourth, black slot as well, and the board can no longer run triple channel.",
+        "For dual channel on this board, put two matching modules in the two blue slots farthest from the processor. A single module goes in the blue slot farthest from the processor. Always check the manual: every board is different.",
+        "Whatever you install needs SPD: serial presence detect. A small chip on the module tells BIOS/UEFI its size, speed, voltage, and data path width at startup. All modern memory has it."]},
+    {t: "Buying the right modules", svg: svg(
+      B(1, R(25, 22, 590, 100, {c: "xcard", rx: 10}) + T(42, 46, "Memory maker's search tool (e.g., Crucial, Kingston)", {fs: 13, w: 700}) +
+        [["Maker", "ASUS"], ["Product line", "PRIME"], ["Model", "Z370-P"]].map(([a, b], i) => R(42 + i * 140, 60, 125, 44, {c: "xsunk", rx: 6}) + T(52 + i * 140, 77, a, {fs: 11, c: "dm"}) + T(52 + i * 140, 96, b + "  ▾", {fs: 13, w: 700})).join("") +
+        arrow(470, 82, 492, 82) + R(497, 60, 105, 44, {c: "xblk", rx: 6}) + T(549, 78, "Compatible", {a: "middle", fs: 12, w: 700}) + T(549, 95, "RAM list", {a: "middle", fs: 12})) +
+      B(2, R(25, 145, 280, 110, {c: "xbad", rx: 10}) + T(165, 172, "Unbuffered + registered", {a: "middle", fs: 15, w: 700}) + cross(165, 210, 1.6) + T(165, 244, "never mix: it won't work", {a: "middle", fs: 12})) +
+      B(3, R(325, 145, 290, 110, {c: "xcard", rx: 10}) + T(470, 168, "Mixed speeds?", {a: "middle", fs: 15, w: 700}) +
+        [["3200", 230], ["3200", 230], ["2666", 190]].map(([s, w], i) => R(345, 180 + i * 20, w * 0.6, 14, {f: i === 2 ? "#f59e0b" : "#14b8a6", rx: 4}) + T(350 + w * 0.6, 192 + i * 20, s, {fs: 11, w: 700})).join("") +
+        arrow(520, 205, 544, 205) + T(550, 202, "all run", {fs: 12}) + T(550, 218, "at 2666", {fs: 12, w: 700})) +
+      B(4, tag(25, 280, "Match the brand when you can", {w: 210}) + tag(258, 280, "Heat spreaders & lights: optional", {w: 240})),
+      "A memory search tool, a warning not to mix unbuffered and registered memory, and mixed speeds running at the slowest"),
+      beats: [
+        "An exact match can be hard to find. Memory sellers like Crucial and Kingston have search tools: pick the motherboard maker, product line, and model, and they list compatible modules.",
+        "Some rules aren't negotiable. Never mix unbuffered memory with buffered or registered memory. It won't work.",
+        "If you mix speeds, every module runs at the speed of the slowest one.",
+        "Matching the brand is best, though a different brand can work in a pinch. Heat spreaders and decorative lights are optional extras."]},
+    {t: "Install a DIMM", svg: svg(
+      R(70, 252, 460, 34, {f: "#2b2b2b", rx: 4}) + R(80, 260, 440, 10, {f: "#111", rx: 2}) + R(70 + 460 * 0.545 - 4, 250, 8, 14, {f: "#2b2b2b", rx: 1}) +
+      X(2, R(56, 200, 12, 88, {f: "#e5e7eb", rx: 3}) + R(532, 200, 12, 88, {f: "#e5e7eb", rx: 3})) +
+      B(2, X(4, `<g transform="rotate(-28 62 288)"><rect x="56" y="200" width="12" height="88" rx="3" fill="#e5e7eb"/></g><g transform="rotate(28 538 288)"><rect x="532" y="200" width="12" height="88" rx="3" fill="#e5e7eb"/></g>`)) +
+      B(4, R(56, 200, 12, 88, {f: "#e5e7eb", rx: 3}) + R(532, 200, 12, 88, {f: "#e5e7eb", rx: 3})) +
+      M(4, "--dy:-110px", dimm(80, 180, 440, "ddr4", {h: 82}), 3) +
+      dot(3, 80 + 440 * 0.545, 152, 15) + dot(3, 70 + 460 * 0.545, 256, 13) + ring(2, 40, 190, 44, 106, 8) + ring(2, 516, 190, 44, 106, 8) +
+      H(4, arrow(110, 40, 110, 80) + arrow(490, 40, 490, 80)) + B(4, T(300, 30, "press both ends evenly · no rocking", {a: "middle", fs: 13, w: 700})) +
+      B(1, X(2, tag(20, 20, "ESD strap · power off · unplug · drain · open case", {w: 330}))) +
+      B(5, card(150, 300, 340, 52, "Check BIOS/UEFI or System Information", "not seen? power down and reseat it", {fs: 13})),
+      "Side view of a memory slot: clips open, module aligned by its notch, pressed down until the clips close"),
+      beats: [
+        "Memory is very sensitive to static. Wear an ESD strap, power off, unplug, press the power button to drain power, and open the case. Don't touch the gold contacts.",
+        "Push the slot's clips outward. Some slots have a clip on one end only.",
+        "Line up the notch on the module's edge with the key in the slot.",
+        "Press straight down on both ends at once, without rocking it, until the clips snap back into place.",
+        "Power on, and check that BIOS/UEFI setup or System Information sees the new memory. If it doesn't, the module probably isn't fully seated: power down and reseat it."]},
+    {t: "Upgrade laptop memory", svg: svg(
+      R(25, 30, 360, 300, {f: "#3a3d44", rx: 18}) + [0, 1, 2, 3, 4, 5].map(i => R(50 + i * 20, 60, 10, 50, {f: "#2b2e34", rx: 4})).join("") +
+      R(110, 150, 200, 140, {f: "#22252a", rx: 6}) +
+      dimm(130, 170, 160, "so4", {h: 40}) + dimm(130, 230, 160, "so4", {h: 40}) +
+      X(2, R(106, 146, 208, 148, {f: "#4b4f57", rx: 8}) + C(118, 158, 4, {f: "#9aa0a8"}) + C(302, 158, 4, {f: "#9aa0a8"}) + C(118, 282, 4, {f: "#9aa0a8"}) + C(302, 282, 4, {f: "#9aa0a8"}) + T(210, 226, "RAM cover", {a: "middle", fs: 13, fill: "#d7dade"})) +
+      B(1, card(405, 22, 215, 72, "Check the warranty", ["use memory the maker approves", "for that exact model"], {fs: 14, sfs: 11})) +
+      B(2, tag(405, 106, "Unplug, remove battery", {w: 180})) +
+      T(510, 160, "Side view", {a: "middle", fs: 12, c: "dm", w: 700}) + R(420, 250, 34, 40, {f: "#2b2b2b", rx: 4}) + R(454, 286, 160, 6, {f: "#555", rx: 2}) +
+      X(4, M(3, "transform-box:view-box;transform-origin:454px 268px;--rot:30deg", `<g transform="rotate(-30 454 268)"><rect x="454" y="262" width="150" height="12" rx="2" fill="#2c7a4b"/></g>`)) +
+      B(4, M(4, "transform-box:view-box;transform-origin:454px 268px;--rot:-30deg;transition:opacity .6s, transform 1.4s cubic-bezier(.3,.7,.3,1) 1.2s", `<rect x="454" y="262" width="150" height="12" rx="2" fill="#2c7a4b"/>`)) +
+      B(4, R(596, 250, 10, 30, {f: "#e5e7eb", rx: 2}) + T(510, 320, "in at ~30°, press down until the clips lock", {a: "middle", fs: 12, w: 700})) +
+      B(3, T(510, 190, "spread clips: module pops up", {a: "middle", fs: 12})) +
+      B(5, tag(30, 336 - 2, "Stacked slots? Remove the top module to reach the lower one.", {w: 400})) +
+      ring(2, 100, 140, 220, 160, 10),
+      "Bottom of a laptop with the RAM cover removed, and a side view of a SODIMM going in at an angle"),
+      beats: [
+        "Before upgrading a laptop, make sure it won't void the warranty, and use memory the maker approves for that exact model.",
+        "Back up your data, shut down, disconnect the AC adapter and peripherals, and remove the battery. Then open the memory compartment on the bottom.",
+        "To remove a SODIMM, spread the slot's side clips. The module pops up at an angle and lifts out.",
+        "Insert the new SODIMM at an angle, then press it down until it snaps into the side clips.",
+        "Replace the cover and battery, connect power, and confirm the new memory is recognized. On some laptops the two slots are stacked, so you remove the top module to reach the lower one."]}
+  ]}
+  ];
+})();
 
 // Core 1 (220-1201) questions, part A — original practice items
 const Q1A = [
@@ -20357,7 +21030,7 @@ function chatRender(box){
 async function tutorTurn(box){
   const c = box._conv; if (c.busy) return;
   if (tutorCtl) tutorCtl.abort();
-  const ctl = new AbortController(); tutorCtl = ctl;
+  const ctl = new AbortController(); ctl.panel = box.id === "tpout"; tutorCtl = ctl;
   const reply = {r:"tutor", t:"Thinking…"}; c.turns.push(reply); c.busy = true; chatRender(box);
   const el = () => { const a = box.querySelectorAll(".tmsg.tutor .txt"); return a[a.length-1]; };
   const hist = c.turns.slice(0, -1);
@@ -20371,24 +21044,80 @@ async function tutorTurn(box){
     if (e && e.code === "cancelled") reply.t = (e.text || reply.t.replace(/^Thinking…$/, "")) + (e.text ? "" : "Stopped.");
     else reply.t = (e && e.text ? e.text + "\n\n" : "") + aiErr(e);
     if (S.pref.voiceChat && reply.t && !/^Thinking…$/.test(reply.t)) setTimeout(() => SPEECH.speak(reply.t), 50);
-  } finally { c.busy = false; if (c.stopBtn) c.stopBtn.hidden = true; if (tutorCtl === ctl) tutorCtl = null; chatRender(box); const inp = box.querySelector(".tfollow input"); }
+  } finally { c.busy = false; if (c.stopBtn) c.stopBtn.hidden = true; if (tutorCtl === ctl) tutorCtl = null; chatRender(box); if (box.id === "tpout") { tpSaveConv(box); tpScroll(); } const inp = box.querySelector(".tfollow input"); }
 }
 document.addEventListener("submit", e => {
   const f = e.target.closest && e.target.closest(".tfollow"); if (!f) return;
   e.preventDefault(); const box = f.parentElement; const inp = f.querySelector("input"); const v = (inp.value||"").trim();
-  if (!v || !box._conv) return; box._conv.turns.push({r:"you", t:v}); tutorTurn(box);
+  if (!v || !box._conv) return; box._conv.turns.push({r:"you", t:v}); if (box.id === "tpout") tpSaveConv(box); tutorTurn(box);
 });
-// ---------- floating tutor chat (any page) ----------
-function openTutorChat(){
-  $("#sheet").dataset.key = "";
-  $("#sheet").innerHTML = `<div class="spread"><span class="eyebrow">AI tutor</span><div class="row"><button class="btn small ghost" data-act="tutorsetup">Settings</button><button class="btn small" data-act="close">Close</button></div></div>
-    <h2>Chat with the tutor</h2><p class="muted" style="margin:0">Ask anything about the A+ exams or your book. The tutor uses the app's study notes and points you to the chapter and page.</p>
-    ${TUTOR_MODE==="handoff" ? `<div class="out" id="gout">${handoffHTML("Hi! I'm studying for CompTIA A+ 220-1201/220-1202 with the textbook CompTIA A+ Guide to IT Technical Support, 12th ed. Please be my tutor.")}</div>`
-    : `<form class="tfirst row"><input type="text" id="gq" placeholder="e.g., Why is a port replicator different from a docking station?" style="flex:1;min-width:180px"><button class="btn small teal" type="submit">Ask</button></form><div class="out tutor-out" id="gout"></div>`}`;
-  $("#modal").hidden = false;
-  const f = $("#sheet").querySelector(".tfirst");
-  if (f) { f.addEventListener("submit", e => { e.preventDefault(); const q = ($("#gq").value||"").trim(); if (!q) return; f.remove(); const r = search(q); runTutor(tutorPrompt(q, r.kb.map(x=>x.k)), $("#gout")); }); setTimeout(() => { const i = $("#gq"); if (i) i.focus(); }, 50); }
+// ---------- tutor side panel (any page): pin it to keep it open while you move around; the chat is kept until "New chat" ----------
+const TP = {open:false, pinned:!!S.pref.tutorPin};
+function tpConv(){ if (!S.tchat || !Array.isArray(S.tchat.turns)) S.tchat = {context:"", turns:[]}; return S.tchat; }
+function tpSaveConv(box){ if (!box || !box._conv) return; S.tchat = {context: box._conv.context, turns: box._conv.turns.filter(t => !(t.r === "tutor" && /^Thinking…$/.test(t.t))).map(t => ({r:t.r, t:t.t}))}; save(); }
+function tpScroll(){ const b = document.querySelector("#tpanel .tp-body"); if (b) b.scrollTop = b.scrollHeight; }
+function tpBody(){
+  const pn = $("#tpanel"); const body = pn.querySelector(".tp-body"); const c = tpConv();
+  const intro = `<p class="muted tp-intro">Ask anything about the A+ exams or your book. The tutor uses the app's study notes and points you to the chapter and page.${TP.pinned ? "" : " Tap 📌 to keep this panel open while you move around the app."}</p>`;
+  if (TUTOR_MODE === "handoff") { body.innerHTML = intro + `<div class="out" id="tpout">${handoffHTML("Hi! I'm studying for CompTIA A+ 220-1201/220-1202 with the textbook CompTIA A+ Guide to IT Technical Support, 12th ed. Please be my tutor.")}</div>`; return; }
+  if (!c.turns.length) {
+    body.innerHTML = intro + `<form class="tfirst"><label class="sr-only" for="gq">Your question</label><textarea id="gq" rows="3" placeholder="e.g., Why is a port replicator different from a docking station?"></textarea><button class="btn small teal" type="submit">Ask</button></form><div class="out tutor-out" id="tpout"></div>`;
+    const f = body.querySelector(".tfirst"), ta = body.querySelector("#gq");
+    ta.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); f.requestSubmit ? f.requestSubmit() : f.dispatchEvent(new Event("submit", {cancelable:true})); } });
+    f.addEventListener("submit", e => { e.preventDefault(); const q = (ta.value || "").trim(); if (!q) return; f.remove(); const intro2 = body.querySelector(".tp-intro"); if (intro2) intro2.remove(); const r = search(q); runTutor(tutorPrompt(q, r.kb.map(x => x.k)), $("#tpout")); });
+  } else {
+    body.innerHTML = `<div class="out tutor-out" id="tpout"></div>`; const box = $("#tpout");
+    box._conv = {context: c.context, turns: c.turns.map(t => ({r:t.r, t:t.t})), stopBtn:null}; chatRender(box);
+  }
+  const box = $("#tpout"); if (box && !box._mo) { box._mo = new MutationObserver(() => { const b = pn.querySelector(".tp-body"); if (b && b.scrollHeight - b.scrollTop - b.clientHeight < 160) tpScroll(); }); box._mo.observe(box, {childList:true, subtree:true, characterData:true}); }
+  setTimeout(tpScroll, 0);
 }
+function tpBuild(){
+  const pn = $("#tpanel");
+  pn.innerHTML = `<div class="nb-h tp-h"><b><span aria-hidden="true">💬</span> AI tutor</b><div class="row" style="gap:4px"><button type="button" class="iconbtn tpmin" data-tp="min" aria-label="Minimize the tutor" title="Minimize">▾</button><button type="button" class="iconbtn tppin" data-tp="pin" aria-pressed="${TP.pinned}" title="${TP.pinned ? "Unpin" : "Pin: keep the tutor open while you move around"}" aria-label="${TP.pinned ? "Unpin the tutor panel" : "Pin the tutor panel open"}">📌</button><button type="button" class="iconbtn" data-tp="close" aria-label="Close the tutor (your chat is kept)" title="Close (your chat is kept)"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button></div></div>
+    <div class="tp-tools"><button type="button" class="btn small ghost" data-tp="save">💾 Save to notes</button><button type="button" class="btn small ghost" data-tp="new">＋ New chat</button><button type="button" class="btn small ghost" data-act="tutorsetup">⚙ Settings</button>${xvChs().length ? `<button type="button" class="btn small ghost" data-tp="xv">🎬 Explainers</button>` : ""}</div>
+    <div class="tp-body"></div>`;
+  tpBody();
+}
+function tpLayout(){
+  const pn = $("#tpanel"); const pin = TP.open && TP.pinned;
+  document.body.classList.toggle("tp-open", TP.open); document.body.classList.toggle("tp-pinned", pin);
+  pn.classList.toggle("open", TP.open); pn.classList.toggle("pinned", TP.pinned);
+  if (TP.open) pn.removeAttribute("inert"); else pn.setAttribute("inert", "");
+  $("#tpscrim").hidden = !TP.open || TP.pinned;
+  const pb = pn.querySelector("[data-tp=pin]"); if (pb) { pb.setAttribute("aria-pressed", TP.pinned); pb.title = TP.pinned ? "Unpin" : "Pin: keep the tutor open while you move around"; pb.setAttribute("aria-label", TP.pinned ? "Unpin the tutor panel" : "Pin the tutor panel open"); }
+}
+function openTutorChat(){
+  const pn = $("#tpanel"); if (!pn) return;
+  if (!$("#modal").hidden && !TP.pinned) closeModal();
+  if (!pn.querySelector(".tp-body")) tpBuild();
+  TP.open = true; tpLayout(); hideBubble();
+  setTimeout(() => { const i = pn.querySelector("#gq") || pn.querySelector(".tfollow input"); if (i) i.focus(); tpScroll(); }, 60);
+}
+function tpClose(){ if (!TP.open) return; TP.open = false; const pn = $("#tpanel"); pn.classList.remove("min"); document.body.classList.remove("tp-min"); const mb = pn.querySelector("[data-tp=min]"); if (mb) mb.textContent = "▾"; tpLayout(); }
+(function(){
+  const pn = $("#tpanel"); if (!pn) return;
+  pn.addEventListener("click", e => {
+    if (e.target.closest("[data-act=tutorsetup]") && !TP.pinned) { tpClose(); return; }
+    const b = e.target.closest("[data-tp]"); if (!b) return; const a = b.dataset.tp;
+    if (a === "close") return tpClose();
+    if (a === "min") { const m = !pn.classList.contains("min"); pn.classList.toggle("min", m); document.body.classList.toggle("tp-min", m); b.textContent = m ? "▴" : "▾"; b.setAttribute("aria-label", m ? "Expand the tutor" : "Minimize the tutor"); if (!m) setTimeout(tpScroll, 0); return; }
+    if (a === "pin") { TP.pinned = !TP.pinned; S.pref.tutorPin = TP.pinned; save(); tpLayout(); const it = pn.querySelector(".tp-intro"); if (it) tpBody(); return toast(TP.pinned ? "Pinned: the tutor stays open while you move around the app." : "Unpinned: the tutor closes when you tap outside it. Your chat is kept."); }
+    if (a === "new") { const box = $("#tpout"); if (box && box._conv && box._conv.busy && tutorCtl) tutorCtl.abort(); S.tchat = {context:"", turns:[]}; save(); tpBody(); const i = pn.querySelector("#gq"); if (i) i.focus(); return; }
+    if (a === "xv") { if (!TP.pinned) tpClose(); return go("explainers"); }
+    if (a === "save") {
+      const box = $("#tpout"); if (box && box._conv) tpSaveConv(box);
+      const turns = tpConv().turns; if (!turns.length) return toast("Ask the tutor something first.");
+      const first = (turns.find(t => t.r === "you") || {t:"Tutor chat"}).t;
+      const text = turns.map(t => (t.r === "you" ? "You: " : "Tutor: ") + t.t).join("\n\n");
+      S.nb.notes.push({id: "n" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), k: "tutor:" + Date.now(), label: "Tutor chat: " + (first.length > 70 ? first.slice(0, 69) + "…" : first), r: null, a: null, note: null, q: null, text, t: Date.now()}); save();
+      if (NB.open) nbRender();
+      return toast("Saved to your notebook (📓 › All notes).");
+    }
+  });
+  $("#tpscrim").addEventListener("click", tpClose);
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && TP.open && !TP.pinned && !NB.open && $("#modal").hidden) { tpClose(); } });
+})();
 function tutorPrompt(question, articles, extra){
   const chs = [...new Set(articles.slice(0,4).map(a=>a.m))].filter(c=>CH_REVIEW[c]).slice(0,2);
   const rctx = chs.map(c => modLabel(c)+" summary key points:\n"+CH_REVIEW[c].map(x=>"- "+x.s+" (p. "+x.p+"): "+x.pts.join(" ")).join("\n")).join("\n\n");
@@ -20530,9 +21259,9 @@ const NAV = [
   {label:"Home", items:[["home","Home (Dashboard)"],["tour","App tour"]]},
   {label:"Study", items:[["study","Study & search"],["lessons","Chapter lessons"],["book","Book map"],["chapters","Chapter review"],["flash","Flashcards"],["platforms","Chipsets & CPUs"],["netsheet","Networking cheat sheet"]]},
   {label:"Practice & exams", items:[["practice","Practice"],["exam","Exam simulator"],["labs","Labs"],["review","Review"]]},
-  {label:"Media", items:[["videos","Videos"],["pictures","Pictures"],["figures","Figures"]]},
+  {label:"Media", items:[["explainers","Video explainers"],["videos","Videos"],["pictures","Pictures"],["figures","Figures"]]},
   {label:"Settings", items:[["settings","Settings"]], acts:[["notebook","Notebook"]]}];
-const navKey = r => r==="sim" ? "labs" : r;
+const navKey = r => r==="sim" ? "labs" : r==="watch" ? "explainers" : r;
 const groupOf = r => NAV.find(g => g.items.some(i => i[0]===navKey(r))) || NAV[0];
 (function buildNav(){
   $("#nav").innerHTML = NAV.map(g => `<div class="navgroup"><span class="navh">${esc(g.label)}</span>${g.items.map(([k,l]) => `<button data-go="${k}">${esc(l)}</button>`).join("")}${(g.acts||[]).map(([k,l]) => `<button data-act="${k}">${esc(l)}</button>`).join("")}</div>`).join("");
@@ -20587,6 +21316,8 @@ function go(r, arg, fromHist){
   }
   if (!fromHist) histPush(r, arg);
   if (READER.on) readerStop();
+  if (XV.root) xvUnmount();
+  if (TP.open && !TP.pinned) tpClose();
   SPEECH.stop();
   if ($("#drawer").classList.contains("open")) setDrawer(false);
   route = r.split("-")[0] === "exam" ? "exam" : (r.split("-")[0] === "practice" ? "practice" : r);
@@ -21021,6 +21752,7 @@ function openNote(id){
     ${(() => { const r0 = refsFor(id)[0]; const sec = r0 ? reviewSecFor(r0[0], r0[2]) : null; return sec ? `<div class="revbox"><span class="eyebrow">${modLabel(r0[0])} review · key points</span>${reviewSecHTML(sec)}<div class="row"><button class="btn small" data-act="chreview" data-ch="${r0[0]}">Full ${modLabel(r0[0])} review</button>${REVQ.some(q=>q.ch===r0[0])?`<button class="btn small ghost" data-act="practicereview" data-ch="${r0[0]}">Review questions</button>`:""}</div></div>` : ""; })()}
     ${id==="cpu"||id==="mb-components"?`<div class="classlink"><span class="eyebrow">Reference</span><span>Chipsets &amp; CPUs guide: chipset generations, sockets, and how to read processor names.</span><button class="btn small teal" data-go="platforms">Open the guide</button></div>`:""}
     ${noteExtraHTML(id)}
+    ${noteXvHTML(id)}
     ${visualsHTML(id)}
     ${videoRowHTML(id, 10)}
     <div class="row">${n?`<button class="btn primary" data-act="practicetopic" data-id="${id}">Practice this topic (${n})</button>`:""}<button class="btn" data-act="practicemodule" data-m="${k.m}">Practice all of ${modLabel(k.m)}</button></div>
@@ -21031,7 +21763,7 @@ function openNote(id){
   bindBoard($("#sheet"));
   $("#sheet").querySelector("[data-act=close]").focus();
 }
-function closeModal(){ SPEECH.stop(); $("#modal").hidden = true; $("#sheet").dataset.key = ""; $("#sheet").innerHTML = ""; if (tutorCtl) tutorCtl.abort(); }
+function closeModal(){ if (XV.root && $("#sheet").contains(XV.root)) xvUnmount(); SPEECH.stop(); $("#modal").hidden = true; $("#sheet").dataset.key = ""; $("#sheet").innerHTML = ""; if (tutorCtl && !tutorCtl.panel) tutorCtl.abort(); }
 
 // ---------- chapter reviews ----------
 function openReview(ch){
@@ -21638,7 +22370,7 @@ VIEWS.settings = function(){
       <p class="muted" style="margin:0">Play inside the app keeps you here. Use the YouTube app if you have YouTube Premium and want it ad-free with background play.</p>
       <fieldset><legend>Video list order</legend><div class="chips">${radio("vorder","obj","By exam objective",S.vorder==="book"?"book":"obj")}${radio("vorder","book","By book chapter",S.vorder==="book"?"book":"obj")}</div></fieldset>
     </section>
-    <section class="panel setgrp"><h2>AI tutor</h2><p class="muted">${TUTOR_MODE==="claude"?"Connected through your Claude account.":TUTOR_MODE==="shared"?"Built-in tutor is on: chat and feedback appear right inside the app.":TUTOR_MODE==="key"?"Answering inside the app with "+esc(provName())+" on this device.":"Tutor buttons open your question in "+esc(HANDOFFS[TUTOR.handoff].name)+" or another AI app. Add an API key (Gemini has a free option) to get answers inside the app."}</p><div class="row"><button class="btn small primary" data-act="tutorsetup">Choose the tutor's AI…</button><button class="btn small" data-act="tutorchat">Open the tutor chat</button></div></section>
+    <section class="panel setgrp"><h2>AI tutor</h2><p class="muted">${TUTOR_MODE==="claude"?"Connected through your Claude account.":TUTOR_MODE==="shared"?"Built-in tutor is on: chat and feedback appear right inside the app.":TUTOR_MODE==="key"?"Answering inside the app with "+esc(provName())+" on this device.":"Tutor buttons open your question in "+esc(HANDOFFS[TUTOR.handoff].name)+" or another AI app. Add an API key (Gemini has a free option) to get answers inside the app."}</p><div class="row"><button class="btn small primary" data-act="tutorsetup">Choose the tutor's AI…</button><button class="btn small" data-act="tutorchat">Open the tutor chat</button><button class="btn small ghost" data-go="explainers">🎬 Video explainers</button></div></section>
     <section class="panel setgrp"><h2>Voice</h2>${SPEECH.ok ? `
       <p class="muted" style="margin:0">Highlight any term or phrase and tap <b>Explain</b> to hear a short, plain-English explanation. Tutor replies have a 🔊 button too. The voices come from your device; phones and Edge often have the most natural ones.</p>
       <fieldset><legend>Voice</legend><div class="row"><select id="voicesel" aria-label="Voice"></select><button type="button" class="btn small" data-voicetest>▶ Hear a sample</button></div></fieldset>
@@ -21782,7 +22514,7 @@ function readerStop(){
   if (f) f();
 }
 // items: [{el, text}] read one after another; the item being read is marked and scrolled into view
-function readerStart(items, src, onStop){
+function readerStart(items, src, onStop){ if (XV.root && XV.playing) xvPause();
   if (READER.on) readerStop();
   if (!SPEECH.ok || !items.length) return;
   READER.on = true; READER.items = items; READER.src = src || ""; READER.onStop = onStop || null;
@@ -21905,18 +22637,21 @@ VIEWS.lessons = function(arg){
     <button class="btn small" data-go="lessons" data-arg="${next}" ${next == null ? "disabled" : ""} aria-label="Next chapter">${next == null ? "Next" : "Ch " + next} →</button></div>`;
   const nq = QS.filter(q => String(q.m) === String(ch)).length;
   v.innerHTML = `<section class="hero"><span class="eyebrow">Chapter lessons · ${esc(modLabel(ch))} · ${esc(m.part || "")}</span><h1>${esc(m.t)}</h1>
-      <p>${m.p ? `Starts on p. ${esc(m.p)} · ` : ""}${st.secs} section${st.secs===1?"":"s"} · ${st.subs} topics · about ${st.min} min to read</p>${navRow}</section>
-    <nav class="panel lsjump" aria-label="Sections in this chapter"><span class="eyebrow">In this chapter</span><ol>${L.map((sec, si) => { const pg = pageOf(sec.s); return `<li><button type="button" class="lk-link" data-lsjump="${si}">${esc(sec.s)}</button>${pg != null ? `<span class="pg mono">p.&nbsp;${pg}</span>` : ""}</li>`; }).join("")}</ol></nav>
+      <p>${m.p ? `Starts on p. ${esc(m.p)} · ` : ""}${st.secs} section${st.secs===1?"":"s"} · ${st.subs} topics · about ${st.min} min to read</p>${xvList(ch).length ? `<div class="row xvcta"><span class="tag amber">beta</span><span class="muted" style="font-size:.9rem">🎬 Every topic has a video explainer: tap <b>Watch</b> under it to play it right here.</span><button class="btn small ghost" data-go="watch" data-arg="${ch}-${xvList(ch)[0].sec}">Theater view</button></div>` : ""}${navRow}</section>
+    <nav class="panel lsjump" data-lsch="${ch}" aria-label="Sections in this chapter"><span class="eyebrow">In this chapter</span><ol>${L.map((sec, si) => { const pg = pageOf(sec.s); return `<li><button type="button" class="lk-link" data-lsjump="${si}">${esc(sec.s)}</button>${xvFor(ch, si) ? `<button type="button" class="xvmini" data-xvsec="${si}" aria-label="Watch the explainer for ${esc(sec.s)}" title="Watch explainer">🎬</button>` : ""}${pg != null ? `<span class="pg mono">p.&nbsp;${pg}</span>` : ""}</li>`; }).join("")}</ol></nav>
     ${L.map((sec, si) => { const spg = pageOf(sec.s); const subs = sec.sub || [];
       const firstPg = spg != null ? spg : (subs.map(x => pageOf(x.h)).find(x => x != null));
-      return `<section class="lsec" id="ls-${si}"><div class="lsec-h"><h2>${esc(sec.s)}</h2><div class="row" style="gap:8px">${firstPg != null ? `<span class="tag">p. ${firstPg}</span>` : ""}${SPEECH.ok ? `<button type="button" class="btn small ghost" data-lsread="${si}">▶ Read this section aloud</button>` : ""}</div></div>
+      const xsec = xvFor(ch, si);
+      return `<section class="lsec" id="ls-${si}" data-lsch="${ch}"><div class="lsec-h"><h2>${esc(sec.s)}</h2><div class="row" style="gap:8px">${firstPg != null ? `<span class="tag">p. ${firstPg}</span>` : ""}${SPEECH.ok ? `<button type="button" class="btn small ghost" data-lsread="${si}">▶ Read this section aloud</button>` : ""}</div></div>
       ${subs.map((x, xi) => { const pg = pageOf(x.h); const shownPg = pg != null ? pg : (xi === 0 ? firstPg : null);
         return `<article class="lsub" id="ls-${si}-${xi}"><div class="lsub-h"><h3>${esc(x.h)}</h3><div class="row" style="gap:6px">${x.obj ? `<span class="tag teal">${esc(x.obj)}</span>` : ""}${shownPg != null ? `<span class="tag">p. ${shownPg}</span>` : ""}</div></div>
           <div class="lbody">${(x.body || []).map(p => `<p>${esc(p)}</p>`).join("")}
           ${(x.pts || []).length ? `<ul>${x.pts.map(p => `<li>${esc(p)}</li>`).join("")}</ul>` : ""}
           ${(x.steps || []).length ? `<ol class="lsteps">${x.steps.map(p => `<li>${esc(p)}</li>`).join("")}</ol>` : ""}
           ${x.tip ? `<div class="ltip"><span class="eyebrow">Exam tip</span><p>${esc(x.tip)}</p></div>` : ""}</div>
-          ${SPEECH.ok ? `<div class="row"><button type="button" class="btn small ghost" data-lsspk="${si}-${xi}" aria-label="Listen to ${esc(x.h)}">🔊 Listen</button></div>` : ""}</article>`; }).join("")}</section>`; }).join("")}
+          ${(() => { const part = xvPart(ch, si, xi); const whole = part && subs.length === 1; const btn = part ? `<button type="button" class="btn small teal xvwatch" data-xvpart="${si}-${xi}" aria-expanded="false" aria-label="Watch the video explainer for ${esc(x.h)}">🎬 ${whole ? "Watch explainer" : "Watch this part"} <span class="xvdur">${part.length} scene${part.length === 1 ? "" : "s"}</span></button>` : "";
+            return (SPEECH.ok || btn) ? `<div class="row lsubact">${SPEECH.ok ? `<button type="button" class="btn small ghost" data-lsspk="${si}-${xi}" aria-label="Listen to ${esc(x.h)}">🔊 Listen</button>` : ""}${btn}</div>${part ? `<div class="xvhost" id="xvh-${si}-${xi}"></div>` : ""}` : ""; })()}</article>`; }).join("")}
+      ${xsec && subs.length > 1 ? `<div class="xvsec"><button type="button" class="btn teal xvsecbtn" data-xvsec="${si}" aria-expanded="false">🎬 Watch the whole section <span class="xvdur">${xsec.scenes.length} scenes · ~${xvMins(xsec)} min</span></button><div class="xvhost" id="xvh-${si}"></div></div>` : ""}</section>`; }).join("")}
     <section class="panel lsend"><h2>Keep going with ${esc(modLabel(ch))}</h2>
       <div class="row">${nq ? `<button class="btn primary" data-act="practicemodule" data-m="${ch}">Practice all ${nq} ${esc(modLabel(ch))} questions</button>` : ""}${CH_REVIEW[ch] ? `<button class="btn small" data-act="chreview" data-ch="${ch}">${esc(modLabel(ch))} review</button>` : ""}${chExtrasHTML(ch, true)}</div>
       ${navRow}</section>`;
@@ -21934,6 +22669,213 @@ VIEWS.lessons = function(arg){
     readerStart([{el: document.getElementById("ls-" + k), text: subSpeech(x)}], "sub-" + k, resetBtns); resetBtns(); b.textContent = "⏹ Stop";
   }));
 };
+
+// ---------- Video explainers (beta): narrated, beat-synced animated diagrams ----------
+// One player at a time. It can live on the Watch page, inside a lesson section/topic, or inside a study note.
+const XV = {on:false, root:null, ch:null, si:0, x:null, seq:[], pi:0, sc:0, b:0, playing:false, ended:false, timer:null, safety:null, gen:0, mute:false, cc:true, onClose:null, page:false};
+const xvList = ch => (typeof EXPLAINERS !== "undefined" && EXPLAINERS[ch]) || [];
+const xvFor = (ch, si) => xvList(ch).find(x => x.sec === si);
+const xvChs = () => typeof EXPLAINERS === "undefined" ? [] : Object.keys(EXPLAINERS).map(Number).filter(c => EXPLAINERS[c].length).sort((a, b) => a - b);
+const xvWords = s => String(s).trim().split(/\s+/).length;
+const xvMinsOf = (x, seq) => Math.max(1, Math.round((seq || x.scenes.map((_, i) => i)).reduce((a, i) => a + x.scenes[i].beats.reduce((b, t) => b + xvWords(t), 0), 0) / 150 + 0.2));
+const xvMins = x => xvMinsOf(x);
+const xvPart = (ch, si, xi) => { const x = xvFor(ch, si); return x && x.parts && x.parts[xi] ? x.parts[xi] : null; };
+const xvQ = s => XV.root ? XV.root.querySelector(s) : null;
+function xvClear(){ XV.gen++; clearTimeout(XV.timer); clearTimeout(XV.safety); SPEECH.stop(); }
+function xvStop(){ xvClear(); XV.playing = false; XV.on = false; xvFull(false); }
+function xvUnmount(){ if (!XV.root) { XV.on = false; return; } xvStop(); const r = XV.root, f = XV.onClose; XV.root = null; XV.onClose = null; if (f) f(r); else if (r.isConnected && !XV.page) r.remove(); XV.page = false; }
+function xvAlive(){ if (XV.root && XV.root.isConnected) return true; xvUnmount(); return false; }
+function xvFull(on){
+  const pl = XV.root; document.body.classList.toggle("xvfullon", !!(on && pl));
+  if (!pl) return; pl.classList.toggle("xvfull", !!on);
+  const fb = pl.querySelector("[data-xv=fs]"); if (fb) { fb.textContent = on ? "✕" : "⛶"; fb.setAttribute("aria-label", on ? "Exit full screen" : "Full screen"); }
+  try {
+    if (on && pl.requestFullscreen && !document.fullscreenElement) pl.requestFullscreen().then(() => { try { screen.orientation.lock("landscape").catch(() => {}); } catch(e) {} }).catch(() => {});
+    else if (!on && document.fullscreenElement) document.exitFullscreen().catch(() => {});
+  } catch(e) {}
+}
+document.addEventListener("fullscreenchange", () => { if (!document.fullscreenElement && XV.root && XV.root.classList.contains("xvfull")) xvFull(false); });
+function xvApply(){
+  if (!xvAlive()) return;
+  const box = xvQ(".xvsvg"); const b = XV.b, s = XV.x.scenes[XV.sc];
+  box.querySelectorAll("[data-b]").forEach(el => el.classList.toggle("on", b >= +el.dataset.b));
+  box.querySelectorAll("[data-x]").forEach(el => el.classList.toggle("off", b >= +el.dataset.x));
+  box.querySelectorAll("[data-m]").forEach(el => el.classList.toggle("go", b >= +el.dataset.m));
+  box.querySelectorAll("[data-h]").forEach(el => el.classList.toggle("hl", el.dataset.h.split(" ").includes(String(b))));
+  XV.root.querySelectorAll("[data-xvseg]").forEach(seg => { const i = +seg.dataset.xvseg; const f = XV.ended || i < XV.pi ? 100 : i > XV.pi ? 0 : Math.round(b / s.beats.length * 100);
+    seg.querySelector("i").style.width = f + "%"; seg.classList.toggle("cur", i === XV.pi && !XV.ended); });
+  const scn = xvQ(".xvscn"); if (scn) scn.textContent = `Scene ${XV.sc + 1} of ${XV.x.scenes.length} · ${s.t}`;
+  const cap = xvQ(".xvcap");
+  if (cap) { cap.classList.toggle("off", !XV.cc); cap.classList.toggle("idle", !b);
+    cap.textContent = XV.ended ? (XV.seq.length < XV.x.scenes.length ? "That's the end of this part." : "That's the end of this explainer.") : b ? s.beats[b - 1] : (XV.playing ? s.t : `${s.t}: press Play to start.`); }
+  const pb = xvQ("[data-xv=play]"); if (pb) { pb.textContent = XV.playing ? "⏸ Pause" : (XV.ended ? "↺ Replay" : "▶ Play"); pb.setAttribute("aria-label", XV.playing ? "Pause" : "Play"); }
+  const big = xvQ(".xvbig"); if (big) { big.hidden = XV.playing; big.textContent = XV.ended ? "↺" : "▶"; big.setAttribute("aria-label", XV.ended ? "Replay" : "Play"); }
+  const st = xvQ(".xvstage"); if (st) st.classList.toggle("paused", !XV.playing);
+  const end = xvQ(".xvend"); if (end) end.hidden = !XV.ended;
+}
+function xvRender(){
+  if (!xvAlive()) return;
+  const box = xvQ(".xvsvg");
+  if (box.dataset.sc !== String(XV.sc)) { box.innerHTML = XV.x.scenes[XV.sc].svg; box.dataset.sc = String(XV.sc); void box.offsetWidth; }
+  xvApply();
+}
+function xvBeat(){
+  xvClear(); if (!xvAlive()) return; const g = XV.gen; xvApply();
+  const text = XV.x.scenes[XV.sc].beats[XV.b - 1], rate = +S.pref.rate || 1, w = xvWords(text), t0 = Date.now();
+  const minMs = w * 230 / rate; // a real voice can't finish faster than this; if it "ends" sooner the voice failed, so keep the caption up
+  const done = () => { if (g !== XV.gen || !XV.playing) return; clearTimeout(XV.safety); const left = Math.max(0, minMs - (Date.now() - t0));
+    XV.timer = setTimeout(() => { if (g === XV.gen && XV.playing) xvAdvance(); }, left + 450); };
+  if (SPEECH.ok && !XV.mute) { SPEECH.speak(text, done); XV.safety = setTimeout(done, (w / (1.4 * rate) + 8) * 1000); }
+  else XV.timer = setTimeout(done, Math.max(2800, w * 390 / rate));
+}
+function xvGoPos(pi, autoStart){
+  XV.pi = pi; XV.sc = XV.seq[pi]; XV.b = 0; xvRender();
+  if (XV.playing) { const g = XV.gen; XV.timer = setTimeout(() => { if (g === XV.gen && XV.playing) { XV.b = 1; xvBeat(); } }, autoStart || 900); }
+}
+function xvAdvance(){
+  if (!xvAlive()) return;
+  const s = XV.x.scenes[XV.sc];
+  if (XV.b < s.beats.length) { XV.b++; return xvBeat(); }
+  if (XV.pi < XV.seq.length - 1) return xvGoPos(XV.pi + 1);
+  XV.playing = false; XV.ended = true; xvClear(); xvApply();
+}
+function xvPlay(){
+  if (!xvAlive()) return;
+  if (READER.on) readerStop();
+  if (XV.ended) { XV.ended = false; XV.pi = 0; XV.sc = XV.seq[0]; XV.b = 0; xvRender(); }
+  XV.on = true; XV.playing = true; if (!XV.b) XV.b = 1; xvBeat();
+}
+function xvPause(){ XV.playing = false; xvClear(); xvApply(); }
+function xvScene(pi){
+  if (pi < 0 || pi >= XV.seq.length) return;
+  XV.ended = false; xvClear(); xvGoPos(pi, 500);
+}
+function xvSetSeq(seq, startPi){
+  XV.seq = seq; const bar = xvQ(".xvbar");
+  if (bar) bar.innerHTML = seq.map((sc, i) => `<button type="button" class="xvseg" data-xvseg="${i}" title="${esc(XV.x.scenes[sc].t)}" aria-label="Scene ${sc + 1}: ${esc(XV.x.scenes[sc].t)}"><i></i></button>`).join("");
+  const more = xvQ("[data-xv=more]"); if (more) more.hidden = seq.length >= XV.x.scenes.length || seq[seq.length - 1] >= XV.x.scenes.length - 1;
+  XV.ended = false; XV.pi = startPi || 0; XV.sc = seq[XV.pi]; XV.b = 0;
+}
+function xvPlayerHTML(x, o){
+  return `<div class="xvplayer${o.inline ? " inline" : ""}" aria-label="Explainer player">
+    ${o.inline ? `<div class="xvhead"><span class="xvhead-t"><span class="eyebrow">🎬 Video explainer · beta</span><b>${esc(o.label || x.title)}</b></span><button type="button" class="btn small ghost" data-xv="close" aria-label="Close the video">✕ Close</button></div>` : ""}
+    <div class="xvstage paused"><div class="xvsvg"></div><button type="button" class="xvbig" aria-label="Play">▶</button><span class="xvscn"></span></div>
+    <div class="xvbar" role="group" aria-label="Scenes"></div>
+    <div class="xvctl">
+      <button type="button" class="btn small ghost" data-xv="prev" aria-label="Previous scene">⏮</button>
+      <button type="button" class="btn small primary xvplay" data-xv="play" aria-label="Play">▶ Play</button>
+      <button type="button" class="btn small ghost" data-xv="next" aria-label="Next scene">⏭</button>
+      <button type="button" class="btn small ghost" data-xv="replay" aria-label="Replay this scene">↺ Scene</button>
+      <span class="xvsp"></span>
+      ${SPEECH.ok ? `<button type="button" class="btn small ghost" data-xv="mute" aria-pressed="${XV.mute}" aria-label="Voice">${XV.mute ? "🔇" : "🔊"}</button>` : ""}
+      <button type="button" class="btn small ghost" data-xv="cc" aria-pressed="${XV.cc}" aria-label="Captions">CC</button>
+      <button type="button" class="btn small ghost" data-xv="fs" aria-label="Full screen" title="Full screen">⛶</button>
+      <label class="xvrate"><span class="xvratel">Speed</span> <select class="xvratesel" aria-label="Narration speed">${[0.8, 0.9, 1, 1.15, 1.3, 1.5].map(r => `<option value="${r}" ${(+S.pref.rate || 1) === r ? "selected" : ""}>${r}×</option>`).join("")}</select></label>
+    </div>
+    <div class="xvcap" aria-live="polite"></div>
+    <div class="xvend row" hidden><button type="button" class="btn small primary" data-xv="more">▶ Keep watching the rest of this section</button><button type="button" class="btn small ghost" data-xv="again">↺ Watch again</button>${o.inline ? `<button type="button" class="btn small ghost" data-go="watch" data-arg="${o.ch}-${x.sec}">Theater view</button>` : ""}</div>
+    <p class="xvtip muted">Tip: tap ⛶ and turn your phone sideways for a bigger picture.</p>
+  </div>`;
+}
+// Mount a player into host. o: {seq:[scene indexes], inline, label, autoplay, onClose(root)}
+function xvMount(host, ch, si, o = {}){
+  const x = xvFor(ch, si); if (!x || !host) return false;
+  xvUnmount();
+  host.innerHTML = xvPlayerHTML(x, Object.assign({ch}, o));
+  const root = host.querySelector(".xvplayer");
+  Object.assign(XV, {on:true, root, ch, si, x, playing:false, ended:false, onClose:o.onClose || null, page:!o.inline});
+  xvSetSeq(o.seq && o.seq.length ? o.seq.slice() : x.scenes.map((_, i) => i), 0);
+  root.querySelector(".xvbig").addEventListener("click", () => xvPlay());
+  root.addEventListener("click", e => {
+    const seg = e.target.closest("[data-xvseg]"); if (seg) return xvScene(+seg.dataset.xvseg);
+    const b = e.target.closest("[data-xv]"); if (!b) return; const k = b.dataset.xv;
+    if (k === "play") return XV.playing ? xvPause() : xvPlay();
+    if (k === "prev") return xvScene(XV.b > 1 && !XV.playing ? XV.pi : XV.pi - 1);
+    if (k === "next") return xvScene(XV.pi + 1);
+    if (k === "replay") { XV.ended = false; XV.b = 0; xvRender(); return xvPlay(); }
+    if (k === "again") return xvPlay();
+    if (k === "more") { const last = XV.seq[XV.seq.length - 1]; const rest = XV.x.scenes.map((_, i) => i).filter(i => i > last); if (!rest.length) return; xvSetSeq(rest, 0); xvRender(); return xvPlay(); }
+    if (k === "mute") { XV.mute = !XV.mute; b.textContent = XV.mute ? "🔇" : "🔊"; b.setAttribute("aria-pressed", XV.mute); if (XV.playing) xvBeat(); return; }
+    if (k === "cc") { XV.cc = !XV.cc; b.setAttribute("aria-pressed", XV.cc); return xvApply(); }
+    if (k === "fs") return xvFull(!root.classList.contains("xvfull"));
+    if (k === "close") { e.stopPropagation(); return xvUnmount(); }
+  });
+  root.querySelector(".xvratesel").addEventListener("change", e => { S.pref.rate = +e.target.value; save(); if (XV.playing) xvBeat(); });
+  xvRender();
+  if (o.autoplay) xvPlay();
+  return true;
+}
+// Inline players: lesson topics (data-xvpart="si-xi"), whole sections (data-xvsec="si"), study notes (data-xvnote="ch-si")
+function xvToggleInline(btn, host, ch, si, seq, label){
+  if (XV.root && host.contains(XV.root)) { xvUnmount(); return; }
+  const orig = btn.innerHTML;
+  btn.innerHTML = "✕ Close video"; btn.setAttribute("aria-expanded", "true");
+  const ok = xvMount(host, ch, si, {inline:true, seq, label, autoplay:true, onClose: r => { r.remove(); btn.innerHTML = orig; btn.setAttribute("aria-expanded", "false"); }});
+  if (!ok) { btn.innerHTML = orig; return; }
+  setTimeout(() => { const r = host.querySelector(".xvplayer"); if (r && r.scrollIntoView) r.scrollIntoView({behavior:"smooth", block:"nearest"}); }, 30);
+}
+document.addEventListener("click", e => {
+  const p = e.target.closest("[data-xvpart],[data-xvsec],[data-xvnote]"); if (!p) return;
+  e.preventDefault();
+  if (p.dataset.xvnote) { const [ch, si] = p.dataset.xvnote.split("-").map(Number); const host = document.getElementById("xvh-note"); const x = xvFor(ch, si); if (!host || !x) return;
+    $("#sheet").querySelectorAll("[data-xvnote]").forEach(b => { if (b !== p && b.getAttribute("aria-expanded") === "true") b.setAttribute("aria-expanded", "false"); });
+    return xvToggleInline(p, host, ch, si, null, x.title); }
+  const ch = +(p.closest("[data-lsch]") || {dataset:{}}).dataset.lsch; if (!ch) return;
+  if (p.dataset.xvsec != null) { const si = +p.dataset.xvsec; const host = document.getElementById("xvh-" + si); const x = xvFor(ch, si); if (!x) return;
+    if (!host) { const pb = document.querySelector(`[data-xvpart="${si}-0"]`); if (pb) { pb.scrollIntoView({behavior:"smooth", block:"center"}); if (pb.getAttribute("aria-expanded") !== "true") pb.click(); } return; }
+    const real = host.parentElement.querySelector(".xvsecbtn") || p;
+    if (real !== p) { real.scrollIntoView({behavior:"smooth", block:"center"}); if (XV.root && host.contains(XV.root)) return; }
+    return xvToggleInline(real, host, ch, si, null, "Whole section: " + x.title); }
+  const [si, xi] = p.dataset.xvpart.split("-").map(Number); const host = document.getElementById("xvh-" + si + "-" + xi); const seq = xvPart(ch, si, xi); if (!host || !seq) return;
+  const sub = LESSONS[ch][si].sub[xi];
+  return xvToggleInline(p, host, ch, si, seq, sub.h);
+});
+const NOTE_XV = {cpu:[[3,1],[3,2]], ram:[[3,3],[3,4]]};
+function noteXvHTML(id){
+  const k = KBMAP[id]; if (!k) return "";
+  const list = (NOTE_XV[id] || xvList(k.m).map(x => [k.m, x.sec])).filter(([c, s]) => xvFor(c, s)); if (!list.length) return "";
+  return `<div class="xvnotebox"><span class="eyebrow">🎬 Video explainers · beta</span><div class="row">${list.map(([c, s]) => { const x = xvFor(c, s); return `<button type="button" class="btn small teal" data-xvnote="${c}-${s}" aria-expanded="false">🎬 ${esc(x.title)} <span class="xvdur">~${xvMins(x)} min</span></button>`; }).join("")}</div><div id="xvh-note" class="xvhost"></div></div>`;
+}
+VIEWS.watch = function(arg){
+  const [ch, si] = String(arg == null ? "" : arg).split("-").map(Number); const x = xvFor(ch, si);
+  if (!x) return VIEWS.explainers();
+  const v = $("#view");
+  const list = xvList(ch), idx = list.indexOf(x), nx = list[idx + 1], pv = list[idx - 1];
+  v.innerHTML = `<section class="hero xvhero"><span class="eyebrow">Video explainer · beta · ${esc(modLabel(ch))} · section ${si + 1}</span><h1>${esc(x.title)}</h1>
+      <p>${x.scenes.length} scenes · about ${xvMins(x)} min${SPEECH.ok ? " · narrated" : " · captions (this device has no read-aloud voice)"}</p></section>
+    <div id="xvpagehost"></div>
+    <section class="panel xvmore"><div class="row">
+      ${pv ? `<button class="btn small" data-go="watch" data-arg="${ch}-${pv.sec}">← ${esc(pv.title)}</button>` : ""}
+      ${nx ? `<button class="btn small primary" data-go="watch" data-arg="${ch}-${nx.sec}">Next: ${esc(nx.title)} →</button>` : `<button class="btn small primary" data-go="lessons" data-arg="${ch}">Back to the ${esc(modLabel(ch))} lesson</button>`}
+      </div><div class="row">
+      <button type="button" class="btn small ghost" id="xvread">📖 Read this section</button>
+      <button class="btn small ghost" data-go="explainers">All explainers</button>
+      <button class="btn small ghost ai-only" data-act="tutorchat">💬 Ask the tutor</button></div>
+      <p class="muted xvnote">Beta: original animated diagrams narrated by your device's read-aloud voice (change it in Settings). Tap a scene bar to jump. In the lesson, every topic has its own 🎬 Watch button too.</p></section>`;
+  xvMount(v.querySelector("#xvpagehost"), ch, si, {});
+  v.querySelector("#xvread").addEventListener("click", () => { go("lessons", String(ch)); setTimeout(() => { const t = document.getElementById("ls-" + si); if (t) t.scrollIntoView({block:"start"}); }, 60); });
+};
+VIEWS.explainers = function(){
+  const v = $("#view"); const chs = xvChs();
+  v.innerHTML = `<section class="hero"><span class="eyebrow">Media · beta</span><h1>Video explainers</h1>
+      <p>Short narrated animations for each section of a chapter: original diagrams that build step by step while the voice explains. They also play right inside the chapter lessons (every topic has a 🎬 Watch button) and in the study notes.</p>
+      <p class="muted" style="margin:0;font-size:.9rem">Pilot: Chapter 3. More chapters will be added after this beta.</p></section>
+    ${chs.map(ch => { const L = xvList(ch); const tot = L.reduce((a, x) => a + xvMins(x), 0);
+      return `<section class="panel xvlist"><div class="spread"><h2>${esc(modLabel(ch))}: ${esc(modTitle(ch))}</h2><span class="tag">${L.length} explainers · ~${tot} min</span></div>
+        <div class="xvcards">${L.map((x, i) => `<button type="button" class="xvcard" data-go="watch" data-arg="${ch}-${x.sec}"><span class="xvthumb" aria-hidden="true">${x.scenes[0].svg}</span><span class="xvct"><span class="no mono">${i + 1}</span><b>${esc(x.title)}</b><span class="muted">${x.scenes.length} scenes · ~${xvMins(x)} min</span></span></button>`).join("")}</div>
+        <div class="row"><button class="btn small" data-go="lessons" data-arg="${ch}">Read the ${esc(modLabel(ch))} lesson</button></div></section>`; }).join("") || `<div class="empty">No explainers yet.</div>`}`;
+  v.querySelectorAll(".xvthumb svg [data-b], .xvthumb svg [data-m]").forEach(el => el.classList.add("on", "go"));
+  v.querySelectorAll(".xvthumb svg [data-x]").forEach(el => el.classList.add("off"));
+};
+document.addEventListener("visibilitychange", () => { if (document.hidden && XV.root && XV.playing) xvPause(); });
+document.addEventListener("keydown", e => {
+  if (!XV.root) return;
+  if (e.key === "Escape" && XV.root.classList.contains("xvfull")) { xvFull(false); return; }
+  if (route !== "watch" || !XV.page || !$("#modal").hidden || /INPUT|TEXTAREA|SELECT/.test((e.target || {}).tagName || "")) return;
+  if (e.key === " " && !(e.target && e.target.closest && e.target.closest("button"))) { e.preventDefault(); XV.playing ? xvPause() : xvPlay(); }
+  else if (e.key === "ArrowRight") { e.preventDefault(); xvScene(XV.pi + 1); }
+  else if (e.key === "ArrowLeft") { e.preventDefault(); xvScene(XV.pi - 1); }
+});
 
 // ---------- Notebook (right-side panel): notes and bookmarks per page ----------
 const NB = {open:false, tab:"page", ctx:null, editing:null, q:"", t:null};
@@ -22370,9 +23312,8 @@ document.addEventListener("click", e => {
   if (a === "hlmake") { const r = bubble._range; hideBubble(); if (r) makeHighlight(r, b.dataset.c); window.getSelection().removeAllRanges(); return; }
   if (a === "hlcolor") { const h = S.hl.find(x => x.id === b.dataset.id); if (h) { h.c = b.dataset.c; save(); document.querySelectorAll(`mark[data-hl="${h.id}"]`).forEach(m => { m.className = "hl hl-" + h.c; }); } hideBubble(); return; }
   if (a === "hldel") { removeHighlight(b.dataset.id); hideBubble(); return; }
-  if (a === "explainchat") { const t = bubbleTerm, ex = bubble._explain || ""; hideBubble(); SPEECH.stop(); openTutorChat();
-    const box = $("#gout"); const f = $("#sheet").querySelector(".tfirst"); if (f) f.remove();
-    if (box) { box._conv = {context: explainPrompt(t), turns:[{r:"you", t:"Explain \"" + t + "\" in simple terms."},{r:"tutor", t:ex}]}; chatRender(box); const inp = box.querySelector(".tfollow input"); if (inp) inp.focus(); }
+  if (a === "explainchat") { const t = bubbleTerm, ex = bubble._explain || ""; hideBubble(); SPEECH.stop(); const c = tpConv(); S.tchat = {context: explainPrompt(t), turns: c.turns.concat([{r:"you", t:"Explain \"" + t + "\" in simple terms."},{r:"tutor", t:ex}])}; save();
+    if ($("#tpanel").querySelector(".tp-body")) tpBody(); openTutorChat();
     return; }
   if (a === "define") return showDefine();
   if (a === "search") return showSearch();
