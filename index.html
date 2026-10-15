@@ -141,7 +141,8 @@ mark.hl{color:inherit;border-radius:3px;padding:0 1px;cursor:pointer;-webkit-box
 :root[data-theme="dark"][data-accent="green"]{--navy:#a6e2b1;--teal:#6fd081;--teal-bg:#132d18}
 .timer{font-family:var(--f-mono);font-weight:600;padding:4px 10px;border-radius:6px;background:var(--amber-bg);color:var(--amber);white-space:nowrap}
 @media (max-width:640px){.brand span{display:none}.top-in{gap:8px;flex-wrap:wrap}.nav{order:3;flex-basis:100%}.nav button{padding:10px 10px 9px}}
-main{max-width:1040px;margin:0 auto;padding-inline:16px;padding-block:28px 64px;display:grid;gap:28px}
+main{max-width:1040px;margin:0 auto;padding-inline:16px;padding-block:28px 64px;display:grid;grid-template-columns:minmax(0,1fr);gap:28px}
+main>*{min-width:0}
 /* generic */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);background:var(--surface);padding:9px 16px;border-radius:8px;font-weight:600;cursor:pointer;text-decoration:none}
 .btn:hover{border-color:var(--muted)}
@@ -155,7 +156,8 @@ main{max-width:1040px;margin:0 auto;padding-inline:16px;padding-block:28px 64px;
 .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .spread{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px}
-.tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-mono);font-size:.72rem;padding:3px 8px;border-radius:5px;background:var(--sunk);color:var(--muted);white-space:nowrap}
+.tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-mono);font-size:.72rem;padding:3px 8px;border-radius:5px;background:var(--sunk);color:var(--muted);white-space:nowrap;max-width:100%}
+@media (max-width:600px){.tag{white-space:normal}}
 .tag.teal{background:var(--teal-bg);color:var(--teal)}
 .tag.amber{background:var(--amber-bg);color:var(--amber)}
 .tag.good{background:var(--good-bg);color:var(--good)}
@@ -227,7 +229,7 @@ textarea{min-height:130px;resize:vertical;line-height:1.5}
 .feedback.part{background:var(--amber-bg)}
 .feedback h3{display:flex;gap:8px;align-items:center}
 .ok h3{color:var(--good)}.no h3{color:var(--bad)}.part h3{color:var(--amber)}
-.bookref{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;border-top:1px dashed var(--line);padding-top:12px;font-size:.9rem}
+.bookref{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;min-width:0;border-top:1px dashed var(--line);padding-top:12px;font-size:.9rem}
 .bookref .mod{font-family:var(--f-mono);font-weight:600;color:var(--navy)}
 .refs{display:grid;gap:4px;flex:1 1 260px;min-width:0}
 .ref{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline}
@@ -300,7 +302,7 @@ textarea{min-height:130px;resize:vertical;line-height:1.5}
 .figlist .fdesc small{display:block;color:var(--muted);font-size:.78rem;margin-top:1px}
 .figlist .pg{white-space:nowrap}
 .lab>summary small{display:block;color:var(--muted);font-size:.85rem;font-weight:400;margin-top:2px}
-.lab .inner{display:grid;gap:14px}
+.lab .inner{display:grid;gap:14px;grid-template-columns:minmax(0,1fr)}
 .plain{margin:4px 0 0;padding-left:1.2em;display:grid;gap:3px}
 .steps{margin:6px 0 0;padding-left:1.4em;display:grid;gap:6px}
 .steps label{display:flex;gap:8px;align-items:flex-start;cursor:pointer;line-height:1.45}
@@ -338,7 +340,7 @@ textarea{min-height:130px;resize:vertical;line-height:1.5}
 /* videos */
 .vidrow{display:grid;gap:6px;border-top:1px dashed var(--line);padding-top:12px}
 .vids{display:flex;flex-wrap:wrap;gap:8px}
-.vid{display:inline-flex;align-items:center;gap:8px;padding:7px 12px 7px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);text-decoration:none;font-size:.9rem;max-width:100%}
+.vid{display:inline-flex;align-items:center;gap:8px;padding:7px 12px 7px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);text-decoration:none;font-size:.9rem;max-width:100%;min-width:0;overflow-wrap:anywhere}
 .vid:hover{border-color:var(--bad)}
 .vid .play{flex:none;width:22px;height:16px;border-radius:4px;background:var(--bad);position:relative}
 .vid .play::after{content:"";position:absolute;left:8px;top:4px;border-left:7px solid var(--surface);border-top:4px solid transparent;border-bottom:4px solid transparent}
@@ -468,14 +470,16 @@ mark{background:var(--amber-bg);color:inherit;padding:0 2px;border-radius:2px}
 .mods summary::-webkit-details-marker{display:none}
 .mods .no{font-family:var(--f-mono);font-weight:600;color:var(--navy);font-size:.85rem}
 .mods .count{font-family:var(--f-mono);font-size:.78rem;color:var(--muted);white-space:nowrap}
-.mods .inner{padding:0 16px 16px 92px;display:grid;gap:10px}
+.mods .inner{padding:0 16px 16px 92px;display:grid;gap:10px;grid-template-columns:minmax(0,1fr);overflow-wrap:anywhere}
 .mods .part{background:var(--sunk);padding:8px 16px;font-family:var(--f-mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-top:1px solid var(--line)}
 .mods .part:first-child{border-top:0}
 .linklist{display:flex;flex-wrap:wrap;gap:6px}
 @media (max-width:640px){.mods .inner{padding-left:16px}.mods summary{grid-template-columns:44px minmax(0,1fr)}.mods .count{grid-column:2}.qcard{padding:18px}.dom{grid-template-columns:minmax(0,1fr) 80px 46px}}
 /* modal */
 .modal{position:fixed;inset:0;background:rgba(8,14,26,.55);z-index:50;display:flex;justify-content:center;align-items:flex-start;padding:max(24px,env(safe-area-inset-top,0px)) 16px 24px;overflow-y:auto}
-.modal .sheet{background:var(--surface);border:1px solid var(--line);border-radius:12px;max-width:760px;width:100%;padding:24px;display:grid;gap:16px}
+.modal .sheet{background:var(--surface);border:1px solid var(--line);border-radius:12px;max-width:760px;width:100%;padding:24px;display:grid;grid-template-columns:minmax(0,1fr);gap:16px;min-width:0;overflow-wrap:anywhere}
+.modal .sheet>*{min-width:0}.modal .sheet .tag{white-space:normal;max-width:100%}
+@media (max-width:560px){.modal .sheet{padding:16px}}
 /* results */
 .score{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
 .score div{padding:14px 16px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
@@ -536,16 +540,16 @@ mark{background:var(--amber-bg);color:inherit;padding:0 2px;border-radius:2px}
 .pchain{display:flex;flex-wrap:wrap;align-items:center;gap:8px}.pchain span{font-family:var(--f-display);font-weight:700;padding:8px 14px;border-radius:10px;background:var(--teal-bg);border:1.5px solid var(--teal)}.pchain i{font-style:normal;color:var(--muted);font-weight:700}
 .prules{margin:10px 0 0;padding-left:20px;display:grid;gap:6px}
 .ptimeline{display:grid;gap:14px;margin-top:12px;position:relative}
-.pcard{border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:var(--r);background:var(--surface);padding:14px 16px;display:grid;gap:10px}
-.pcard-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.pcard-h b{font-family:var(--f-display);font-size:1.15rem;display:block}.pcard-h span{font-size:.85rem;color:var(--muted)}
+.pcard{grid-template-columns:minmax(0,1fr);border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:var(--r);background:var(--surface);padding:14px 16px;display:grid;gap:10px}
+.pcard-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}.pcard-h>div{min-width:0}.pcard{min-width:0}.pcard-h b{font-family:var(--f-display);font-size:1.15rem;display:block}.pcard-h span{font-size:.85rem;color:var(--muted)}
 .ramb{flex:none;font-family:var(--f-mono);font-weight:700;font-size:.85rem!important;color:var(--ink)!important;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:4px 10px;white-space:nowrap}
-.prow{display:grid;grid-template-columns:76px minmax(0,1fr);gap:10px;align-items:start}.pl{font-family:var(--f-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding-top:3px}
+.prow{display:grid;grid-template-columns:76px minmax(0,1fr);min-width:0;gap:10px;align-items:start}.pl{font-family:var(--f-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding-top:3px}
 .prow ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}.prow li small{display:block;color:var(--muted);font-size:.8rem}
 .pchips{display:grid;gap:6px}.pser{font-size:.8rem;color:var(--muted);margin-right:6px}
 .chipb{display:inline-block;font-family:var(--f-mono);font-weight:700;font-size:.82rem;padding:2px 8px;border-radius:6px;margin:2px 4px 2px 0;border:1.5px solid}
 .chipb.t-z{background:var(--teal);border-color:var(--teal);color:var(--on-accent)}.chipb.t-b{background:var(--good);border-color:var(--good);color:var(--on-accent)}.chipb.t-h{background:transparent;border-color:var(--muted);color:var(--ink)}.chipb.t-q{background:var(--amber);border-color:var(--amber);color:var(--on-accent)}
 .ptip{margin:0;font-size:.9rem;padding:8px 10px;border-radius:8px;background:var(--sunk)}
-@media (max-width:560px){.prow{grid-template-columns:1fr;gap:2px}}
+@media (max-width:560px){.prow{grid-template-columns:minmax(0,1fr);gap:2px}}
 .pm{display:grid;gap:12px}.pm-start{display:grid;gap:10px}.pm-order{display:grid;gap:8px}.pm-q{display:grid;gap:10px}
 .pm-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:4px}.pm-chain i{font-style:normal;color:var(--muted)}
 .pm-link{display:grid;border:1.5px dashed var(--line);border-radius:10px;padding:6px 10px;min-width:96px}.pm-link span{font-family:var(--f-mono);font-size:.68rem;text-transform:uppercase;color:var(--muted)}.pm-link b{font-size:.92rem}
@@ -635,6 +639,9 @@ mark{background:var(--amber-bg);color:inherit;padding:0 2px;border-radius:2px}
 .nbgroup{display:grid;gap:8px;margin-bottom:6px}
 .nbgroup-h{font-size:.82rem;font-weight:600;color:var(--navy);overflow-wrap:anywhere}
 .nbempty{color:var(--muted);font-size:.9rem}
+/* overflow guards: grid children may shrink, long words wrap */
+.panel,.rgroup,.article,.inner,.revbox,.lab,.drill,.boardsec,.noteextra{min-width:0}
+.article .body,.revbox,.panel p,.inner p,.lk-def{overflow-wrap:anywhere}
 </style>
 
 </head>
@@ -656,8 +663,13 @@ mark{background:var(--amber-bg);color:inherit;padding:0 2px;border-radius:2px}
 
 <script>
 // App version and update history (newest first). Bump APP_VERSION and add an entry for every release.
-const APP_VERSION = "1.19";
+const APP_VERSION = "1.20";
 const CHANGELOG = [
+  {v:"1.20", date:"Oct 2026", items:[
+    "Fixed: study notes and other pop-up pages no longer run off the right edge on phones",
+    "Fixed: lab guides, Chipsets & CPUs cards, the video list and the router lab now fit small screens (checked every screen from 320px phones to desktops)",
+    "Fixed: Define now shows the right meaning for acronyms, e.g. AMD = Advanced Micro Devices",
+    "Over 175 more acronyms and 50 everyday terms added to Define (XMP, EXPO, ZIF, LGA, ATX, IP, DVD, LCD, port, driver, lease and more)"]},
   {v:"1.19", date:"Oct 2026", items:[
     "Chapter lessons: every chapter of the book explained in plain English, section by section, with read-aloud",
     "Notebook: a slide-out panel for your own notes and page bookmarks",
@@ -1542,6 +1554,243 @@ const TERMS = {
 "upnp":"Universal Plug and Play; lets devices open router ports automatically. Disable unless needed.",
 "dmz":"A network segment that exposes a host to the internet while separating it from the internal LAN.",
 "port forwarding":"Router setting that sends inbound traffic on a port to one internal device."
+};
+
+// More acronyms used in the notes and lessons: [acronym, what it stands for, plain-English meaning]
+const GLOSSARY_EXTRA = [
+["AC","Alternating Current","The kind of electricity from a wall outlet; the power supply converts it to DC. (In Wi-Fi, 802.11ac is Wi-Fi 5.)"],
+["AD","Active Directory","Microsoft's directory service that stores users, computers and groups in a Windows domain."],
+["AD DS","Active Directory Domain Services","The Windows Server role that runs a domain: logins, Group Policy and user accounts."],
+["ADF","Automatic Document Feeder","The tray on a scanner or copier that feeds a stack of pages one at a time."],
+["AMD","Advanced Micro Devices","A company that makes processors (Ryzen, Threadripper, EPYC, Athlon), chipsets and Radeon graphics. Intel's main competitor."],
+["ANSI","American National Standards Institute","A U.S. organization that publishes technical standards."],
+["APK","Android Package Kit","The file format used to install apps on Android."],
+["ATA","AT Attachment","The family of drive-interface standards; SATA (Serial ATA) is the modern version, PATA the old parallel one."],
+["ATX","Advanced Technology Extended","The standard desktop motherboard and power supply form factor (ATX board: 12 × 9.6 in)."],
+["AWS","Amazon Web Services","Amazon's cloud computing platform."],
+["BCD","Boot Configuration Data","The Windows database that tells the Windows Boot Manager which OS to load and how."],
+["BD","Blu-ray Disc","An optical disc format holding 25 GB per layer."],
+["BEC","Business Email Compromise","A scam where an attacker poses as an executive or vendor by email to trick staff into sending money or data."],
+["BGP","Border Gateway Protocol","The routing protocol that connects networks across the Internet."],
+["CA","Certificate Authority","A trusted organization that issues digital certificates (used by HTTPS)."],
+["CAC","Common Access Card","A smart card used for ID and login, for example by the U.S. military."],
+["CAS","Column Access Strobe","CAS latency (CL) is how many clock cycles RAM takes to respond; lower is faster at the same speed."],
+["CCFL","Cold Cathode Fluorescent Lamp","The fluorescent backlight used in older LCD screens; replaced by LEDs."],
+["CD","Compact Disc","An optical disc that holds about 700 MB."],
+["CF","CompactFlash","An older memory card format used in professional cameras."],
+["CIDR","Classless Inter-Domain Routing","Writing a subnet mask as a slash and a bit count, such as 192.168.1.0/24."],
+["CIFS","Common Internet File System","An older version of SMB, Windows file sharing (port 445)."],
+["CL","CAS Latency","How many clock cycles RAM takes to deliver data; lower is faster."],
+["CMYK","Cyan, Magenta, Yellow, Black","The four ink or toner colors used by color printers."],
+["CSM","Compatibility Support Module","A UEFI setting that emulates legacy BIOS for old OSs; must be off for Secure Boot and Windows 11."],
+["DB-9","D-subminiature 9-pin","The 9-pin serial connector found on older PCs and network devices."],
+["DC","Direct Current","Steady, one-direction power such as from batteries or a power supply's outputs. (In Windows networking, DC also means domain controller.)"],
+["DDR","Double Data Rate","RAM that transfers data twice per clock cycle. DDR3, DDR4 and DDR5 are different generations and aren't interchangeable."],
+["DDR3","Double Data Rate 3","An older RAM generation (240-pin DIMM, 204-pin SODIMM)."],
+["DDR4","Double Data Rate 4","A RAM generation used from about 2014–2021 (288-pin DIMM, 260-pin SODIMM)."],
+["DDR5","Double Data Rate 5","The current RAM generation (288-pin DIMM keyed differently from DDR4, 262-pin SODIMM)."],
+["DIMM","Dual Inline Memory Module","A desktop memory stick."],
+["DLP","Data Loss Prevention","Tools and policies that stop sensitive data from leaving the organization."],
+["DOCSIS","Data Over Cable Service Interface Specification","The standard cable modems use to carry Internet over coaxial TV cable."],
+["DP","DisplayPort","A digital video and audio connector used on PCs and monitors."],
+["DRAM","Dynamic Random Access Memory","The main kind of RAM; it must be refreshed constantly to keep data."],
+["DS","Digital Signature","A cryptographic stamp that proves who created data and that it wasn't changed."],
+["DVD","Digital Versatile Disc","An optical disc holding 4.7 GB (single layer) or 8.5 GB (dual layer)."],
+["ECC","Error-Correcting Code","Memory that detects and fixes single-bit errors; used in servers."],
+["EFI","Extensible Firmware Interface","The original name for UEFI. The EFI System Partition (ESP) holds the boot files on a GPT drive."],
+["EIGRP","Enhanced Interior Gateway Routing Protocol","A Cisco routing protocol used inside an organization."],
+["EPYC","EPYC (AMD server processor brand)","AMD's line of server processors; not an acronym."],
+["ESP","EFI System Partition","The small FAT32 partition on a GPT drive that holds the UEFI boot files."],
+["EULA","End User License Agreement","The software license you agree to when installing software."],
+["FAT","File Allocation Table","An older, simple file system (FAT32 max file size 4 GB); widely compatible with USB drives and cameras."],
+["FERPA","Family Educational Rights and Privacy Act","A U.S. law protecting the privacy of student education records."],
+["FQDN","Fully Qualified Domain Name","A complete name such as www.example.com: host + domain + top-level domain."],
+["FRU","Field Replaceable Unit","A part a technician can swap on site, such as RAM, a drive or a power supply."],
+["FTPS","FTP Secure (FTP over TLS)","FTP with encryption added (ports 989/990)."],
+["GB","Gigabyte","About one billion bytes (1,000 MB, or 1,024 MB in binary)."],
+["GPS","Global Positioning System","Satellite system that gives a device its location."],
+["GPU","Graphics Processing Unit","The processor that draws images; on a graphics card or built into the CPU."],
+["GRUB","Grand Unified Bootloader","The boot loader most Linux systems use."],
+["GUI","Graphical User Interface","Windows, icons and a mouse pointer, as opposed to a command line."],
+["GUID","Globally Unique Identifier","A long ID number guaranteed to be unique; GPT stands for GUID Partition Table."],
+["HAL","Hardware Abstraction Layer","Part of Windows that sits between the kernel and the hardware."],
+["HAV","Hardware-Assisted Virtualization","CPU features (Intel VT-x, AMD-V) that let hypervisors run VMs efficiently; enable them in UEFI."],
+["HD","High Definition","Video resolution of 720p or 1080p. (HD can also mean hard drive.)"],
+["HDD","Hard Disk Drive","A storage drive with spinning magnetic platters."],
+["HFS","Hierarchical File System","Apple's older Mac file system (HFS+), replaced by APFS."],
+["HKCU","HKEY_CURRENT_USER","The registry hive with settings for the user who is signed in."],
+["HKLM","HKEY_LOCAL_MACHINE","The registry hive with settings for the whole computer: hardware, software and system."],
+["HKU","HKEY_USERS","The registry hive holding profiles for all users on the computer."],
+["HTML","Hypertext Markup Language","The language web pages are written in."],
+["HTTP","Hypertext Transfer Protocol","Unencrypted web traffic (port 80)."],
+["IAM","Identity and Access Management","Systems and policies that control who can sign in and what they can access."],
+["ICMP","Internet Control Message Protocol","The protocol ping and tracert use to test connectivity."],
+["ID","Identification","An identifier, such as a user ID or hardware ID."],
+["IDE","Integrated Drive Electronics","The old parallel (PATA) drive interface with wide ribbon cables."],
+["IDS","Intrusion Detection System","A system that watches network traffic and alerts on attacks."],
+["IEEE","Institute of Electrical and Electronics Engineers","The group behind networking standards such as 802.3 (Ethernet) and 802.11 (Wi-Fi)."],
+["IMAP","Internet Message Access Protocol","Email protocol that keeps mail on the server and syncs it across devices (port 143; 993 secure)."],
+["IMEI","International Mobile Equipment Identity","The unique ID number of a cell phone's hardware."],
+["IMSI","International Mobile Subscriber Identity","The unique ID of a subscriber, stored on the SIM card."],
+["IP","Internet Protocol","The protocol that addresses and routes packets between networks. An IP address identifies a device on a network."],
+["IPS","Intrusion Prevention System","Like an IDS but it also blocks the attack. (IPS is also a type of LCD panel: in-plane switching.)"],
+["ISE","Integrated Scripting Environment","The PowerShell ISE editor for writing and testing scripts."],
+["ISO","ISO image (named for the International Organization for Standardization)","An ISO file is an exact copy of an optical disc, often used to install an OS."],
+["IT","Information Technology","Computers, networks and the people who support them."],
+["ITX","Information Technology eXtended","A family of small motherboard form factors; Mini-ITX is 6.7 × 6.7 in."],
+["KB","Kilobyte","About one thousand bytes. (Microsoft also uses KB for Knowledge Base articles and updates, like KB5001234.)"],
+["KEK","Key Exchange Key","A key in UEFI Secure Boot that controls which signatures can be trusted."],
+["LBA","Logical Block Addressing","Numbering a drive's sectors in order from 0; used by modern drives."],
+["LC","Lucent Connector","A small push-pull fiber-optic connector."],
+["LCD","Liquid Crystal Display","A flat screen that uses liquid crystals and a backlight."],
+["LDAPS","LDAP Secure","LDAP over TLS (port 636)."],
+["LED","Light-Emitting Diode","A light source used for screen backlights, indicator lights and OLED displays."],
+["LGA","Land Grid Array","A CPU socket with pins in the socket and flat pads on the CPU (all current Intel sockets, and AMD AM5)."],
+["LTE","Long-Term Evolution","A 4G cellular data standard."],
+["MB","Megabyte","About one million bytes. (MB can also mean motherboard.)"],
+["MD5","Message Digest 5","An older hash algorithm used to check that a file hasn't changed."],
+["MDM","Mobile Device Management","Software that lets IT manage, secure and wipe company phones and tablets."],
+["MDI","Medium Dependent Interface","The Ethernet port wiring; auto-MDI-X lets ports adjust so straight-through cables work everywhere."],
+["MIMO","Multiple Input, Multiple Output","Wi-Fi that uses several antennas at once for more speed."],
+["MMF","Multimode Fiber","Fiber-optic cable for shorter runs (inside buildings), using LED or laser light."],
+["MSI","Microsoft Installer","The .msi installer package format for Windows software."],
+["MSP","Managed Service Provider","A company that runs IT services for other businesses."],
+["MT/s","Megatransfers per second","How RAM speed is measured, e.g. DDR5-6000 = 6,000 MT/s."],
+["NAND","NAND flash (named for the NOT-AND logic gate)","The kind of flash memory inside SSDs, USB drives and memory cards."],
+["NAS","Network-Attached Storage","A storage device on the network that shares files with many computers."],
+["NGFW","Next-Generation Firewall","A firewall that inspects applications and content, not just ports and addresses."],
+["NIC","Network Interface Card","The network adapter that connects a device to a network."],
+["NTP","Network Time Protocol","Keeps computer clocks in sync (UDP port 123)."],
+["NVMe","Non-Volatile Memory Express","The fast protocol SSDs use over PCIe, often in an M.2 slot."],
+["OEM","Original Equipment Manufacturer","The company that built the hardware, such as Dell or HP; OEM Windows licenses come with a new PC."],
+["ONT","Optical Network Terminal","The box that converts fiber-optic Internet service into Ethernet at your home."],
+["OSI","Open Systems Interconnection","The 7-layer model of network communication (Physical, Data Link, Network, Transport, Session, Presentation, Application)."],
+["OSPF","Open Shortest Path First","A routing protocol used inside organizations."],
+["OTP","One-Time Password","A code that works only once, often sent by text or made by an app, used for MFA."],
+["PAM","Privileged Access Management","Tools that control and monitor admin accounts."],
+["PC","Personal Computer","A desktop or laptop computer for one person."],
+["PCI","Peripheral Component Interconnect","An older expansion slot standard, replaced by PCIe. (PCI DSS is the payment-card security standard.)"],
+["PDL","Page Description Language","The language a printer driver uses to describe a page, such as PCL or PostScript."],
+["PE","Preinstallation Environment","Windows PE: a small version of Windows used to install, deploy and repair Windows."],
+["PGA","Pin Grid Array","A CPU socket design where the pins are on the CPU (AMD AM4 and older)."],
+["PIN","Personal Identification Number","A numeric code used to sign in, such as Windows Hello PIN or a phone unlock."],
+["PS","PowerShell","Microsoft's command-line shell and scripting language (.ps1 scripts)."],
+["PUP","Potentially Unwanted Program","Software bundled with other installs, like toolbars or adware, that the user didn't really want."],
+["PVC","Polyvinyl Chloride","The plastic used for regular cable jackets; not allowed in plenum spaces because it gives off toxic smoke."],
+["PWM","Pulse Width Modulation","How a motherboard controls 4-pin fan speed."],
+["QR","Quick Response code","A square barcode a phone camera can scan."],
+["RAID","Redundant Array of Independent Disks","Combining drives for speed and/or redundancy (RAID 0, 1, 5, 10)."],
+["RE","Recovery Environment","Windows RE: the repair environment with Startup Repair, System Restore and Command Prompt."],
+["RF","Radio Frequency","Wireless signals such as Wi-Fi, Bluetooth and cellular."],
+["RFC","Request for Comments","The documents that define Internet standards."],
+["RGB","Red, Green, Blue","The three colors screens mix to make every color."],
+["RJ","Registered Jack","Telephone and network connector standards: RJ11 for phone lines, RJ45 for Ethernet."],
+["RJ45","Registered Jack 45","The 8-pin connector on Ethernet cables."],
+["ROM","Read-Only Memory","Memory that keeps data without power; firmware used to be stored in ROM chips."],
+["RPM","Revolutions Per Minute","How fast a hard drive's platters spin, such as 5400 or 7200 RPM."],
+["SAM","Security Accounts Manager","The Windows database that stores local user accounts and password hashes."],
+["SAML","Security Assertion Markup Language","A standard used for single sign-on between an identity provider and apps."],
+["SAS","Serial Attached SCSI","A fast drive interface used in servers."],
+["SC","Subscriber Connector","A square, push-pull fiber-optic connector."],
+["SCSI","Small Computer System Interface","An older set of standards for connecting drives and devices."],
+["SD","Secure Digital","The common memory card format (SD, SDHC, SDXC, microSD)."],
+["SDHC","Secure Digital High Capacity","SD cards from 4 GB to 32 GB."],
+["SDXC","Secure Digital eXtended Capacity","SD cards from 32 GB to 2 TB."],
+["SFF","Small Form Factor","A compact desktop case or computer."],
+["SFTP","SSH File Transfer Protocol","Secure file transfer that runs over SSH (port 22)."],
+["SHA","Secure Hash Algorithm","A family of hash functions (such as SHA-256) used to verify files and secure data."],
+["SIM","Subscriber Identity Module","The small card (or eSIM) that connects a phone to a cellular carrier."],
+["SLA","Service-Level Agreement","A contract that sets the level of service a provider must deliver, such as uptime or response time."],
+["SMF","Single-Mode Fiber","Fiber-optic cable for long distances, using a laser."],
+["SMS","Short Message Service","Regular text messages on a cell phone."],
+["SMT","Simultaneous Multithreading","Letting one CPU core run two threads at once (AMD's term; Intel calls it Hyper-Threading)."],
+["SPD","Serial Presence Detect","A small chip on a RAM module that tells the motherboard the module's speed and timings."],
+["SQL","Structured Query Language","The language used to work with databases."],
+["SSL","Secure Sockets Layer","The older protocol for encrypting web traffic, replaced by TLS."],
+["ST","Straight Tip","A round, twist-lock fiber-optic connector."],
+["STP","Shielded Twisted Pair","Network cable with shielding against interference. (STP is also Spanning Tree Protocol on switches.)"],
+["TB","Terabyte","About one trillion bytes (1,000 GB)."],
+["TBW","Terabytes Written","How much data an SSD is rated to write over its life."],
+["TIA","Telecommunications Industry Association","The group behind cabling standards such as TIA-568 (T568A/T568B)."],
+["TLS","Transport Layer Security","The encryption behind HTTPS and other secure protocols."],
+["TN","Twisted Nematic","A fast, inexpensive type of LCD panel with narrower viewing angles."],
+["TOTP","Time-based One-Time Password","A code from an authenticator app that changes every 30 seconds."],
+["TTL","Time to Live","A counter on a packet (or a DNS record) that limits how long it lasts."],
+["TV","Television","A television set."],
+["UDF","Universal Disk Format","The file system used on DVDs and Blu-ray discs."],
+["UHS","Ultra High Speed","The bus speed class of SD cards (UHS-I, UHS-II)."],
+["UNIX","UNIX (not an acronym)","An operating system family that Linux and macOS are based on or modeled after."],
+["URL","Uniform Resource Locator","A web address, such as https://www.comptia.org."],
+["USB4","Universal Serial Bus 4","The newest USB standard (up to 40 or 80 Gbps over USB-C), based on Thunderbolt."],
+["USMT","User State Migration Tool","Microsoft tools (scanstate and loadstate) that move user files and settings to a new PC."],
+["VA","Vertical Alignment","A type of LCD panel with deep blacks and good contrast."],
+["VHD","Virtual Hard Disk","A file that acts as a hard drive for a virtual machine (.vhd or .vhdx)."],
+["VRAM","Video RAM","Memory on a graphics card used to hold images."],
+["VT","Virtualization Technology","Intel VT-x: the CPU virtualization feature you enable in UEFI to run virtual machines."],
+["WAP","Wireless Access Point","A device that connects Wi-Fi clients to a wired network."],
+["WPA2","Wi-Fi Protected Access 2","Wi-Fi security using AES encryption; still common."],
+["WPA3","Wi-Fi Protected Access 3","The newest Wi-Fi security (SAE handshake); use it when all devices support it."],
+["WWAN","Wireless Wide Area Network","Cellular data, such as a laptop's LTE or 5G connection."],
+["XFS","XFS (journaling file system)","A high-performance Linux file system; the default on Red Hat."],
+["XMP","Extreme Memory Profile","Intel's RAM overclocking profile; turn it on in UEFI so RAM runs at its rated speed instead of the slower default."],
+["EXPO","Extended Profiles for Overclocking","AMD's version of XMP for DDR5 RAM; enable it in UEFI to run RAM at its rated speed."],
+["SODIMM","Small Outline Dual Inline Memory Module","The smaller memory stick used in laptops and mini PCs."],
+["ECC RAM","Error-Correcting Code RAM","Memory that detects and corrects single-bit errors; used in servers and workstations."],
+["ZIF","Zero Insertion Force","A CPU socket with a lever, so the CPU drops in without pressure."]
+];
+// Plain terms that aren't acronyms (merged into TERMS when not already defined)
+const TERMS_EXTRA = {
+  "intel":"A company that makes processors (Core, Core Ultra, Xeon), chipsets and network adapters. AMD's main competitor.",
+  "nvidia":"A company best known for GeForce graphics cards (GPUs) and AI accelerators.",
+  "apple silicon":"Apple's own ARM-based processors (M1, M2, M3, M4…) used in Macs since 2020.",
+  "ryzen":"AMD's processor brand for desktops and laptops (Ryzen 3, 5, 7, 9).",
+  "core ultra":"Intel's newer processor brand (Core Ultra 5, 7, 9), introduced in 2023.",
+  "threadripper":"AMD's high-end desktop and workstation processor line with many cores.",
+  "xeon":"Intel's processor line for servers and workstations.",
+  "ethernet":"The standard for wired networking (IEEE 802.3), using twisted-pair or fiber cable and RJ45 connectors.",
+  "wi-fi":"Wireless networking based on the IEEE 802.11 standards.",
+  "bluetooth":"Short-range wireless for connecting devices like headsets, keyboards and phones (about 10 meters).",
+  "thunderbolt":"A fast Intel/Apple connection standard (up to 40–80 Gbps) that uses the USB-C connector.",
+  "port":"1) A connector on a device, such as a USB or HDMI port. 2) In networking, a number (0–65535) that identifies a service, such as 443 for HTTPS.",
+  "driver":"Software that lets the operating system talk to a piece of hardware, such as a printer or graphics card.",
+  "cache":"A small, fast storage area that keeps copies of recently used data so it can be reached quickly (CPU cache, browser cache, DNS cache).",
+  "lease":"The length of time a DHCP server lets a device keep the IP address it assigned before it must renew it.",
+  "partition":"A section of a drive that the OS treats as a separate drive, formatted with its own file system (such as C:).",
+  "hub":"An old network device that repeats every signal out every port; replaced by switches.",
+  "toner":"The fine powder a laser printer melts onto paper to form text and images.",
+  "duplex":"1) Printing on both sides of the paper. 2) In networking, full duplex sends and receives at the same time; half duplex takes turns.",
+  "print spooler":"The Windows service that queues print jobs and sends them to the printer. Restart it when jobs get stuck.",
+  "overclock":"Running a CPU, GPU or RAM faster than its rated speed for more performance, with more heat and risk.",
+  "overclocking":"Running a CPU, GPU or RAM faster than its rated speed for more performance, with more heat and risk.",
+  "dual channel":"Using two matching RAM modules in the right slots (usually A2 and B2) so the memory controller reads both at once, doubling bandwidth.",
+  "core i7":"Intel's upper-tier desktop and laptop processor line (between Core i5 and Core i9).",
+  "core i5":"Intel's mainstream processor line, the common choice for everyday and gaming PCs.",
+  "core i3":"Intel's entry-level processor line.",
+  "core i9":"Intel's top-tier consumer processor line.",
+  "update":"A patch or new version that fixes bugs, closes security holes or adds features (Windows Update, driver updates, firmware updates).",
+  "firmware":"Software stored on a chip in a device that controls its basic functions, such as the BIOS/UEFI on a motherboard.",
+  "virtual machine":"A software computer that runs its own operating system inside your real computer, managed by a hypervisor.",
+  "ransomware":"Malware that encrypts or locks your files and demands payment to unlock them.",
+  "trojan":"Malware disguised as legitimate software.",
+  "worm":"Malware that spreads by itself across a network without needing a user to run it.",
+  "rootkit":"Malware that hides deep in the OS or firmware so it's hard to detect and remove.",
+  "spyware":"Malware that secretly watches what you do and sends information to someone else.",
+  "keylogger":"Malware or a device that records your keystrokes to steal passwords and data.",
+  "botnet":"A network of infected computers controlled remotely by an attacker, often used for spam or DDoS attacks.",
+  "power supply":"The unit that converts wall AC power into the DC voltages a computer needs (+12 V, +5 V, +3.3 V).",
+  "heat sink":"A metal block with fins that draws heat away from a component like the CPU.",
+  "standoff":"A small spacer that holds the motherboard off the case so it doesn't short out.",
+  "expansion card":"A circuit board you plug into a motherboard slot (usually PCIe) to add features, such as a graphics or network card.",
+  "graphics card":"An expansion card with its own GPU and video memory that drives the monitor.",
+  "monitor":"The screen that displays a computer's output.",
+  "router":"A device that forwards traffic between networks, such as your home network and the Internet.",
+  "modem":"A device that converts your ISP's signal (cable, DSL, fiber) into a network connection.",
+  "access point":"A device that lets Wi-Fi devices connect to a wired network.",
+  "ip address":"A numeric address that identifies a device on a network, such as 192.168.1.10.",
+  "ssid":"The name of a Wi-Fi network.",
+  "dns server":"A server that translates names like comptia.org into IP addresses.",
+  "boot loader":"A small program that loads the operating system when the computer starts (Windows Boot Manager, GRUB).",
+  "hyper-threading":"Intel's technology that lets one CPU core run two threads at once."
 };
 
 // Core 1 (220-1201) questions, part A — original practice items
@@ -17711,6 +17960,7 @@ const def = {P,
  intro:"New ticket. You're at the dental office with a laptop and the brand-new Contoso AX3000 router. Read the ticket, then use the Desk, Command Prompt and Browser tabs.",
  css:`
 .rtr-desk{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:10px}
+.rtr-wrap{min-width:0;max-width:100%}.rtr-wrap>*,.rtr-desk>*{min-width:0}
 @media (max-width:700px){.rtr-desk{grid-template-columns:1fr}}
 .rtr-svgw{background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:6px;overflow-x:auto}
 .rtr-svgw svg{width:100%;min-width:430px;height:auto;display:block}
@@ -19279,7 +19529,8 @@ Object.values(FIGS).forEach(arr => { let last = null; arr.forEach(f => { if (f[1
 const FLASH_CHS = Object.keys(FLASH).map(Number).sort((a,b)=>a-b);
 const FLASH_ALL = []; FLASH_CHS.forEach(ch => FLASH[ch].forEach((c,i) => FLASH_ALL.push({id: ch+"-"+i, ch, term:c[0], def:c[1]})));
 const FLASHMAP = {}; FLASH_ALL.forEach(c => { const t = c.term.toLowerCase(); const base = t.replace(/\s*\(.*?\)\s*/g," ").trim(); const par = (t.match(/\(([^)]+)\)/)||[])[1];
-  [t, base, par].filter(Boolean).forEach(k => { const kk = k.replace(/\s+/g," "); if (!FLASHMAP[kk]) FLASHMAP[kk] = c; }); });
+  const parIsName = par && (par.split(/\s+/).length >= 2 || par.length > base.length + 3) && !/^(intel|amd|apple|microsoft|google|cisco)$/i.test(par);
+  [t, base, parIsName ? par : null].filter(Boolean).forEach(k => { const kk = k.replace(/\s+/g," "); if (!FLASHMAP[kk]) FLASHMAP[kk] = c; }); });
 const QMAP = Object.fromEntries(QS.map(q => [q.id, q]));
 // ---------- chapter reviews (key points from each chapter summary, in this app's words) ----------
 const REV_CHS = Object.keys(CH_REVIEW).map(Number).sort((a,b)=>a-b);
@@ -21390,27 +21641,40 @@ KB.forEach(k => {
   }
 });
 const GLMAP = {}; GLOSSARY.forEach(([a,m]) => { GLMAP[norm(a).replace(/[^a-z0-9+]/g,"")] = [a,m]; });
+Object.entries(TERMS_EXTRA).forEach(([k,v]) => { if (!TERMS[k]) TERMS[k] = v; });
+GLOSSARY_EXTRA.forEach(([a,m,d]) => { const k = norm(a).replace(/[^a-z0-9+]/g,""); if (!GLMAP[k]) GLMAP[k] = [a,m,d]; else if (!GLMAP[k][2]) GLMAP[k] = [GLMAP[k][0], GLMAP[k][1], d]; });
 function cleanTerm(s){ return String(s).replace(/\s+/g," ").trim().replace(/^[^A-Za-z0-9.+$]+|[^A-Za-z0-9+$)]+$/g,""); }
+const isAcronym = t => /^[A-Z0-9][A-Z0-9\-\/+.&]{1,9}$/.test(t) || (/^[A-Z][A-Za-z0-9\-\/+]{1,8}$/.test(t) && (t.match(/[A-Z]/g) || []).length >= 2);
 function defineTerm(term){
   const out = {term, acro:null, notes:[], plain:null};
   const key = norm(term).replace(/[^a-z0-9+]/g,"");
-  { const tt = norm(term).replace(/\s+/g," "); out.plain = TERMS[tt] || TERMS[tt.replace(/s$/,"")] || TERMS[tt.replace(/es$/,"")] || null; }
-  if (!out.plain) { const fk = norm(term).replace(/\s+/g," ").trim(); const fc = FLASHMAP[fk] || FLASHMAP[fk.replace(/s$/,"")]; if (fc) out.plain = fc.def; }
+  const acr = isAcronym(term.replace(/s$/, "")) && term.length <= 10;
+  const tt = norm(term).replace(/\s+/g," ").trim();
+  // 1) exact dictionary / flashcard matches only
+  out.plain = TERMS[tt] || TERMS[tt.replace(/s$/,"")] || (!acr && TERMS[tt.replace(/es$/,"")]) || null;
+  if (!out.plain) { const fc = FLASHMAP[tt] || FLASHMAP[tt.replace(/s$/,"")]; if (fc) out.plain = fc.def; }
+  // 2) acronym expansion
   out.acro = GLMAP[key] || (key.endsWith("s") && GLMAP[key.slice(0,-1)]) || null;
+  if (out.acro && !out.plain && out.acro[2]) out.plain = out.acro[2];
+  // 3) study-note passages that really talk about this term
   const t = norm(term); const tSing = t.replace(/s$/,"");
+  const wordRe = new RegExp("(^|[^a-z0-9])" + t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "([^a-z0-9]|$)");
   const scored = FRAGS.map(f => {
     let s = 0;
-    if (f.first && (f.first === t || f.first.startsWith(t+" ") || f.first.startsWith(tSing))) s += 12;
+    const whole = wordRe.test(f.n);
+    if (acr && !whole) return {f, s:0};
+    if (acr && out.acro) { const w = norm(out.acro[1]).split(" ").filter(x => x.length > 3 && !/^(with|from|that|this|over)$/.test(x)); if (w.length && !w.some(x => f.n.includes(x)) && !(out.plain === null && f.bold.includes(t))) return {f, s:0}; }
+    if (f.first && (f.first === t || f.first.startsWith(t+" ") || (!acr && f.first.startsWith(tSing)))) s += 12;
     if (f.bold.some(b => b === t || b === tSing || b.startsWith(t+" ") || b.replace(/[^a-z0-9 ]/g,"") === t)) s += 10;
     else if (f.bold.some(b => has(b, t))) s += 5;
-    if (has(f.n, t)) s += 3; else if (t.length > 3 && f.n.includes(tSing)) s += 2;
+    if (whole) s += 3; else if (!acr && t.length > 3 && f.n.includes(tSing)) s += 2;
     if (s && f.n.indexOf(t) >= 0 && f.n.indexOf(t) < 25) s += 2;
     if (s && f.text.length > 320) s -= 2;
     if (s && f.first && !f.first.includes(tSing)) s -= 2;
     return {f, s};
-  }).filter(x => x.s >= 3).sort((a,b) => b.s - a.s);
+  }).filter(x => x.s >= (acr ? 8 : 3)).sort((a,b) => b.s - a.s);
   const seen = new Set();
-  for (const x of scored) { if (seen.has(x.f.text)) continue; seen.add(x.f.text); out.notes.push(x.f); if (out.notes.length >= (out.plain ? 1 : 2)) break; }
+  for (const x of scored) { if (seen.has(x.f.text)) continue; seen.add(x.f.text); out.notes.push(x.f); if (out.notes.length >= (out.plain || out.acro ? 1 : 2)) break; }
   return out;
 }
 let bubble = null, bubbleTerm = "", selTimer = null;
@@ -21628,6 +21892,7 @@ document.addEventListener("click", e => {
   const r = m.getBoundingClientRect(); bubble._rect = r; placeBubble(r);
 });
 
+window.__aplusDebug = {defineTerm, isAcronym};
 go("home");
 if (S.seenVer !== APP_VERSION) { const fresh = !S.seenVer && !Object.keys(S.att || {}).length; S.seenVer = APP_VERSION; save(); openWhatsNew(fresh); }
 })();
