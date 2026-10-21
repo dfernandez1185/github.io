@@ -833,8 +833,17 @@ svg .xaccentt{fill:var(--teal);font-family:var(--f-body)} svg .xwarnt{fill:var(-
 
 <script>
 // App version and update history (newest first). Bump APP_VERSION and add an entry for every release.
-const APP_VERSION = "1.22 beta 15";
+const APP_VERSION = "1.23 beta 3";
 const CHANGELOG = [
+  {v:"1.23 beta 3", date:"Oct 2026", items:[
+    "PC Build Lab: adjust a build after you get results. Each part has ▲ ▼ to step it up or down (and the lab swaps anything that stops fitting), plus “Make it cheaper”, “Make it faster”, “Fix compatibility” and “Undo”. Every change lists exactly which parts changed and how the total moved",
+    "Type follow-up changes in plain words: “use 2x8GB instead”, “cheaper graphics card”, “bigger SSD”, “drop the power supply”, “switch to AMD”, “no graphics card” or “add back the power supply”. The parts list also fits small phone screens better"]},
+  {v:"1.23 beta 2", date:"Oct 2026", items:[
+    "PC Build Lab: describe the PC in your own words (“1080p gaming under $1,100, 1x16GB DDR4, 1TB NVMe, Wi-Fi, I have my own power supply”) and it sets the options and builds it. “Customize the requirements” lets you choose the memory amount, 1 or 2 sticks, DDR4 or DDR5, drive size and type, an extra hard drive, and the graphics tier and brand. Single 8, 16 and 32 GB sticks and a 240 GB SSD were added for cheaper builds",
+    "Every part now has 🔒 Keep (the auto-builder builds around it) and “I'll supply it” (left out of the price, with the specs your own part needs, such as the minimum power supply wattage). Bulk orders list the parts supplied separately"]},
+  {v:"1.23 beta 1", date:"Oct 2026", items:[
+    "New PC Build Lab (Practice & exams → PC Build Lab): pick a use (office, gaming, video editing, CAD, virtualization, NAS, classroom…) and a budget, and “Build it for me” chooses the best-matched parts from about 100 current components. Or choose every part yourself, sorted by price, performance or value, with live compatibility checks (socket, DDR4/DDR5, form factor, card length, cooler fit, power supply headroom, M.2 slots)",
+    "Bulk orders for a classroom or office: number of PCs, spares, Windows license, monitor, keyboard and mouse, UPS, discount and sales tax, with a per-PC budget worked out from a total. Prices were checked in October 2026; edit any price or tap “Check prices” for today's listings at PCPartPicker, Newegg, Amazon, Best Buy and Micro Center"]},
   {v:"1.22 beta 15", date:"Oct 2026", items:[
     "Video explainers for all of Chapter 21 (Linux distros and boot, Ubuntu Desktop and Server, file, admin and network commands, the directory tree, root and sudo, nano and /etc files, apt updates, chmod and chown, SSH vs. Telnet, script types, variables and loops, PowerShell and shell scripts, scripting security, AI policies and public vs. private AI): 29 new scenes. Every chapter of the book now has a 🎬 Watch button under every topic",
     "The Linux, scripting and AI study notes play these explainers too"]},
@@ -28186,6 +28195,1113 @@ SIMS.push({
 });
 })();
 
+// PC Build Lab parts catalog. Typical US street prices checked October 2026.
+// est:1 = no fresh listing found; price estimated from similar parts. Users can edit any price in the app.
+// Performance indexes are relative: CPU multi-thread (Ryzen 5 5600 = 100), CPU gaming (Ryzen 5 5600 = 100),
+// GPU 1440p gaming (RTX 5060 = 100; integrated graphics are scored separately).
+const BL = {
+  asOf: "October 2026",
+  sources: [
+    ["Tom's Hardware CPU deals (Oct 9, 2026)", "https://www.tomshardware.com/features/best-cpu-deals"],
+    ["Tom's Hardware GPU deals (Oct 9, 2026)", "https://www.tomshardware.com/pc-components/gpus/best-gaming-graphics-card-gpu-deals"],
+    ["Tom's Hardware: 32GB DDR5 now $450 (Oct 14, 2026)", "https://www.tomshardware.com/pc-components/ddr5/32gb-of-ddr5-6000-ram-now-costs-usd450-ai-induced-shortage-reaches-worst-milestone-yet"],
+    ["Capital & Compute RAM and SSD price trackers (Oct 16, 2026)", "https://capitalandcompute.net/memory-prices/"],
+    ["Tech Insider: Arc B580 vs RTX 5060 vs RX 9060 XT (Oct 18, 2026)", "https://tech-insider.org/arc-b580-vs-rtx-5060-vs-rx-9060-xt-2026/"],
+    ["PC Build Helper motherboard deals", "https://www.pcbuildhelper.com/deals/motherboard"],
+    ["BetterFPS power supply guide", "https://betterfps.com/psus"]],
+  cats: [
+    {k:"cpu", n:"CPU", one:"processor", req:1},
+    {k:"cooler", n:"CPU cooler", one:"cooler"},
+    {k:"mobo", n:"Motherboard", one:"motherboard", req:1},
+    {k:"ram", n:"Memory", one:"memory kit", req:1},
+    {k:"sto", n:"Storage", one:"drive", req:1, multi:4},
+    {k:"gpu", n:"Graphics card", one:"graphics card"},
+    {k:"case", n:"Case", one:"case", req:1},
+    {k:"psu", n:"Power supply", one:"power supply", req:1}],
+  extraCats: [
+    {k:"os", n:"Operating system", one:"operating system"},
+    {k:"mon", n:"Monitor", one:"monitor"},
+    {k:"kbm", n:"Keyboard & mouse", one:"keyboard and mouse"},
+    {k:"ups", n:"UPS (battery backup)", one:"UPS"}],
+  parts: {
+    cpu: [
+      {id:"r5-5600g", n:"AMD Ryzen 5 5600G", b:"AMD", sock:"AM4", c:6, t:12, ghz:4.4, w:76, igpu:1, box:1, mt:95, g:85, p:110, est:1},
+      {id:"r5-5600", n:"AMD Ryzen 5 5600", b:"AMD", sock:"AM4", c:6, t:12, ghz:4.4, w:76, igpu:0, box:1, mt:100, g:100, p:115, est:1},
+      {id:"r7-5700x", n:"AMD Ryzen 7 5700X", b:"AMD", sock:"AM4", c:8, t:16, ghz:4.6, w:76, igpu:0, box:0, mt:127, g:105, p:155, est:1},
+      {id:"r7-5800x3d", n:"AMD Ryzen 7 5800X3D (10th Anniversary)", b:"AMD", sock:"AM4", c:8, t:16, ghz:4.5, w:120, igpu:0, box:0, mt:132, g:130, p:340},
+      {id:"r5-8600g", n:"AMD Ryzen 5 8600G", b:"AMD", sock:"AM5", c:6, t:12, ghz:5.0, w:88, igpu:2, box:1, mt:114, g:100, p:180, est:1},
+      {id:"r5-7600", n:"AMD Ryzen 5 7600", b:"AMD", sock:"AM5", c:6, t:12, ghz:5.1, w:88, igpu:1, box:1, mt:132, g:125, p:214},
+      {id:"r5-7600x", n:"AMD Ryzen 5 7600X", b:"AMD", sock:"AM5", c:6, t:12, ghz:5.3, w:142, igpu:1, box:0, mt:136, g:128, p:150},
+      {id:"r5-9600x", n:"AMD Ryzen 5 9600X", b:"AMD", sock:"AM5", c:6, t:12, ghz:5.4, w:88, igpu:1, box:0, mt:153, g:138, p:175},
+      {id:"r7-7700x", n:"AMD Ryzen 7 7700X", b:"AMD", sock:"AM5", c:8, t:16, ghz:5.4, w:142, igpu:1, box:0, mt:177, g:133, p:232},
+      {id:"r7-9700x", n:"AMD Ryzen 7 9700X", b:"AMD", sock:"AM5", c:8, t:16, ghz:5.5, w:88, igpu:1, box:0, mt:182, g:140, p:299},
+      {id:"r7-7800x3d", n:"AMD Ryzen 7 7800X3D", b:"AMD", sock:"AM5", c:8, t:16, ghz:5.0, w:120, igpu:1, box:0, mt:164, g:160, p:348},
+      {id:"r7-9800x3d", n:"AMD Ryzen 7 9800X3D", b:"AMD", sock:"AM5", c:8, t:16, ghz:5.2, w:150, igpu:1, box:0, mt:209, g:180, p:429},
+      {id:"r7-9850x3d", n:"AMD Ryzen 7 9850X3D", b:"AMD", sock:"AM5", c:8, t:16, ghz:5.6, w:160, igpu:1, box:0, mt:218, g:184, p:469},
+      {id:"r9-9900x", n:"AMD Ryzen 9 9900X", b:"AMD", sock:"AM5", c:12, t:24, ghz:5.6, w:162, igpu:1, box:0, mt:300, g:142, p:306},
+      {id:"r9-7950x", n:"AMD Ryzen 9 7950X", b:"AMD", sock:"AM5", c:16, t:32, ghz:5.7, w:230, igpu:1, box:0, mt:345, g:138, p:458},
+      {id:"r9-9950x", n:"AMD Ryzen 9 9950X", b:"AMD", sock:"AM5", c:16, t:32, ghz:5.7, w:200, igpu:1, box:0, mt:382, g:146, p:499},
+      {id:"i3-14100", n:"Intel Core i3-14100", b:"Intel", sock:"LGA1700", c:4, t:8, ghz:4.7, w:89, igpu:1, box:1, mt:85, g:95, p:110, est:1},
+      {id:"i5-14400", n:"Intel Core i5-14400", b:"Intel", sock:"LGA1700", c:10, t:16, ghz:4.7, w:148, igpu:1, box:1, mt:150, g:112, p:165, est:1},
+      {id:"i5-14400f", n:"Intel Core i5-14400F", b:"Intel", sock:"LGA1700", c:10, t:16, ghz:4.7, w:148, igpu:0, box:1, mt:150, g:112, p:145, est:1},
+      {id:"i5-14600k", n:"Intel Core i5-14600K", b:"Intel", sock:"LGA1700", c:14, t:20, ghz:5.3, w:181, igpu:1, box:0, mt:218, g:130, p:220, est:1},
+      {id:"i7-14700k", n:"Intel Core i7-14700K", b:"Intel", sock:"LGA1700", c:20, t:28, ghz:5.6, w:253, igpu:1, box:0, mt:318, g:140, p:300},
+      {id:"i9-14900k", n:"Intel Core i9-14900K", b:"Intel", sock:"LGA1700", c:24, t:32, ghz:6.0, w:253, igpu:1, box:0, mt:355, g:146, p:400},
+      {id:"u5-225", n:"Intel Core Ultra 5 225", b:"Intel", sock:"LGA1851", c:10, t:10, ghz:4.9, w:121, igpu:1, box:1, mt:173, g:115, p:175, est:1},
+      {id:"u5-245k", n:"Intel Core Ultra 5 245K", b:"Intel", sock:"LGA1851", c:14, t:14, ghz:5.2, w:159, igpu:1, box:0, mt:218, g:128, p:180},
+      {id:"u5-250kp", n:"Intel Core Ultra 5 250K Plus", b:"Intel", sock:"LGA1851", c:18, t:18, ghz:5.3, w:159, igpu:1, box:0, mt:255, g:132, p:210},
+      {id:"u7-265k", n:"Intel Core Ultra 7 265K", b:"Intel", sock:"LGA1851", c:20, t:20, ghz:5.5, w:250, igpu:1, box:0, mt:327, g:138, p:300},
+      {id:"u9-285k", n:"Intel Core Ultra 9 285K", b:"Intel", sock:"LGA1851", c:24, t:24, ghz:5.7, w:250, igpu:1, box:0, mt:382, g:142, p:480}],
+    cooler: [
+      {id:"tr-ax120", n:"Thermalright Assassin X 120 Refined SE", type:"air", h:148, cap:180, p:20, est:1},
+      {id:"ar-f36", n:"Arctic Freezer 36", type:"air", h:159, cap:220, p:35, est:1},
+      {id:"tr-pa120", n:"Thermalright Peerless Assassin 120 SE", type:"air", h:155, cap:245, p:38, est:1},
+      {id:"nc-d15g2", n:"Noctua NH-D15 G2", type:"air", h:168, cap:280, p:150, est:1},
+      {id:"tr-axp90", n:"Thermalright AXP90-X47 (low profile)", type:"air", h:47, cap:100, p:30, est:1},
+      {id:"ar-lf3-240", n:"Arctic Liquid Freezer III Pro 240", type:"aio", rad:240, h:0, cap:250, p:70, est:1},
+      {id:"ar-lf3-360", n:"Arctic Liquid Freezer III Pro 360", type:"aio", rad:360, h:0, cap:300, p:90, est:1}],
+    mobo: [
+      {id:"msi-b550m-wifi", n:"MSI B550M PRO-VDH WiFi", sock:"AM4", chip:"B550", ff:"mATX", mem:"DDR4", slots:4, m2:2, sata:4, wifi:1, p:110, est:1},
+      {id:"asr-b550-pg4", n:"ASRock B550 Phantom Gaming 4", sock:"AM4", chip:"B550", ff:"ATX", mem:"DDR4", slots:4, m2:2, sata:6, wifi:0, p:100, est:1},
+      {id:"asr-b550-itx", n:"ASRock B550M-ITX/ac", sock:"AM4", chip:"B550", ff:"ITX", mem:"DDR4", slots:2, m2:1, sata:4, wifi:1, p:130, est:1},
+      {id:"asr-b650m-prors", n:"ASRock B650M Pro RS", sock:"AM5", chip:"B650", ff:"mATX", mem:"DDR5", slots:4, m2:3, sata:4, wifi:0, p:110},
+      {id:"asus-b650a", n:"ASUS ROG Strix B650-A Gaming WiFi", sock:"AM5", chip:"B650", ff:"ATX", mem:"DDR5", slots:4, m2:3, sata:4, wifi:1, p:140},
+      {id:"msi-b850-tomahawk", n:"MSI MAG B850 Tomahawk WiFi", sock:"AM5", chip:"B850", ff:"ATX", mem:"DDR5", slots:4, m2:3, sata:4, wifi:1, p:179},
+      {id:"gb-x870-eagle", n:"Gigabyte X870 Eagle WIFI7", sock:"AM5", chip:"X870", ff:"ATX", mem:"DDR5", slots:4, m2:3, sata:4, wifi:1, p:190},
+      {id:"gb-b650i", n:"Gigabyte B650I AORUS Ultra", sock:"AM5", chip:"B650", ff:"ITX", mem:"DDR5", slots:2, m2:3, sata:2, wifi:1, p:230, est:1},
+      {id:"msi-b760m-e-d4", n:"MSI PRO B760M-E DDR4", sock:"LGA1700", chip:"B760", ff:"mATX", mem:"DDR4", slots:2, m2:1, sata:4, wifi:0, p:95, est:1},
+      {id:"asus-b760m-a-d4", n:"ASUS Prime B760M-A WiFi D4", sock:"LGA1700", chip:"B760", ff:"mATX", mem:"DDR4", slots:4, m2:2, sata:4, wifi:1, p:130, est:1},
+      {id:"msi-z790p", n:"MSI PRO Z790-P WiFi", sock:"LGA1700", chip:"Z790", ff:"ATX", mem:"DDR5", slots:4, m2:4, sata:6, wifi:1, p:180, est:1},
+      {id:"msi-b860m-a", n:"MSI PRO B860M-A WiFi", sock:"LGA1851", chip:"B860", ff:"mATX", mem:"DDR5", slots:4, m2:2, sata:4, wifi:1, p:150, est:1},
+      {id:"asus-z890-tuf", n:"ASUS TUF Gaming Z890-PLUS WiFi", sock:"LGA1851", chip:"Z890", ff:"ATX", mem:"DDR5", slots:4, m2:4, sata:4, wifi:1, p:215},
+      {id:"asr-b860i", n:"ASRock B860I WiFi", sock:"LGA1851", chip:"B860", ff:"ITX", mem:"DDR5", slots:2, m2:2, sata:2, wifi:1, p:180, est:1}],
+    ram: [
+      {id:"d4-8-1", n:"Crucial 8GB (1×8GB) DDR4-3200", mem:"DDR4", gb:8, sticks:1, mhz:3200, p:65, est:1},
+      {id:"d4-16-1", n:"Corsair Vengeance LPX 16GB (1×16GB) DDR4-3200", mem:"DDR4", gb:16, sticks:1, mhz:3200, p:90, est:1},
+      {id:"d4-32-1", n:"Crucial 32GB (1×32GB) DDR4-3200", mem:"DDR4", gb:32, sticks:1, mhz:3200, p:175, est:1},
+      {id:"d4-16", n:"Corsair Vengeance LPX 16GB (2×8GB) DDR4-3200", mem:"DDR4", gb:16, sticks:2, mhz:3200, p:130},
+      {id:"d4-32", n:"G.Skill Ripjaws V 32GB (2×16GB) DDR4-3200", mem:"DDR4", gb:32, sticks:2, mhz:3200, p:190},
+      {id:"d4-64", n:"Crucial 64GB (2×32GB) DDR4-3200", mem:"DDR4", gb:64, sticks:2, mhz:3200, p:557},
+      {id:"d5-8-1", n:"Crucial 8GB (1×8GB) DDR5-5600", mem:"DDR5", gb:8, sticks:1, mhz:5600, p:150, est:1},
+      {id:"d5-16-1", n:"Kingston Fury Beast 16GB (1×16GB) DDR5-5600", mem:"DDR5", gb:16, sticks:1, mhz:5600, p:215, est:1},
+      {id:"d5-32-1", n:"Crucial 32GB (1×32GB) DDR5-5600", mem:"DDR5", gb:32, sticks:1, mhz:5600, p:400, est:1},
+      {id:"d5-16", n:"Crucial 16GB (2×8GB) DDR5-5600", mem:"DDR5", gb:16, sticks:2, mhz:5600, p:297},
+      {id:"d5-32-5200", n:"Corsair Vengeance RGB 32GB (2×16GB) DDR5-5200", mem:"DDR5", gb:32, sticks:2, mhz:5200, p:399},
+      {id:"d5-32-6000", n:"G.Skill Flare X5 32GB (2×16GB) DDR5-6000 CL30", mem:"DDR5", gb:32, sticks:2, mhz:6000, p:450},
+      {id:"d5-64", n:"Kingston Fury Beast 64GB (2×32GB) DDR5-6000", mem:"DDR5", gb:64, sticks:2, mhz:6000, p:1300}],
+    sto: [
+      {id:"nv3-500", n:"Kingston NV3 500GB NVMe (PCIe 4.0)", type:"nvme", bus:"m2", gb:500, mbs:5000, p:116},
+      {id:"nv3-1t", n:"Kingston NV3 1TB NVMe (PCIe 4.0)", type:"nvme", bus:"m2", gb:1000, mbs:6000, p:150},
+      {id:"sn850x-1t", n:"WD Black SN850X 1TB NVMe (PCIe 4.0)", type:"nvme", bus:"m2", gb:1000, mbs:7300, p:190, est:1},
+      {id:"adl710-2t", n:"ADATA Legend 710 2TB NVMe (PCIe 3.0)", type:"nvme", bus:"m2", gb:2000, mbs:2400, p:210},
+      {id:"s990p-2t", n:"Samsung 990 Pro 2TB NVMe (PCIe 4.0)", type:"nvme", bus:"m2", gb:2000, mbs:7450, p:320, est:1},
+      {id:"t705-2t", n:"Crucial T705 2TB NVMe (PCIe 5.0)", type:"nvme", bus:"m2", gb:2000, mbs:14500, p:400, est:1},
+      {id:"sn5100-4t", n:"WD Blue SN5100 4TB NVMe (PCIe 4.0)", type:"nvme", bus:"m2", gb:4000, mbs:7100, p:479},
+      {id:"a400-240", n:"Kingston A400 240GB SATA SSD", type:"ssd", bus:"sata", gb:240, mbs:500, p:60, est:1},
+      {id:"a400-480", n:"Kingston A400 480GB SATA SSD", type:"ssd", bus:"sata", gb:480, mbs:500, p:100},
+      {id:"bx500-4t", n:"Crucial BX500 4TB SATA SSD", type:"ssd", bus:"sata", gb:4000, mbs:540, p:372},
+      {id:"bc-4t", n:"Seagate BarraCuda 4TB HDD (5400 rpm)", type:"hdd", bus:"sata", gb:4000, mbs:190, p:95, est:1},
+      {id:"wdred-8t", n:"WD Red Plus 8TB NAS HDD", type:"hdd", bus:"sata", gb:8000, mbs:215, p:200, est:1}],
+    gpu: [
+      {id:"arc-b570", n:"Intel Arc B570 10GB", b:"Intel", vram:10, len:270, w:150, perf:75, p:290},
+      {id:"rtx-5050", n:"NVIDIA GeForce RTX 5050 8GB", b:"NVIDIA", vram:8, len:200, w:130, perf:78, p:310},
+      {id:"arc-b580", n:"Intel Arc B580 12GB", b:"Intel", vram:12, len:272, w:190, perf:94, p:330},
+      {id:"rtx-5060", n:"NVIDIA GeForce RTX 5060 8GB", b:"NVIDIA", vram:8, len:281, w:145, perf:100, p:439},
+      {id:"rx-9060xt-16", n:"AMD Radeon RX 9060 XT 16GB", b:"AMD", vram:16, len:240, w:160, perf:112, p:520},
+      {id:"rtx-5060ti-16", n:"NVIDIA GeForce RTX 5060 Ti 16GB", b:"NVIDIA", vram:16, len:230, w:180, perf:113, p:580},
+      {id:"rx-9070gre", n:"AMD Radeon RX 9070 GRE 12GB", b:"AMD", vram:12, len:280, w:220, perf:140, p:570},
+      {id:"rx-9070", n:"AMD Radeon RX 9070 16GB", b:"AMD", vram:16, len:290, w:220, perf:165, p:700},
+      {id:"rtx-5070", n:"NVIDIA GeForce RTX 5070 12GB", b:"NVIDIA", vram:12, len:330, w:250, perf:150, p:779},
+      {id:"rx-9070xt", n:"AMD Radeon RX 9070 XT 16GB", b:"AMD", vram:16, len:288, w:304, perf:185, p:860},
+      {id:"rtx-5070ti", n:"NVIDIA GeForce RTX 5070 Ti 16GB", b:"NVIDIA", vram:16, len:329, w:300, perf:190, p:1250},
+      {id:"rtx-5080", n:"NVIDIA GeForce RTX 5080 16GB", b:"NVIDIA", vram:16, len:340, w:360, perf:220, p:1654},
+      {id:"rtx-5090", n:"NVIDIA GeForce RTX 5090 32GB", b:"NVIDIA", vram:32, len:357, w:575, perf:320, p:3500, est:1}],
+    case: [
+      {id:"cm-q300l", n:"Cooler Master Q300L", ff:"mATX", gpu:360, cool:157, psu:"ATX", rad:240, p:50, est:1},
+      {id:"tt-h18", n:"Thermaltake Versa H18", ff:"mATX", gpu:350, cool:155, psu:"ATX", rad:240, p:50, est:1},
+      {id:"px-xtpro", n:"Phanteks XT Pro", ff:"ATX", gpu:415, cool:184, psu:"ATX", rad:360, p:70, est:1},
+      {id:"mt-903max", n:"Montech AIR 903 MAX", ff:"ATX", gpu:400, cool:180, psu:"ATX", rad:360, p:90, est:1},
+      {id:"cs-4000d", n:"Corsair 4000D Airflow", ff:"ATX", gpu:360, cool:170, psu:"ATX", rad:360, p:95, est:1},
+      {id:"nzxt-h5", n:"NZXT H5 Flow", ff:"ATX", gpu:365, cool:165, psu:"ATX", rad:280, p:95, est:1},
+      {id:"ll-216", n:"Lian Li Lancool 216", ff:"ATX", gpu:392, cool:180, psu:"ATX", rad:360, p:100, est:1},
+      {id:"fd-north", n:"Fractal Design North", ff:"ATX", gpu:355, cool:170, psu:"ATX", rad:360, p:140, est:1},
+      {id:"cm-nr200p", n:"Cooler Master NR200P V2", ff:"ITX", gpu:336, cool:155, psu:"SFX", rad:280, p:110, est:1},
+      {id:"fd-terra", n:"Fractal Design Terra", ff:"ITX", gpu:322, cool:77, psu:"SFX", rad:0, p:180, est:1}],
+    psu: [
+      {id:"msi-a650bn", n:"MSI MAG A650BN", w:650, eff:"80+ Bronze", ff:"ATX", p:60, est:1},
+      {id:"cm-mwe850", n:"Cooler Master MWE Gold 850 V3", w:850, eff:"80+ Gold", ff:"ATX", p:95},
+      {id:"cs-rm850e", n:"Corsair RM850e (ATX 3.1)", w:850, eff:"80+ Gold", ff:"ATX", p:110},
+      {id:"ss-gx750", n:"Seasonic Focus GX-750 V4", w:750, eff:"80+ Gold", ff:"ATX", p:130},
+      {id:"bq-pp12-1000", n:"be quiet! Pure Power 12 M 1000W", w:1000, eff:"80+ Gold", ff:"ATX", p:165},
+      {id:"sf-l3-1000", n:"Super Flower Leadex III 1000W", w:1000, eff:"80+ Gold", ff:"ATX", p:175},
+      {id:"cs-sf850l", n:"Corsair SF850L (SFX)", w:850, eff:"80+ Gold", ff:"SFX", p:180},
+      {id:"cs-hx1500i", n:"Corsair HX1500i", w:1500, eff:"80+ Platinum", ff:"ATX", p:375}],
+    os: [
+      {id:"win11home", n:"Windows 11 Home (retail)", p:139},
+      {id:"win11pro", n:"Windows 11 Pro (retail)", p:199, note:"Needed to join a domain, use Group Policy and BitLocker"},
+      {id:"linux", n:"Linux (Ubuntu, free)", p:0},
+      {id:"volume", n:"Already licensed (volume or school license)", p:0}],
+    mon: [
+      {id:"mon24", n:"24-inch 1080p office monitor", p:110, est:1},
+      {id:"mon27q", n:"27-inch 1440p 165 Hz monitor", p:220, est:1},
+      {id:"mon27k", n:"27-inch 4K monitor", p:300, est:1}],
+    kbm: [
+      {id:"mk120", n:"Logitech MK120 wired keyboard + mouse", p:20, est:1},
+      {id:"mk270", n:"Logitech MK270 wireless keyboard + mouse", p:30, est:1}],
+    ups: [
+      {id:"apc600", n:"APC Back-UPS 600VA", p:80, est:1},
+      {id:"apc1500", n:"APC Back-UPS Pro 1500VA", p:230, est:1}]},
+  // Use cases. w = how much each score matters; cap = point where more speed stops helping this use;
+  // ram/sto in GB; gpu: 0 = graphics card not needed, >0 = minimum GPU index; hdd = extra hard drive space (GB).
+  uses: [
+    {id:"office", n:"Office / standard desktop", w:{mt:.6, g:.1, gpu:0, ram:.2, sto:.1}, cap:{mt:140, g:110, gpu:1, ram:16, sto:1000}, ram:16, sto:500, gpu:0, value:1,
+      tip:"A standard desktop (thick client) runs its apps locally. It needs to meet the OS requirements, and integrated graphics are fine. Spend on a fast SSD, not a graphics card."},
+    {id:"thin", n:"Thin client / kiosk", w:{mt:.5, g:0, gpu:0, ram:.25, sto:.25}, cap:{mt:120, g:100, gpu:1, ram:16, sto:500}, ram:16, sto:250, gpu:0, value:1, sff:1,
+      tip:"A thin client runs apps from a server, so it only needs to meet the minimum OS requirements and have a good network connection. Keep it small, quiet and cheap."},
+    {id:"classroom", n:"Classroom or training lab", w:{mt:.55, g:.15, gpu:0, ram:.2, sto:.1}, cap:{mt:150, g:115, gpu:1, ram:32, sto:1000}, ram:16, sto:500, gpu:0, value:1,
+      tip:"Lab PCs should be identical so one image deploys to all of them. Choose parts that are easy to find again, and Windows Pro if they join a domain."},
+    {id:"g1080", n:"Gaming at 1080p", w:{mt:.05, g:.25, gpu:.6, ram:.05, sto:.05}, cap:{mt:200, g:160, gpu:130, ram:32, sto:2000}, ram:16, sto:1000, gpu:75,
+      tip:"For gaming, the graphics card does most of the work. Pair it with a CPU strong enough that it doesn't hold the card back."},
+    {id:"g1440", n:"Gaming at 1440p", w:{mt:.05, g:.25, gpu:.6, ram:.05, sto:.05}, cap:{mt:220, g:180, gpu:200, ram:32, sto:2000}, ram:32, sto:1000, gpu:110,
+      tip:"1440p needs a mid-range or better graphics card with at least 12 GB of video memory, and 32 GB of system RAM for current games."},
+    {id:"g4k", n:"Gaming at 4K", w:{mt:.05, g:.2, gpu:.65, ram:.05, sto:.05}, cap:{mt:250, g:190, gpu:330, ram:32, sto:2000}, ram:32, sto:2000, gpu:180,
+      tip:"4K gaming is limited almost entirely by the graphics card. A high-end card needs a strong power supply with headroom."},
+    {id:"video", n:"Audio / video editing", w:{mt:.45, g:.05, gpu:.2, ram:.2, sto:.1}, cap:{mt:390, g:150, gpu:190, ram:64, sto:4000}, ram:32, sto:2000, gpu:75,
+      tip:"An A/V editing workstation needs a fast multicore CPU, plenty of RAM, fast and large storage, and usually dual monitors. Audio work may add a specialized sound card."},
+    {id:"cad", n:"CAD / 3D design", w:{mt:.35, g:.15, gpu:.3, ram:.15, sto:.05}, cap:{mt:390, g:170, gpu:220, ram:64, sto:2000}, ram:32, sto:1000, gpu:100,
+      tip:"A CAD/CAM design workstation needs a multicore processor, a high-end graphics card and as much RAM as the budget allows."},
+    {id:"virt", n:"Virtualization host", w:{mt:.5, g:0, gpu:0, ram:.4, sto:.1}, cap:{mt:390, g:100, gpu:1, ram:64, sto:4000}, ram:32, sto:2000, gpu:0,
+      tip:"A virtualization workstation needs the most RAM and CPU cores you can afford, and the CPU's virtualization feature (AMD-V or Intel VT-x) turned on in firmware."},
+    {id:"nas", n:"Home server / NAS", w:{mt:.3, g:0, gpu:0, ram:.2, sto:.5}, cap:{mt:110, g:100, gpu:1, ram:16, sto:16000}, ram:16, sto:250, hdd:8000, gpu:0, value:1,
+      tip:"A NAS needs lots of hard-drive space (often in a RAID array for fault tolerance), a fast network connection and low power use. It doesn't need a graphics card."}]
+};
+
+// PC Build Lab: part picker, compatibility checker, budget auto-builder, custom requirements,
+// "keep" and "I'm supplying it" switches, a plain-English request box, and bulk ordering.
+// Uses the BL catalog (buildlab_data.js); the app hands in S, save, toast and closeModal through init().
+const BLX = (() => {
+  let H = {S: () => ({}), save(){}, toast(){}, closeModal(){}};
+  const S0 = () => H.S(), save = () => H.save(), toast = m => H.toast(m), closeModal = () => H.closeModal();
+  const $ = q => document.querySelector(q);
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const P = BL.parts;
+  const ALL = {}; Object.keys(P).forEach(c => P[c].forEach(x => { x.cat = c; ALL[x.id] = x; }));
+  const USE = Object.fromEntries(BL.uses.map(u => [u.id, u]));
+  const CAT = Object.fromEntries(BL.cats.map(c => [c.k, c]));
+  const FF_RANK = {ITX:1, mATX:2, ATX:3};
+  const GPU_TIER = {entry:75, mid:110, high:165, top:215};
+  const REQ0 = {ram:0, sticks:0, mem:"any", sto:0, stoType:"any", hdd:-1, gpu:"auto", gpuBrand:"any"};
+  const st = () => {
+    S0().bl = S0().bl || {};
+    const d = S0().bl;
+    d.use = USE[d.use] ? d.use : "g1440"; if (d.budget == null) d.budget = 1800;
+    d.brand = d.brand || "any"; d.mode = d.mode || "auto"; d.wifi = !!d.wifi; d.sff = !!d.sff;
+    d.build = d.build || {}; if (!Array.isArray(d.build.sto)) d.build.sto = d.build.sto ? [d.build.sto] : [];
+    d.build.lock = d.build.lock || {}; d.build.own = d.build.own || {};
+    d.req = Object.assign({}, REQ0, d.req || {});
+    d.prices = d.prices || {}; d.saved = d.saved || [];
+    d.bulk = Object.assign({on:false, qty:20, spares:2, os:"win11pro", mon:"mon24", kbm:"mk120", ups:"", basis:"seat", total:30000, tax:0, disc:0}, d.bulk || {});
+    return d;
+  };
+  const price = x => { if (!x || x === "stock") return 0; const o = (S0().bl && S0().bl.prices || {})[x.id]; return o != null && o !== "" && !isNaN(o) ? +o : x.p; };
+  const get = id => (id && ALL[id]) || null;
+  const money = n => "$" + Math.round(n).toLocaleString("en-US");
+  const money2 = n => "$" + n.toLocaleString("en-US", {minimumFractionDigits:2, maximumFractionDigits:2});
+  const gbTxt = gb => gb >= 1000 ? (gb / 1000) + " TB" : gb + " GB";
+  const STO_T = {nvme:"NVMe SSD", ssd:"SATA SSD", hdd:"Hard drive"};
+  const caseFits = (cs, mb) => FF_RANK[cs.ff] >= FF_RANK[mb.ff];
+  const igpuPerf = cpu => !cpu ? 0 : cpu.igpu === 2 ? 30 : cpu.igpu ? 8 : 0;
+  const own = (b, k) => !!(b.own && b.own[k]);
+  const lock = (b, k) => !!(b.lock && b.lock[k]);
+  const hasModel = (b, k) => k === "sto" ? !!(b.sto && b.sto.length) : !!b[k];
+  const ownNo = (b, k) => own(b, k) && !hasModel(b, k);
+  const psuNeed = w => Math.ceil(w * 1.3 / 50) * 50;
+  const OWN_GPU_W = 220;
+
+  // ---------- parts of a build ----------
+  function parts(b){
+    const cpu = get(b.cpu), mobo = get(b.mobo), ram = get(b.ram), gpu = get(b.gpu), cs = get(b.case), psu = get(b.psu);
+    const cooler = b.cooler === "stock" ? "stock" : get(b.cooler);
+    const sto = (b.sto || []).map(get).filter(Boolean);
+    return {cpu, mobo, ram, gpu, cs, psu, cooler, sto};
+  }
+  function watts(b){
+    const p = parts(b), og = !p.gpu && ownNo(b, "gpu");
+    if (!p.cpu && !p.gpu && !og) return 0;
+    return (p.cpu ? p.cpu.w : 0) + (p.gpu ? p.gpu.w : og ? OWN_GPU_W : 0) + 50 + Math.max(1, p.sto.length) * 8;
+  }
+  function cost(b){
+    const p = parts(b), add = (k, x) => own(b, k) ? 0 : price(x);
+    return add("cpu", p.cpu) + add("mobo", p.mobo) + add("ram", p.ram) + add("gpu", p.gpu) + add("case", p.cs) + add("psu", p.psu) + add("cooler", p.cooler) +
+      p.sto.reduce((a, x) => a + add("sto", x), 0);
+  }
+  // what the parts you're supplying would cost if bought (for the "you save" line)
+  const ownValue = b => { const p = parts(b); return ["cpu", "mobo", "ram", "gpu", "case", "psu", "cooler"].reduce((a, k) => a + (own(b, k) ? price(k === "case" ? p.cs : p[k]) : 0), 0) + (own(b, "sto") ? p.sto.reduce((a, x) => a + price(x), 0) : 0); };
+
+  // ---------- compatibility ----------
+  // each issue: [level, text, tip]; "err" = won't work, "warn" = works but unwise, "own" = a part you're supplying, "miss" = still to choose
+  function check(b){
+    const p = parts(b), out = [];
+    const add = (lv, t, tip) => out.push([lv, t, tip || ""]);
+    const w = watts(b);
+    if (p.cpu && p.mobo && p.cpu.sock !== p.mobo.sock) add("err", `The ${p.cpu.n} uses socket ${p.cpu.sock}, but the ${p.mobo.n} has socket ${p.mobo.sock}.`, "A CPU only fits motherboards with its exact socket.");
+    if (p.ram && p.mobo && p.ram.mem !== p.mobo.mem) add("err", `The memory is ${p.ram.mem}, but this motherboard takes ${p.mobo.mem}.`, "DDR4 and DDR5 have different notches, so they can't go in each other's slots.");
+    if (p.ram && p.mobo && p.ram.sticks > p.mobo.slots) add("err", `The memory kit has ${p.ram.sticks} sticks but the board has only ${p.mobo.slots} slots.`);
+    if (p.cs && p.mobo && !caseFits(p.cs, p.mobo)) add("err", `A ${p.mobo.ff} motherboard doesn't fit in the ${p.cs.n}, which takes up to ${p.cs.ff}.`, "ATX is the largest common form factor, then microATX, then Mini-ITX. A case fits its own size and smaller.");
+    if (p.cs && p.gpu && p.gpu.len > p.cs.gpu) add("err", `The graphics card is ${p.gpu.len} mm long; the case fits cards up to ${p.cs.gpu} mm.`);
+    if (p.cs && p.psu && p.cs.psu === "SFX" && p.psu.ff !== "SFX") add("err", `The ${p.cs.n} needs a small SFX power supply.`, "Small cases use SFX power supplies; standard ATX units are too big.");
+    if (p.cs && p.cooler && p.cooler !== "stock") {
+      if (p.cooler.type === "air" && p.cooler.h > p.cs.cool) add("err", `The cooler is ${p.cooler.h} mm tall; the case fits coolers up to ${p.cs.cool} mm.`);
+      if (p.cooler.type === "aio" && p.cooler.rad > p.cs.rad) add("err", p.cs.rad ? `The ${p.cooler.rad} mm radiator is too big; the case takes up to ${p.cs.rad} mm.` : `The ${p.cs.n} has no room for a liquid-cooling radiator.`);
+    }
+    if (p.cpu) {
+      if (p.cooler === "stock" && !p.cpu.box) add("err", `The ${p.cpu.n} doesn't come with a cooler. Choose one.`);
+      else if (!p.cooler && !own(b, "cooler")) add(p.cpu.box ? "warn" : "err", p.cpu.box ? "No cooler chosen. Use the cooler that comes in the CPU box, or pick one." : `The ${p.cpu.n} doesn't come with a cooler. Choose one.`);
+      else if (p.cooler && p.cooler !== "stock" && p.cooler.cap < p.cpu.w) add("warn", `The cooler is rated for about ${p.cooler.cap} W, but this CPU can draw ${p.cpu.w} W. It may run hot and slow itself down (thermal throttling).`);
+      else if (p.cooler === "stock" && p.cpu.w > 150) add("warn", "The included cooler is basic; this CPU will run hot under load.");
+      if (!p.gpu && !p.cpu.igpu && !own(b, "gpu")) add("err", `The ${p.cpu.n} has no built-in graphics, so the PC can't display anything without a graphics card.`, "CPUs ending in F (Intel) and most AM4 Ryzen chips without a G have no integrated graphics.");
+    }
+    const m2 = p.sto.filter(s => s.bus === "m2").length, sata = p.sto.filter(s => s.bus === "sata").length;
+    if (p.mobo && m2 > p.mobo.m2) add("err", `You chose ${m2} M.2 drives but the board has ${p.mobo.m2} M.2 slot${p.mobo.m2 === 1 ? "" : "s"}.`);
+    if (p.mobo && sata > p.mobo.sata) add("err", `You chose ${sata} SATA drives but the board has ${p.mobo.sata} SATA ports.`);
+    if (p.psu && w) {
+      if (p.psu.w < w) add("err", `The PSU is ${p.psu.w} W but the parts can draw about ${w} W.`);
+      else if (p.psu.w < w * 1.25) add("warn", `The PSU is ${p.psu.w} W for about ${w} W of parts: only ${Math.round((p.psu.w / w - 1) * 100)}% headroom.`, "Leave 25–50% headroom so the power supply runs cool and handles power spikes.");
+    }
+    if (p.ram && p.ram.sticks === 1 && p.mobo) add("warn", "One memory stick runs in single-channel mode: about half the memory bandwidth of a matched pair. Fine for office work; games and built-in graphics run slower.", "Dual-channel memory needs two matched sticks in the slots the motherboard manual names (often A2 and B2).");
+    // parts you're supplying yourself
+    if (own(b, "psu")) add("own", p.psu ? `Power supply: your ${p.psu.n}.` : `Power supply: needs at least ${w ? psuNeed(w) : 450} W${p.cs && p.cs.psu === "SFX" ? " and must be SFX size" : ""}${p.gpu && p.gpu.w >= 250 ? ", with the PCIe power connectors the graphics card needs" : ""}.`);
+    if (own(b, "case")) add("own", p.cs ? `Case: your ${p.cs.n}.` : `Case: must fit a ${p.mobo ? p.mobo.ff : "?"} motherboard${p.gpu ? `, a ${p.gpu.len} mm graphics card` : ""}${p.cooler && p.cooler !== "stock" ? p.cooler.type === "air" ? ` and a ${p.cooler.h} mm tall cooler` : ` and a ${p.cooler.rad} mm radiator` : ""}.`);
+    if (own(b, "cooler")) add("own", p.cooler && p.cooler !== "stock" ? `Cooler: your ${p.cooler.n}.` : `Cooler: must fit socket ${p.cpu ? p.cpu.sock : "?"} and handle about ${p.cpu ? p.cpu.w : "?"} W.`);
+    if (own(b, "gpu")) add("own", p.gpu ? `Graphics card: your ${p.gpu.n}.` : `Graphics card: power and size assumed at about ${OWN_GPU_W} W; check its length against the case.`);
+    if (own(b, "ram")) add("own", p.ram ? `Memory: your ${p.ram.n}.` : `Memory: must be ${p.mobo ? p.mobo.mem : "the type the motherboard takes"}${p.mobo ? `, no more than ${p.mobo.slots} sticks` : ""}.`);
+    if (own(b, "sto")) add("own", p.sto.length ? `Storage: your ${p.sto.map(x => x.n).join(" + ")}.` : `Storage: an M.2 NVMe SSD${p.mobo && !p.mobo.m2 ? " (this board has no M.2 slot: use SATA)" : ""} or a SATA drive.`);
+    if (own(b, "cpu")) add("own", p.cpu ? `CPU: your ${p.cpu.n}.` : "CPU: choose your model so the motherboard and cooler can be matched to it.");
+    if (own(b, "mobo")) add("own", p.mobo ? `Motherboard: your ${p.mobo.n}.` : "Motherboard: choose your model so the CPU and memory can be matched to it.");
+    BL.cats.filter(c => c.req).forEach(c => { if (!hasModel(b, c.k) && !own(b, c.k)) add("miss", `Choose a ${c.one}.`); });
+    return out;
+  }
+
+  // ---------- scores ----------
+  function scores(b, use){
+    const p = parts(b), u = USE[use];
+    const v = {mt: p.cpu ? p.cpu.mt : 0, g: p.cpu ? p.cpu.g : 0,
+      gpu: p.gpu ? p.gpu.perf : ownNo(b, "gpu") ? u.cap.gpu : igpuPerf(p.cpu),
+      ram: p.ram ? p.ram.gb : ownNo(b, "ram") ? u.cap.ram : 0,
+      sto: ownNo(b, "sto") ? u.cap.sto : p.sto.reduce((a, s) => a + s.gb, 0)};
+    const n = {}; let tot = 0, wsum = 0;
+    Object.keys(u.w).forEach(k => { n[k] = Math.min(v[k], u.cap[k]) / u.cap[k]; if (u.w[k]) { tot += u.w[k] * n[k]; wsum += u.w[k]; } });
+    if (p.ram && p.ram.sticks === 1 && (u.w.g + u.w.gpu) >= .3) tot -= .03; // single-channel costs games a little
+    const boot = p.sto.filter(s => s.type !== "hdd").reduce((a, s) => a + s.gb, 0), hdd = p.sto.filter(s => s.type === "hdd").reduce((a, s) => a + s.gb, 0);
+    const meets = [];
+    if (p.ram && p.ram.gb < u.ram) meets.push(`${u.n} usually calls for at least ${u.ram} GB of RAM; you chose ${p.ram.gb} GB.`);
+    if (p.sto.length && boot < u.sto && !own(b, "sto")) meets.push(`${u.n} usually calls for at least ${gbTxt(u.sto)} of SSD storage.`);
+    if (u.hdd && hdd < u.hdd && !own(b, "sto")) meets.push(`${u.n} usually needs about ${gbTxt(u.hdd)} of hard-drive space for files.`);
+    if (u.gpu && v.gpu < u.gpu && (p.cpu || p.gpu)) meets.push(`${u.n} usually needs a graphics card at least as fast as ${gpuNameAt(u.gpu)}.`);
+    return {v, n, fit: Math.max(0, Math.round(100 * tot / (wsum || 1))), meets};
+  }
+  const gpuNameAt = perf => (P.gpu.filter(g => g.perf >= perf).sort((a, b) => a.perf - b.perf)[0] || P.gpu[0]).n.replace(/^(NVIDIA GeForce|AMD Radeon|Intel Arc) /, m => m.split(" ")[0] + " ");
+
+  // ---------- auto-builder ----------
+  // o.base = current build; parts marked "keep" stay as they are, parts marked "I'm supplying it" cost nothing.
+  function autoBuild(o){
+    const u = USE[o.use], R = Object.assign({}, REQ0, o.req || {}), base = o.base || {sto: []};
+    const L = base.lock || {}, O = base.own || {};
+    const fixed = k => (L[k] || O[k]) && hasModel(base, k);
+    const byP = list => list.slice().sort((a, b) => price(a) - price(b));
+    if (ownNo(base, "cpu") && !L.cpu) return {needModel: "cpu"};
+    if (ownNo(base, "mobo") && !L.mobo) return {needModel: "mobo"};
+    const best = [];
+    const coolersByPrice = byP(P.cooler), psusByPrice = byP(P.psu);
+    const casesByPrice = byP(P.case.filter(c => !o.sff || c.ff !== "ATX"));
+    const cpus = fixed("cpu") ? [get(base.cpu)] : P.cpu.filter(c => o.brand === "any" || c.b === o.brand);
+    cpus.forEach(cpu => {
+      let boards;
+      if (fixed("mobo")) boards = [get(base.mobo)].filter(m => m.sock === cpu.sock);
+      else {
+        const ok = P.mobo.filter(m => m.sock === cpu.sock && (!o.wifi || m.wifi) && (!o.sff || m.ff !== "ATX") && (R.mem === "any" || m.mem === R.mem));
+        const byMem = {}; ok.forEach(m => { if (!byMem[m.mem] || price(m) < price(byMem[m.mem])) byMem[m.mem] = m; });
+        boards = Object.values(byMem);
+      }
+      boards.forEach(mobo => {
+        // memory
+        let ramOpts;
+        if (fixed("ram")) ramOpts = [get(base.ram)];
+        else if (ownNo(base, "ram")) ramOpts = [null];
+        else {
+          const kits = byP(P.ram.filter(r => r.mem === mobo.mem && r.sticks <= mobo.slots));
+          const pick = gb => {
+            const tries = [[R.sticks ? r => r.sticks === R.sticks : r => r.sticks >= 2, R.ram ? r => r.gb === gb : r => r.gb >= gb]];
+            if (!R.sticks) tries.push([() => true, R.ram ? r => r.gb === gb : r => r.gb >= gb]);
+            tries.push([R.sticks ? r => r.sticks === R.sticks : () => true, r => r.gb >= gb], [() => true, r => r.gb >= gb]);
+            for (const [f1, f2] of tries) { const k = kits.find(r => f1(r) && f2(r)); if (k) return k; }
+            return null;
+          };
+          ramOpts = [...new Set([pick(R.ram || u.ram), R.ram ? null : pick(u.cap.ram)].filter(Boolean))];
+        }
+        if (!ramOpts.length) return;
+        // storage
+        let stoOpts;
+        if (fixed("sto")) stoOpts = [base.sto.slice()];
+        else if (ownNo(base, "sto")) stoOpts = [[]];
+        else {
+          const tgt = R.sto || u.sto;
+          const boots = byP(P.sto.filter(s => s.type !== "hdd" && (s.bus === "sata" || mobo.m2 > 0) &&
+            (R.stoType === "nvme" ? s.type === "nvme" : R.stoType === "ssd" ? s.type === "ssd" : (s.type === "nvme" || mobo.m2 === 0 || u.id === "thin"))));
+          const first = boots.find(s => s.gb >= tgt) || boots.slice().sort((a, b) => b.gb - a.gb)[0];
+          const second = R.sto ? null : boots.find(s => s.gb >= Math.min(u.cap.sto, tgt * 2) && s.gb > tgt);
+          const hddTgt = R.hdd >= 0 ? R.hdd : (u.hdd || 0);
+          let hdds = [];
+          if (hddTgt) {
+            let bh = null;
+            P.sto.filter(s => s.type === "hdd").forEach(h => { const nH = Math.ceil(hddTgt / h.gb); if (nH <= mobo.sata && (!bh || nH * price(h) < bh.c)) bh = {h, nH, c: nH * price(h)}; });
+            if (bh) hdds = Array(bh.nH).fill(bh.h.id);
+          }
+          stoOpts = [first, second].filter(Boolean).filter((x, i, a) => a.indexOf(x) === i).map(s => [s.id, ...hdds]);
+        }
+        if (!stoOpts.length) return;
+        // graphics
+        let gpuOpts;
+        if (L.gpu && !base.gpu && !O.gpu) gpuOpts = [null];
+        else if (fixed("gpu")) gpuOpts = [get(base.gpu)];
+        else if (ownNo(base, "gpu")) gpuOpts = [null];
+        else if (R.gpu === "none") gpuOpts = [null];
+        else {
+          const min = R.gpu !== "auto" ? GPU_TIER[R.gpu] : u.gpu;
+          gpuOpts = min ? P.gpu.filter(g => g.perf >= min) : [null];
+          if (R.gpuBrand !== "any" && min) gpuOpts = gpuOpts.filter(g => g.b === R.gpuBrand);
+          if (!min && !cpu.igpu) gpuOpts = [byP(P.gpu.filter(g => R.gpuBrand === "any" || g.b === R.gpuBrand))[0]];
+        }
+        if (gpuOpts.some(g => !g) && !cpu.igpu && !O.gpu) gpuOpts = gpuOpts.filter(Boolean);
+        if (!gpuOpts.length) return;
+        // cooler, case, power supply
+        const coolerOpts = fixed("cooler") || (L.cooler && base.cooler === "stock") ? [base.cooler === "stock" ? "stock" : get(base.cooler)] :
+          ownNo(base, "cooler") ? ["OWN"] : (cpu.box && cpu.w <= 150 ? ["stock"] : []).concat(coolersByPrice.filter(c => c.cap >= cpu.w));
+        const caseOpts = fixed("case") ? [get(base.case)] : ownNo(base, "case") ? ["OWN"] : casesByPrice;
+        const psuFixed = fixed("psu") ? get(base.psu) : ownNo(base, "psu") ? "OWN" : null;
+        ramOpts.forEach(ram => stoOpts.forEach(sto => gpuOpts.forEach(gpu => {
+          const b = {cpu: cpu.id, mobo: mobo.id, ram: ram ? ram.id : (fixed("ram") ? base.ram : null), gpu: gpu ? gpu.id : null, sto, lock: Object.assign({}, L), own: Object.assign({}, O)};
+          const need = watts(b);
+          const psuFor = c => psuFixed || (c === "OWN" ? psusByPrice.find(ps => ps.w >= need * 1.3) : psusByPrice.find(ps => ps.w >= need * 1.3 && (c.psu !== "SFX" || ps.ff === "SFX")));
+          let pick = null;
+          for (const cl of coolerOpts) {
+            if (cl === "stock" && !cpu.box) continue;
+            for (const cs of caseOpts) {
+              if (cs !== "OWN" && (!caseFits(cs, mobo) || (gpu && gpu.len > cs.gpu) || (cl !== "stock" && cl !== "OWN" && (cl.type === "air" ? cl.h > cs.cool : cl.rad > cs.rad)))) continue;
+              const ps = psuFor(cs); if (!ps) continue;
+              const c = (cl === "stock" || cl === "OWN" || O.cooler ? 0 : price(cl)) + (cs === "OWN" || O.case ? 0 : price(cs)) + (ps === "OWN" || O.psu ? 0 : price(ps));
+              if (!pick || c < pick.c) pick = {cl, cs, ps, c};
+              if (caseOpts === casesByPrice) break; // cases are sorted by price: the first that fits is the cheapest
+            }
+          }
+          if (!pick) return;
+          b.cooler = pick.cl === "OWN" ? null : pick.cl === "stock" ? "stock" : pick.cl.id;
+          b.case = pick.cs === "OWN" ? null : pick.cs.id; b.psu = pick.ps === "OWN" ? null : pick.ps.id;
+          best.push({b, cost: cost(b), fit: scores(b, o.use).fit});
+        })));
+      });
+    });
+    if (!best.length) return null;
+    const within = best.filter(x => x.cost <= o.budget);
+    if (!within.length) { const c = best.sort((a, b) => a.cost - b.cost)[0]; return Object.assign({over: true}, c); }
+    if (o.cheapest) { const ok = within.filter(x => x.fit >= (o.minFit || 0)); const pool = ok.length ? ok : within; pool.sort((a, b) => a.cost - b.cost || b.fit - a.fit); return Object.assign({valueMode: true}, pool[0]); }
+    const top = Math.max(...within.map(x => x.fit));
+    const valueMode = o.mode === "value" || (o.mode === "auto" && u.value);
+    const pool = valueMode ? within.filter(x => x.fit >= top * 0.92) : within.filter(x => x.fit >= top);
+    pool.sort((a, b) => valueMode ? a.cost - b.cost : (b.fit - a.fit) || (a.cost - b.cost));
+    return Object.assign({valueMode, top}, pool[0]);
+  }
+
+  // ---------- plain-English request ----------
+  // Reads a description like "gaming PC under $1200, 1x16GB DDR4, 1TB NVMe, Wi-Fi, I have my own PSU"
+  // and sets the matching options. Returns the list of things it understood.
+  function parseNeeds(text, d){
+    const t = " " + String(text || "").toLowerCase().replace(/(\d),(?=\d{3}\b)/g, "$1").replace(/[“”]/g, '"') + " ";
+    const said = [], R = d.req;
+    const say = s => said.push(s);
+    // what it's for
+    const uses = [[/\b4k\b|2160p/, "g4k"], [/\b1440p?\b|\b2k\b|\bqhd\b/, "g1440"], [/\b1080p?\b|full ?hd|\bfhd\b/, "g1080"], [/thin client|\bkiosk/, "thin"],
+      [/\bnas\b|file server|\bplex\b|home server|media server|storage server/, "nas"], [/virtuali[sz]|\bvms?\b|virtual machines?|hyper-?v|home ?lab/, "virt"],
+      [/\bcad\b|autocad|solidworks|revit|\b3d\b|blender|architect|engineering design/, "cad"], [/video|editing|premiere|davinci|after effects|audio|music production|podcast|streaming setup/, "video"],
+      [/gaming|\bgames?\b|\bgamer/, "g1440"], [/classroom|students|training lab|computer lab|school lab|\blab pcs?\b/, "classroom"],
+      [/office|\bword\b|excel|e-?mail|browsing|homework|spreadsheet|business|receptionist|front desk|basic use|everyday/, "office"]];
+    for (const [re, id] of uses) if (re.test(t)) { d.use = id; say("Use: " + USE[id].n); break; }
+    // quantity (bulk)
+    const qm = t.match(/\b(\d{1,3})\s*(?:x\s*)?(?:pcs|pc's|computers|machines|workstations|desktops|systems|seats|stations|units|students|towers)\b/);
+    if (qm && +qm[1] >= 2) { d.bulk.on = true; d.bulk.qty = +qm[1]; say(`${qm[1]} PCs (bulk order)`); if (d.use === "g1440" && !/gam/.test(t)) d.use = "classroom"; }
+    const spm = t.match(/\b(\d{1,2})\s*spares?\b/); if (spm) { d.bulk.spares = +spm[1]; say(`${spm[1]} spare PCs`); }
+    // budget
+    let bud = null, bm;
+    if ((bm = t.match(/\$\s*(\d+(?:\.\d+)?)\s*(k)?\b/))) bud = +bm[1] * (bm[2] ? 1000 : 1);
+    else if ((bm = t.match(/(\d+(?:\.\d+)?)\s*(k)?\s*(?:dollars|bucks|usd)\b/))) bud = +bm[1] * (bm[2] ? 1000 : 1);
+    else if ((bm = t.match(/(?:under|below|max(?:imum)?|budget(?: is| of)?|around|about|up to|less than|no more than|spend)\s*\$?\s*(\d+(?:\.\d+)?)\s*(k)?\b/))) bud = +bm[1] * (bm[2] ? 1000 : 1);
+    if (bud && bud >= 150) {
+      if (d.bulk.on && /total|whole order|altogether|overall|for all|in all/.test(t)) { d.bulk.basis = "total"; d.bulk.total = Math.round(bud); say(`Total budget ${money(bud)}`); }
+      else { d.budget = Math.round(bud); if (d.bulk.on) d.bulk.basis = "seat"; say(`Budget ${money(bud)} per PC`); }
+    }
+    // memory
+    let used = [];
+    const km = t.match(/\b([1-4])\s*[x×]\s*(\d{1,2})\s*gb\b/);
+    if (km) { R.sticks = Math.min(2, +km[1]); R.ram = +km[1] * +km[2]; used.push(km.index); say(`Memory: ${km[1]} × ${km[2]} GB`); }
+    else {
+      const rm = t.match(/\b(\d{1,3})\s*gb\s*(?:of\s*)?(?:ram|memory|ddr[45])\b/) || t.match(/\b(?:ram|memory)\s*(?:of|:)?\s*(\d{1,3})\s*gb\b/);
+      if (rm) { R.ram = +rm[1]; used.push(rm.index); say(`Memory: ${rm[1]} GB`); }
+    }
+    if (/single[- ]stick|one stick|\b1 stick|single[- ]channel/.test(t)) { R.sticks = 1; say("1 memory stick"); }
+    if (/dual[- ]channel|two sticks|\b2 sticks/.test(t)) { R.sticks = 2; say("2 memory sticks (dual-channel)"); }
+    if (/\bddr4\b/.test(t)) { R.mem = "DDR4"; say("DDR4 memory"); } else if (/\bddr5\b/.test(t)) { R.mem = "DDR5"; say("DDR5 memory"); }
+    // storage
+    const sre = /\b(\d+(?:\.\d+)?)\s*(tb|gb)\b\s*(?:of\s*)?(nvme|m\.2|ssd|sata(?: ssd)?|hdd|hard drives?|hard disks?|storage|drives?)?/g; let sm;
+    while ((sm = sre.exec(t))) {
+      if (used.some(i => Math.abs(i - sm.index) < 4)) continue;
+      const after = t.slice(sm.index + sm[0].length, sm.index + sm[0].length + 10);
+      if (!sm[3] && /^\s*(of\s*)?(ram|memory|ddr|kit)/.test(after)) continue;
+      const gb = +sm[1] * (sm[2] === "tb" ? 1000 : 1); if (gb < 120) continue;
+      if (/hdd|hard/.test(sm[3] || "")) { R.hdd = [4000, 8000, 16000].find(x => x >= gb) || 16000; say(`Hard drive space: ${gbTxt(R.hdd)}`); }
+      else { R.sto = [240, 500, 1000, 2000, 4000].find(x => x >= gb * 0.95) || 4000; say(`Main drive: ${gbTxt(R.sto)}`); if (/nvme|m\.2/.test(sm[3] || "")) { R.stoType = "nvme"; say("NVMe SSD"); } else if (/sata/.test(sm[3] || "")) { R.stoType = "ssd"; say("SATA SSD"); } }
+    }
+    if (/\bnvme\b|\bm\.2\b/.test(t) && R.stoType === "any") { R.stoType = "nvme"; say("NVMe SSD"); }
+    // features
+    if (/wi-?fi|\bwlan\b|wireless (?:internet|network|connection)|wireless(?! (?:keyboard|mouse|combo|headset))/.test(t)) { d.wifi = true; say("Built-in Wi-Fi"); }
+    if (/\bsmall\b|compact|mini[- ]?itx|\bitx\b|micro ?atx|\bsff\b|small form/.test(t)) { d.sff = true; say("Small case"); }
+    const amd = /\bamd\b|\bryzen\b/.test(t.replace(/amd radeon|radeon/g, "")), intel = /\bintel\b|core i[3579]|core ultra/.test(t.replace(/intel arc|\barc\b/g, ""));
+    if (amd && !intel) { d.brand = "AMD"; say("AMD processor"); } else if (intel && !amd) { d.brand = "Intel"; say("Intel processor"); }
+    if (/\bnvidia\b|geforce|\brtx\b/.test(t)) { R.gpuBrand = "NVIDIA"; say("NVIDIA graphics"); } else if (/radeon|\brx ?\d{4}/.test(t)) { R.gpuBrand = "AMD"; say("AMD Radeon graphics"); } else if (/\barc\b/.test(t)) { R.gpuBrand = "Intel"; say("Intel Arc graphics"); }
+    if (/(?:remove|drop|without|take out|get rid of|delete)\s+(?:the |a )?(?:graphics card|gpu|video card)|no (?:dedicated |separate )?(?:graphics card|gpu|video card)|integrated graphics|built-?in graphics|onboard graphics|\bigpu\b|don'?t need (?:a )?(?:graphics card|gpu)/.test(t)) { R.gpu = "none"; say("No graphics card"); }
+    else if (/high[- ]end (?:graphics|gpu|video card)|powerful (?:graphics|gpu)/.test(t)) { R.gpu = "high"; say("High-end graphics"); }
+    if (/cheap|cheapest|budget build|best value|save money|lowest (?:cost|price)|affordable|inexpensive/.test(t)) { d.mode = "value"; say("Goal: best value"); }
+    else if (/fastest|max(?:imum)? performance|best performance|top of the line|no compromise/.test(t)) { d.mode = "perf"; say("Goal: most performance"); }
+    // parts you already have
+    const map = [[/power supply|\bpsu\b/, "psu"], [/\bcase\b|\btower\b|chassis/, "case"], [/graphics card|video card|\bgpu\b/, "gpu"], [/cooler|\bfan\b/, "cooler"],
+      [/\bssd\b|hard drive|\bdrives?\b|storage|\bnvme\b|\bhdd\b/, "sto"], [/\bram\b|memory/, "ram"], [/motherboard|\bmobo\b/, "mobo"], [/\bcpu\b|processor/, "cpu"],
+      [/monitors?\b/, "mon"], [/keyboards?|mice|mouse/, "kbm"], [/windows|license|\bos\b/, "os"]];
+    const ore = /(?:i (?:already )?(?:have|own|got)|i've got|i'?ll (?:buy|supply|provide|bring)|my own|bring(?:ing)? (?:my |our )?own|reus(?:e|ing)|supply(?:ing)? (?:my |our )?own|already have|we have|will provide|providing (?:my |our )?own)\s+((?:[a-z0-9.\- ]|,(?! ?(?:and|but|need|with|under)))+?)(?=[.;!?]|\bbut\b|\bneed|\bwant|\bunder\b|\bfor\b|$)/g;
+    let om; const ownSaid = new Set();
+    while ((om = ore.exec(t))) {
+      map.forEach(([re, k]) => { if (re.test(om[1]) && !ownSaid.has(k)) {
+        ownSaid.add(k);
+        if (k === "mon" || k === "kbm") { d.bulk[k] = ""; say(`You have the ${k === "mon" ? "monitors" : "keyboards and mice"}`); }
+        else if (k === "os") { d.bulk.os = "volume"; say("Windows license: already have one"); }
+        else { d.build.own[k] = true; delete d.build.lock[k]; say(`You're supplying the ${CAT[k].one}`); }
+      } });
+    }
+    if (/windows 11 pro|win ?11 pro|\bpro licen[sc]e/.test(t)) { d.bulk.os = "win11pro"; say("Windows 11 Pro"); }
+    else if (/windows 11 home|win ?11 home/.test(t)) { d.bulk.os = "win11home"; say("Windows 11 Home"); }
+    else if (/\blinux\b|ubuntu/.test(t)) { d.bulk.os = "linux"; say("Linux"); }
+    if (!ownSaid.has("mon") && /(?:with|include|including|plus) (?:a |the )?monitors?/.test(t)) { d.bulk.mon = d.bulk.mon || "mon24"; say("Monitors included"); }
+    if (/no monitors?/.test(t)) { d.bulk.mon = ""; say("No monitors"); }
+    const tx = t.match(/(\d+(?:\.\d+)?)\s*%\s*(?:sales )?tax/); if (tx) { d.bulk.tax = +tx[1]; say(`Sales tax ${tx[1]}%`); }
+    return said;
+  }
+
+  // ---------- explanations ----------
+  function why(b, use){
+    const p = parts(b), u = USE[use], out = [], w = watts(b), mine = k => own(b, k) ? " (You're supplying this.)" : "";
+    if (p.cpu) out.push(["CPU", `${p.cpu.n}: ${p.cpu.c} cores, ${p.cpu.t} threads, up to ${p.cpu.ghz} GHz. ` +
+      (u.value ? "Plenty of speed for this kind of work; a faster chip wouldn't feel faster here." : u.w.mt >= .35 ? "This work uses every core, so core count matters most." : u.w.gpu >= .5 ? "Games lean on a few fast cores; this chip keeps up with the graphics card." : "Plenty for everyday apps.") +
+      (p.cpu.sock === "AM4" ? " AM4 is an older platform, but it uses cheaper DDR4 memory." : "") + mine("cpu")]);
+    if (p.cooler) out.push(["Cooler", (p.cooler === "stock" ? "Uses the cooler that comes in the CPU box. Fine for everyday loads on a mainstream chip." :
+      `${p.cooler.n}: rated for about ${p.cooler.cap} W against the CPU's ${p.cpu ? p.cpu.w : "?"} W.` + (p.cooler.type === "aio" ? " Liquid (AIO) coolers move heat to a radiator; check the case has room for it." : "")) + mine("cooler")]);
+    if (p.mobo) out.push(["Motherboard", `${p.mobo.chip} chipset, ${p.mobo.ff}, ${p.mobo.mem}, ${p.mobo.slots} memory slots, ${p.mobo.m2} M.2 slot${p.mobo.m2 === 1 ? "" : "s"}${p.mobo.wifi ? ", built-in Wi-Fi" : ""}. The socket (${p.mobo.sock}) matches the CPU.` + mine("mobo")]);
+    if (p.ram) out.push(["Memory", `${p.ram.gb} GB of ${p.ram.mem} as ${p.ram.sticks === 1 ? "one stick" : p.ram.sticks + " sticks"}. ` +
+      (p.ram.sticks === 1 ? "One stick is cheaper and leaves slots free for an upgrade, but runs single-channel (about half the bandwidth of a matched pair). " : "Two matched sticks run in dual-channel mode for more memory bandwidth. ") +
+      (p.ram.mem === "DDR5" ? "DDR5 prices have climbed sharply in 2026." : "DDR4 costs far less than DDR5 right now.") + mine("ram")]);
+    if (p.sto.length) out.push(["Storage", p.sto.map(x => `${x.n.replace(/ \(.*\)$/, "")} (${STO_T[x.type]}, ${gbTxt(x.gb)})`).join(" + ") + ". " +
+      (p.sto.some(x => x.type === "hdd") ? "The SSD runs the OS and apps; the hard drives hold files cheaply." : p.sto[0].type === "ssd" ? "A SATA SSD costs less than NVMe and is still far faster than a hard drive." : "An NVMe SSD in an M.2 slot is many times faster than a hard drive.") + mine("sto")]);
+    out.push(["Graphics", p.gpu ? `${p.gpu.n}: ${p.gpu.vram} GB of video memory, about ${p.gpu.w} W.` + (u.gpu ? ` ${u.n} needs at least ${gpuNameAt(u.gpu)}-class performance.` : "") + mine("gpu") :
+      own(b, "gpu") ? "You're supplying the graphics card." : p.cpu && p.cpu.igpu ? "No graphics card: the CPU's integrated graphics drive the display, which saves money and power." : "Needs a graphics card for display output."]);
+    if (p.cs) out.push(["Case", `${p.cs.n}: takes up to ${p.cs.ff} boards and graphics cards up to ${p.cs.gpu} mm.` + mine("case")]);
+    if (p.psu && w) out.push(["Power supply", `${p.psu.n}: ${p.psu.w} W, ${p.psu.eff}. The parts draw about ${w} W, leaving ${Math.max(0, Math.round((p.psu.w / w - 1) * 100))}% headroom.` + mine("psu")]);
+    else if (own(b, "psu") && w) out.push(["Power supply", `You're supplying it. Use one rated for at least ${psuNeed(w)} W (about ${w} W of parts plus 30% headroom).`]);
+    return out;
+  }
+
+  // ---------- small render helpers ----------
+  function spec(x){
+    switch (x.cat) {
+      case "cpu": return `${x.c} cores / ${x.t} threads · ${x.ghz} GHz · ${x.sock} · ${x.w} W · ${x.igpu ? "has graphics" : "no graphics"} · ${x.box ? "cooler included" : "no cooler"}`;
+      case "cooler": return x.type === "aio" ? `Liquid (AIO) · ${x.rad} mm radiator · up to ${x.cap} W` : `Air · ${x.h} mm tall · up to ${x.cap} W`;
+      case "mobo": return `${x.sock} · ${x.chip} · ${x.ff} · ${x.mem} × ${x.slots} slots · ${x.m2} M.2 · ${x.wifi ? "Wi-Fi" : "no Wi-Fi"}`;
+      case "ram": return `${x.mem} · ${x.gb} GB · ${x.sticks === 1 ? "1 stick (single-channel)" : x.sticks + " sticks (dual-channel)"} · ${x.mhz} MT/s`;
+      case "sto": return `${STO_T[x.type]} · ${gbTxt(x.gb)} · up to ${x.mbs.toLocaleString()} MB/s`;
+      case "gpu": return `${x.vram} GB · ${x.len} mm long · ${x.w} W`;
+      case "case": return `Fits ${x.ff === "ATX" ? "ATX, microATX, Mini-ITX" : x.ff === "mATX" ? "microATX, Mini-ITX" : "Mini-ITX"} · cards ≤ ${x.gpu} mm · coolers ≤ ${x.cool} mm · ${x.psu} PSU`;
+      case "psu": return `${x.w} W · ${x.eff} · ${x.ff}`;
+      default: return x.note || "";
+    }
+  }
+  function perf(x, use){
+    const u = USE[use];
+    switch (x.cat) {
+      case "cpu": return u.w.mt >= u.w.g ? x.mt : x.g;
+      case "gpu": return x.perf;
+      case "ram": return x.gb * (x.sticks >= 2 ? 1 : 0.85);
+      case "sto": return x.gb * (x.type === "nvme" ? 1.5 : x.type === "ssd" ? 1.2 : 1);
+      case "psu": return x.w;
+      case "cooler": return x.cap;
+      default: return 0;
+    }
+  }
+  const perfLbl = (cat, use) => cat === "cpu" ? (USE[use].w.mt >= USE[use].w.g ? "Multi-core" : "Gaming") : cat === "gpu" ? "1440p" : cat === "ram" ? "GB" : cat === "psu" ? "Watts" : cat === "cooler" ? "Max W" : cat === "sto" ? "Size" : "";
+  const shop = x => {
+    const q = encodeURIComponent(x.n.replace(/\(.*?\)/g, "").replace(/×/g, "x").trim());
+    return `<details class="bl-shop"><summary>Check prices</summary><div>
+      <a href="https://pcpartpicker.com/search/?q=${q}" target="_blank" rel="noopener">PCPartPicker</a>
+      <a href="https://www.newegg.com/p/pl?d=${q}" target="_blank" rel="noopener">Newegg</a>
+      <a href="https://www.amazon.com/s?k=${q}" target="_blank" rel="noopener">Amazon</a>
+      <a href="https://www.bestbuy.com/site/searchpage.jsp?st=${q}" target="_blank" rel="noopener">Best Buy</a>
+      <a href="https://www.microcenter.com/search/search_results.aspx?Ntt=${q}" target="_blank" rel="noopener">Micro Center</a></div></details>`;
+  };
+  const priceCell = (x, mine) => mine ? `<span class="bl-mine"><span class="mono">$0</span> <span class="tag teal">yours</span>${x && price(x) ? `<s class="muted mono" title="What it would cost">${money(price(x))}</s>` : ""}</span>` :
+    `<label class="bl-price"><span class="sr-only">Price of ${esc(x.n)}</span>$<input type="number" min="0" step="1" inputmode="decimal" value="${price(x)}" data-blprice="${x.id}">${S0().bl.prices[x.id] != null ? `<button type="button" class="bl-reset" data-blreset="${x.id}" title="Back to the catalog price (${money(x.p)})">↺</button>` : x.est ? `<span class="bl-est" title="Estimated: no current listing found. Check prices.">est.</span>` : ""}</label>`;
+  const toggles = (b, k) => `<span class="bl-tgs"><button type="button" class="bl-tg" data-bllock="${k}" aria-pressed="${lock(b, k)}" title="The auto-builder won't change this part">🔒 Keep</button><button type="button" class="bl-tg" data-blown="${k}" aria-pressed="${own(b, k)}" title="Not included in the price">${own(b, k) ? "✓ " : ""}I'll supply it</button></span>`;
+
+  // ---------- CSS ----------
+  const CSS = `
+  .bl-needs{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));align-items:end}
+  .bl-needs label,.bl-req label{display:grid;gap:4px;font-size:.85rem;color:var(--muted)}
+  .bl-needs select,.bl-needs input[type=number],.bl-bulk select,.bl-bulk input[type=number],.bl-pick-tools input,.bl-pick-tools select,.bl-save input,.bl-req select,.bl-nl textarea{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);min-width:0}
+  .bl-nl{display:grid;gap:8px}
+  .bl-nl textarea{resize:vertical;min-height:62px;width:100%;box-sizing:border-box}
+  .bl-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:.85rem}
+  .bl-chips span.tag{white-space:normal}
+  .bl-req{border:1px solid var(--line);border-radius:10px;padding:0 14px}
+  .bl-req>summary{cursor:pointer;padding:12px 0;font-weight:700}
+  .bl-req .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));padding-bottom:12px}
+  .bl-req fieldset{border:0;padding:0;margin:0 0 12px;display:flex;flex-wrap:wrap;gap:8px 16px;font-size:.9rem}
+  .bl-req legend{font-size:.85rem;color:var(--muted);margin-bottom:6px;padding:0}
+  .bl-req fieldset label{display:flex;flex-direction:row;gap:6px;align-items:center;color:var(--ink);font-size:.9rem}
+  .bl-adjust{border:1px dashed var(--teal);border-radius:10px;padding:12px 14px;display:grid;gap:8px}
+  .bl-refine{display:flex;gap:8px;flex-wrap:wrap}
+  .bl-refine input{flex:1;min-width:200px;font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+  .bl-chg{font-size:.88rem}
+  .bl-chg ul{margin:6px 0;padding-left:18px;display:grid;gap:3px}
+  .bl-step{min-width:30px;padding-left:6px;padding-right:6px}
+  .bl-checks{display:flex;flex-wrap:wrap;gap:14px;font-size:.9rem}
+  .bl-checks label{display:flex;gap:6px;align-items:center;color:var(--ink)}
+  .bl-table{width:100%;border-collapse:collapse}
+  .bl-table th{text-align:left;font-size:.75rem;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);padding:6px 8px;border-bottom:1px solid var(--line)}
+  .bl-table td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+  .bl-table td.bl-cat{font-weight:700;white-space:nowrap;width:1%}
+  .bl-table tr.mine td{background:color-mix(in srgb,var(--teal-bg) 55%,transparent)}
+  .bl-table .bl-name{font-weight:600}
+  .bl-table .bl-spec{font-size:.8rem;color:var(--muted);margin-top:2px}
+  .bl-table td.bl-pr{white-space:nowrap;width:1%}
+  .bl-table td.bl-act{width:1%;text-align:right}
+  .bl-table td.bl-act .bl-btns{display:flex;gap:4px;justify-content:flex-end;align-items:center;flex-wrap:nowrap;white-space:nowrap}
+  .bl-tgs{display:flex;gap:4px;justify-content:flex-end;margin-top:6px}
+  .bl-tg{font:inherit;font-size:.75rem;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;padding:3px 9px;cursor:pointer;white-space:nowrap}
+  .bl-tg[aria-pressed=true]{background:var(--teal);border-color:var(--teal);color:var(--on-accent)}
+  .bl-mine{display:inline-flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .bl-price{display:inline-flex;align-items:center;gap:2px;font-family:var(--f-mono)}
+  .bl-price input{width:78px;font:inherit;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink)}
+  .bl-est{font-size:.7rem;color:var(--amber);margin-left:4px}
+  .bl-reset{border:0;background:none;color:var(--teal);cursor:pointer;font-size:1rem;padding:0 4px}
+  .bl-shop{display:inline-block;position:relative;font-size:.8rem}
+  .bl-shop summary{cursor:pointer;color:var(--teal);list-style:none;padding:4px 0}
+  .bl-shop summary::-webkit-details-marker{display:none}
+  .bl-shop[open] div{position:absolute;right:0;z-index:5;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px;display:grid;gap:2px;min-width:140px;box-shadow:0 6px 18px rgba(0,0,0,.15)}
+  .bl-shop a{padding:6px 8px;border-radius:6px;color:var(--ink);text-decoration:none}
+  .bl-shop a:hover{background:var(--sunk)}
+  .bl-total{display:flex;flex-wrap:wrap;gap:10px 24px;align-items:center;justify-content:space-between;padding:12px 4px 0}
+  .bl-total b{font-family:var(--f-display);font-size:1.5rem}
+  .bl-budgetbar{height:10px;border-radius:5px;background:var(--sunk);overflow:hidden;flex:1;min-width:140px}
+  .bl-budgetbar i{display:block;height:100%;background:var(--teal)}
+  .bl-budgetbar.over i{background:var(--bad)}
+  .bl-status{border-radius:10px;padding:10px 14px;display:grid;gap:6px;font-size:.92rem}
+  .bl-status.ok{background:var(--good-bg);color:var(--ink);border:1px solid var(--good)}
+  .bl-status.warn{background:var(--amber-bg);border:1px solid var(--amber)}
+  .bl-status.err{background:var(--bad-bg);border:1px solid var(--bad)}
+  .bl-status.info{background:var(--teal-bg);border:1px solid var(--teal)}
+  .bl-status ul{margin:0;padding-left:18px;display:grid;gap:4px}
+  .bl-status small{color:var(--muted);display:block}
+  .bl-scores{display:grid;gap:8px}
+  .bl-score{display:grid;grid-template-columns:130px 1fr 44px;gap:10px;align-items:center;font-size:.88rem}
+  .bl-score .bar{height:10px;border-radius:5px;background:var(--sunk);overflow:hidden}
+  .bl-score .bar i{display:block;height:100%;background:var(--teal)}
+  .bl-fit{font-family:var(--f-display);font-size:2.2rem;line-height:1}
+  .bl-why{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+  .bl-why li{display:grid;grid-template-columns:110px 1fr;gap:10px;font-size:.9rem}
+  .bl-why b{color:var(--muted);font-weight:600}
+  .bl-pick-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+  .bl-pick-tools input[type=search]{flex:1;min-width:150px}
+  .bl-list{display:grid;gap:8px;max-height:min(60vh,560px);overflow:auto;padding-right:2px}
+  .bl-item{display:grid;grid-template-columns:1fr auto;gap:6px 12px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--surface)}
+  .bl-item.cur{border-color:var(--teal);background:var(--teal-bg)}
+  .bl-item.bad{opacity:.62}
+  .bl-item .bl-name{font-weight:600}
+  .bl-item .bl-spec{font-size:.8rem;color:var(--muted)}
+  .bl-item .bl-why-not{font-size:.8rem;color:var(--bad)}
+  .bl-item .bl-nums{display:flex;gap:12px;font-size:.8rem;color:var(--muted);flex-wrap:wrap}
+  .bl-item .bl-nums b{color:var(--ink);font-family:var(--f-mono)}
+  .bl-item .bl-side{display:grid;gap:6px;justify-items:end;align-content:start}
+  .bl-item .bl-side .mono{font-size:1rem;font-weight:700}
+  .bl-bulk{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+  .bl-bulk label{display:grid;gap:4px;font-size:.85rem;color:var(--muted)}
+  .bl-lines{width:100%;border-collapse:collapse;font-size:.92rem}
+  .bl-lines td{padding:7px 6px;border-bottom:1px solid var(--line)}
+  .bl-lines td:nth-child(n+2){text-align:right;font-family:var(--f-mono);white-space:nowrap}
+  .bl-lines tr.sum td{font-weight:700;border-bottom:0;font-size:1.05rem}
+  .bl-tips{margin:0;padding-left:18px;display:grid;gap:6px;font-size:.9rem}
+  .bl-saved{display:grid;gap:8px}
+  .bl-saved>div{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+  .bl-save{display:flex;gap:8px;flex-wrap:wrap}
+  .bl-save input{flex:1;min-width:160px}
+  .bl-src{font-size:.8rem;color:var(--muted)}
+  .bl-src a{color:var(--teal)}
+  @media (max-width:640px){
+    .bl-table thead{display:none}
+    .bl-table,.bl-table tbody,.bl-table tr,.bl-table td{display:block;width:auto}
+    .bl-table tr{border-bottom:1px solid var(--line);padding:8px 0;display:grid;grid-template-columns:1fr auto;gap:2px 10px}
+    .bl-table td{border:0;padding:2px 0}
+    .bl-table tr.mine td{background:none}
+    .bl-table td.bl-cat{grid-column:1/-1;font-size:.75rem;text-transform:uppercase;color:var(--muted);letter-spacing:.04em}
+    .bl-table td.bl-sel{grid-column:1/-1}
+    .bl-table td.bl-pr,.bl-table td.bl-act,.bl-table td.bl-cat{grid-column:1/-1;text-align:left;white-space:normal;width:auto}
+    .bl-table td.bl-act .bl-btns{flex-wrap:wrap;white-space:normal}
+    .bl-table td.bl-act .bl-btns,.bl-tgs{justify-content:flex-start}
+    .bl-table td.bl-sel{min-width:0;overflow-wrap:anywhere}
+    .bl-score{grid-template-columns:100px 1fr 40px}
+    .bl-why li{grid-template-columns:1fr}
+  }`;
+  function css(){ const old = document.getElementById("bl-css"); if (old && old.dataset.v === "4") return; if (old) old.remove(); const s = document.createElement("style"); s.id = "bl-css"; s.dataset.v = "4"; s.textContent = CSS; document.head.appendChild(s); }
+
+  // ---------- main view ----------
+  function render(keepScroll){
+    css();
+    const d = st(), v = $("#view"), b = d.build, u = USE[d.use], R = d.req;
+    const y = keepScroll ? window.scrollY : 0;
+    const issues = check(b), errs = issues.filter(i => i[0] === "err"), warns = issues.filter(i => i[0] === "warn"), miss = issues.filter(i => i[0] === "miss"), mineList = issues.filter(i => i[0] === "own");
+    const sc = scores(b, d.use), pc = cost(b), w = watts(b), saved = ownValue(b);
+    const bud = blBudget(d);
+    const btns = (k, i, x) => `<span class="bl-btns">${x && x !== "stock" ? shop(x) : ""}${x && !i ? `<button class="btn small ghost bl-step" data-blstep="${k}" data-dir="down" title="Downgrade: next cheaper ${esc(CAT[k].one)}" aria-label="Downgrade ${esc(CAT[k].one)}">▼</button><button class="btn small ghost bl-step" data-blstep="${k}" data-dir="up" title="Upgrade: next better ${esc(CAT[k].one)}" aria-label="Upgrade ${esc(CAT[k].one)}">▲</button>` : ""}<button class="btn small ghost" data-blpick="${k}"${i != null ? ` data-i="${i}"` : ""}>${x || k === "sto" ? "Change" : "Choose"}</button><button class="btn small ghost" data-blclear="${k}"${i != null ? ` data-i="${i}"` : ""} aria-label="Remove">✕</button></span>`;
+    const rows = BL.cats.map(c => {
+      const k = c.k, mine = own(b, k);
+      if (k === "sto") {
+        const list = b.sto.map((id, i) => [get(id), i]).filter(r => r[0]);
+        return list.map(([x, i]) => `<tr class="${mine ? "mine" : ""}"><td class="bl-cat">${i ? "" : esc(c.n)}</td><td class="bl-sel"><div class="bl-name">${esc(x.n)}</div><div class="bl-spec">${esc(spec(x))}</div></td><td class="bl-pr">${priceCell(x, mine)}</td><td class="bl-act">${btns(k, i, x)}</td></tr>`).join("") +
+          `<tr class="${mine ? "mine" : ""}"><td class="bl-cat">${list.length ? "" : esc(c.n)}</td><td class="bl-sel">${!list.length && mine ? `<div class="bl-name">You're supplying the storage</div><div class="bl-spec">Not included in the price.</div>` : ""}<button class="btn small${list.length || mine ? " ghost" : " primary"}" data-blpick="sto" data-i="${list.length}" style="margin-top:4px">＋ ${list.length ? "Add another drive" : mine ? "Pick your drive (optional)" : "Choose storage"}</button></td><td class="bl-pr">${!list.length && mine ? priceCell(null, true) : ""}</td><td class="bl-act">${toggles(b, k)}</td></tr>`;
+      }
+      if (k === "cooler" && b.cooler === "stock") return `<tr><td class="bl-cat">${esc(c.n)}</td><td class="bl-sel"><div class="bl-name">Included cooler (in the CPU box)</div><div class="bl-spec">Basic air cooler that comes with the ${esc(get(b.cpu) ? get(b.cpu).n : "CPU")}</div></td><td class="bl-pr mono">$0</td><td class="bl-act">${btns(k, null, "stock")}${toggles(b, k)}</td></tr>`;
+      const x = get(b[k]);
+      if (x) return `<tr class="${mine ? "mine" : ""}"><td class="bl-cat">${esc(c.n)}</td><td class="bl-sel"><div class="bl-name">${esc(x.n)}</div><div class="bl-spec">${esc(spec(x))}</div></td><td class="bl-pr">${priceCell(x, mine)}</td><td class="bl-act">${btns(k, null, x)}${toggles(b, k)}</td></tr>`;
+      if (mine) return `<tr class="mine"><td class="bl-cat">${esc(c.n)}</td><td class="bl-sel"><div class="bl-name">You're supplying this</div><div class="bl-spec">Not included in the price. ${k === "cpu" || k === "mobo" ? "Pick your model so the other parts can be matched to it." : "Pick your model if you want it checked for fit."}</div><button class="btn small ghost" data-blpick="${k}" style="margin-top:6px">Pick your ${esc(c.one)}${k === "cpu" || k === "mobo" ? "" : " (optional)"}</button></td><td class="bl-pr">${priceCell(null, true)}</td><td class="bl-act">${toggles(b, k)}</td></tr>`;
+      if (k === "gpu" && lock(b, "gpu")) return `<tr><td class="bl-cat">${esc(c.n)}</td><td class="bl-sel"><div class="bl-name">No graphics card</div><div class="bl-spec">Uses the CPU's built-in graphics. “Build it for me” won't add one while this is kept.</div><button class="btn small ghost" data-blpick="gpu" style="margin-top:6px">＋ Choose a graphics card</button></td><td class="bl-pr mono">$0</td><td class="bl-act">${toggles(b, k)}</td></tr>`;
+      return `<tr><td class="bl-cat">${esc(c.n)}</td><td class="bl-sel"><button class="btn small primary" data-blpick="${k}">＋ Choose a ${esc(c.one)}</button>${k === "gpu" ? `<span class="muted" style="font-size:.85rem;margin-left:8px">optional if the CPU has graphics</span>` : k === "cooler" ? `<span class="muted" style="font-size:.85rem;margin-left:8px">some CPUs include one</span>` : ""}</td><td class="bl-pr"></td><td class="bl-act">${toggles(b, k)}</td></tr>`;
+    }).join("");
+    const status = errs.length ? "err" : warns.length ? "warn" : "ok";
+    const statusHTML = !(pc || mineList.length) ? "" : `<div class="bl-status ${status}" role="status"><b>${errs.length ? `✕ ${errs.length} compatibility problem${errs.length > 1 ? "s" : ""}` : warns.length ? "⚠ Compatible, with warnings" : miss.length ? "✓ No problems so far" : "✓ Compatible: every part works together"}</b>
+      ${errs.length + warns.length ? `<ul>${errs.concat(warns).map(i => `<li>${esc(i[1])}${i[2] ? `<small>A+ tip: ${esc(i[2])}</small>` : ""}</li>`).join("")}</ul>` : ""}
+      ${miss.length ? `<span class="muted" style="font-size:.85rem">Still to choose: ${miss.map(m => esc(m[1].replace(/^Choose an? /, "").replace(/\.$/, ""))).join(", ")}.</span>` : ""}</div>
+      ${mineList.length ? `<div class="bl-status info"><b>Parts you're supplying (not in the price)</b><ul>${mineList.map(i => `<li>${esc(i[1])}</li>`).join("")}</ul></div>` : ""}`;
+    const over = bud && pc > bud;
+    const reqCustom = Object.keys(REQ0).some(k => R[k] !== REQ0[k]);
+    const sel = (key, label, opts) => `<label>${label}<select data-blreq="${key}">${opts.map(([val, l]) => `<option value="${val}"${String(R[key]) === String(val) ? " selected" : ""}>${esc(l)}</option>`).join("")}</select></label>`;
+    v.innerHTML = `<section class="hero"><span class="eyebrow">Labs · Core 1 hardware · prices checked ${esc(BL.asOf)}</span><h1>PC Build Lab</h1>
+      <p>Describe what you need, or set the options, and it builds the best-matched PC from current parts. Keep the parts you like, leave out the ones you'll supply yourself, and change anything. It checks that everything fits together and totals a classroom or office order.</p></section>
+
+    <section class="panel" style="display:grid;gap:14px">
+      <h2 style="margin:0">1. What do you need?</h2>
+      <div class="bl-nl"><label for="bl-nl-in" style="font-size:.9rem;font-weight:600">Describe it in your own words <span class="muted" style="font-weight:400">(optional)</span></label>
+        <textarea id="bl-nl-in" data-blnl placeholder="e.g. Gaming PC for 1080p under $1,100 with 1x16GB DDR4 and a 1TB NVMe. Needs Wi-Fi. I have my own power supply and case.">${esc(d.nlText || "")}</textarea>
+        <div class="row"><button class="btn teal" data-blact="nl">✍ Build from my description</button>${d.nlSaid && d.nlSaid.length ? `<span class="bl-chips"><span class="muted">I understood:</span>${d.nlSaid.map(s => `<span class="tag">${esc(s)}</span>`).join("")}</span>` : d.nlSaid ? `<span class="muted" style="font-size:.85rem">I couldn't pick out any needs from that. Try naming the use, a budget, RAM or storage sizes, or the parts you have.</span>` : ""}</div></div>
+      <div class="bl-needs">
+        <label>Use<select data-blset="use">${BL.uses.map(x => `<option value="${x.id}"${x.id === d.use ? " selected" : ""}>${esc(x.n)}</option>`).join("")}</select></label>
+        <label>Budget per PC ($)<input type="number" min="0" step="50" value="${d.budget}" data-blset="budget"${d.bulk.on && d.bulk.basis === "total" ? " disabled title=\"Set by the bulk order total below\"" : ""}></label>
+        <label>CPU brand<select data-blset="brand">${[["any", "Either"], ["AMD", "AMD"], ["Intel", "Intel"]].map(([k, l]) => `<option value="${k}"${d.brand === k ? " selected" : ""}>${l}</option>`).join("")}</select></label>
+        <label>Goal<select data-blset="mode">${[["auto", "Recommended for this use"], ["perf", "Most performance for the budget"], ["value", "Best value (stop when gains get small)"]].map(([k, l]) => `<option value="${k}"${d.mode === k ? " selected" : ""}>${l}</option>`).join("")}</select></label>
+      </div>
+      <div class="bl-checks"><label><input type="checkbox" data-blset="wifi"${d.wifi ? " checked" : ""}> Needs built-in Wi-Fi</label><label><input type="checkbox" data-blset="sff"${d.sff ? " checked" : ""}> Small case (microATX or Mini-ITX)</label><label><input type="checkbox" data-blset="bulk"${d.bulk.on ? " checked" : ""}> Ordering several (classroom or office)</label></div>
+      <details class="bl-req"${reqCustom || Object.values(b.own).some(Boolean) ? " open" : ""}><summary>Customize the requirements${reqCustom ? ` <span class="tag teal">custom</span>` : ""}</summary>
+        <div class="grid">
+          ${sel("ram", "Memory amount", [[0, `Recommended (${u.ram} GB+)`], [8, "8 GB"], [16, "16 GB"], [32, "32 GB"], [64, "64 GB"]])}
+          ${sel("sticks", "Memory sticks", [[0, "Recommended (2, dual-channel)"], [1, "1 stick: cheapest, upgrade later"], [2, "2 sticks: dual-channel, faster"]])}
+          ${sel("mem", "Memory type", [["any", "Either (cheapest that fits)"], ["DDR4", "DDR4 (much cheaper in 2026)"], ["DDR5", "DDR5 (newer platforms)"]])}
+          ${sel("sto", "Main drive size", [[0, `Recommended (${gbTxt(u.sto)}+)`], [240, "240 GB"], [500, "500 GB"], [1000, "1 TB"], [2000, "2 TB"], [4000, "4 TB"]])}
+          ${sel("stoType", "Main drive type", [["any", "Recommended"], ["nvme", "NVMe SSD (fastest)"], ["ssd", "SATA SSD (cheaper)"]])}
+          ${sel("hdd", "Extra hard drive", [[-1, u.hdd ? `Recommended (${gbTxt(u.hdd)})` : "Recommended (none)"], [0, "None"], [4000, "4 TB"], [8000, "8 TB"], [16000, "16 TB"]])}
+          ${sel("gpu", "Graphics", [["auto", u.gpu ? `Recommended (${gpuNameAt(u.gpu)} class+)` : "Recommended (built-in graphics)"], ["none", "No graphics card (built-in graphics)"], ["entry", "Entry: Arc B570 class"], ["mid", "Mid: RX 9060 XT class"], ["high", "High: RX 9070 class"], ["top", "Top: RTX 5080 class"]])}
+          ${sel("gpuBrand", "Graphics brand", [["any", "Any"], ["NVIDIA", "NVIDIA"], ["AMD", "AMD"], ["Intel", "Intel"]])}
+        </div>
+        <fieldset><legend>Parts I'm supplying myself (left out of the price)</legend>${BL.cats.map(c => `<label><input type="checkbox" data-blownbox="${c.k}"${own(b, c.k) ? " checked" : ""}> ${esc(c.n)}</label>`).join("")}</fieldset>
+        <div class="row" style="padding-bottom:12px"><button class="btn small ghost" data-blact="reqreset">Reset to recommended</button><span class="muted" style="font-size:.85rem">Tip: tap 🔒 Keep on any part in the list and “Build it for me” will build around it.</span></div>
+      </details>
+      <p class="muted" style="margin:0;font-size:.9rem">${esc(u.tip)}</p>
+      <div class="row"><button class="btn primary" data-blact="auto">⚡ Build it for me</button><button class="btn" data-blact="clear">Start from scratch</button>${d.saved.length ? `<a class="btn ghost" href="#bl-saved">Saved builds (${d.saved.length})</a>` : ""}</div>
+      ${d.autoMsg ? `<p class="note" style="margin:0">${d.autoMsg}</p>` : ""}
+    </section>
+
+    <section class="panel" style="display:grid;gap:12px">
+      <div class="spread"><h2 style="margin:0">2. Parts list</h2><span class="muted" style="font-size:.85rem">Edit any price · 🔒 Keep = auto-build won't change it · “I'll supply it” = left out of the price</span></div>
+      <div class="tablewrap"><table class="bl-table"><thead><tr><th>Part</th><th>Selection</th><th>Price</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>
+      <div class="bl-total">
+        <span>Estimated power draw: <b style="font-size:1.1rem">${w ? w + " W" : "—"}</b></span>
+        <span>Total per PC: <b>${money(pc)}</b>${saved ? ` <span class="muted" style="font-size:.85rem">(+ parts you supply, worth about ${money(saved)})</span>` : ""}</span>
+        ${bud ? `<span style="display:flex;gap:10px;align-items:center;flex:1 1 220px"><span class="bl-budgetbar${over ? " over" : ""}" role="img" aria-label="${Math.round(pc / bud * 100)}% of budget"><i style="width:${Math.min(100, pc / bud * 100)}%"></i></span><span class="mono" style="font-size:.85rem;color:var(${over ? "--bad" : "--muted"})">${over ? money(pc - bud) + " over" : money(bud - pc) + " left"} of ${money(bud)}</span></span>` : ""}
+      </div>
+      ${statusHTML}
+      ${pc || d.hist && d.hist.length ? `<div class="bl-adjust"><b>Adjust this build</b>
+        <div class="row"><button class="btn small" data-blact="cheaper">💲 Make it cheaper</button><button class="btn small" data-blact="faster">🚀 Make it faster</button>${errs.length ? `<button class="btn small primary" data-blact="fix">🔧 Fix compatibility</button>` : ""}${d.hist && d.hist.length ? `<button class="btn small ghost" data-blact="undo">↶ Undo</button>` : ""}</div>
+        <div class="bl-refine"><input type="text" data-blrefine placeholder="Tell it what to change: “use 2x8GB instead”, “cheaper graphics card”, “drop the PSU”…" aria-label="What to change" value="${esc(d.refText || "")}"><button class="btn small teal" data-blact="refine">Apply</button></div>
+        <span class="muted" style="font-size:.8rem">Or use ▲ ▼ on any part to step it up or down. Changed parts are kept (🔒) and the lab fixes anything that no longer fits.</span>
+        ${d.chg ? `<div class="bl-chg">${d.chg.said && d.chg.said.length ? `<div class="bl-chips">${d.chg.said.map(x => `<span class="tag">${esc(x)}</span>`).join("")}</div>` : ""}${d.chg.err ? `<div class="bl-status warn" style="margin-top:6px">${esc(d.chg.err)}</div>` : ""}<ul>${(d.chg.lines || []).map(l => `<li>${esc(l)}</li>`).join("")}</ul>${d.chg.delta != null && d.chg.lines && !/^No parts/.test(d.chg.lines[d.chg.lines.length - 1]) ? `<span class="mono" style="font-size:.85rem">Total ${d.chg.delta >= 0 ? "+" : "−"}${money(Math.abs(d.chg.delta))} → ${money(d.chg.total)}</span>` : ""}</div>` : ""}
+      </div>` : ""}
+      <div class="row"><button class="btn small" data-blact="copy">Copy parts list</button>${pc ? `<button class="btn small ghost" data-blact="savebox">💾 Save this build</button>` : ""}</div>
+      <div id="bl-savebox" hidden class="bl-save"><input type="text" maxlength="60" placeholder="Name this build" aria-label="Build name" value="${esc(u.n)} · ${money(pc)}"><button class="btn small primary" data-blact="save">Save</button></div>
+    </section>
+
+    ${pc ? `<section class="panel grid2" style="gap:20px">
+      <div style="display:grid;gap:10px;align-content:start">
+        <h2 style="margin:0">3. How it fits: ${esc(u.n)}</h2>
+        <div><span class="bl-fit">${sc.fit}</span><span class="muted"> / 100 match</span></div>
+        <div class="bl-scores">${[["mt", "CPU multi-core"], ["g", "CPU gaming"], ["gpu", "Graphics"], ["ram", "Memory"], ["sto", "Storage"]].filter(([k]) => u.w[k]).map(([k, l]) => `<div class="bl-score"><span>${l}</span><span class="bar" role="img" aria-label="${Math.round(sc.n[k] * 100)}%"><i style="width:${Math.round(sc.n[k] * 100)}%"></i></span><span class="mono">${Math.round(sc.n[k] * 100)}%</span></div>`).join("")}</div>
+        <p class="muted" style="margin:0;font-size:.85rem">100% means more speed in that area wouldn't help this use. Scores are relative, from published benchmarks. Parts you supply without picking a model are assumed to be adequate.</p>
+        ${sc.meets.length ? `<div class="bl-status warn"><b>Below the usual need</b><ul>${sc.meets.map(m => `<li>${esc(m)}</li>`).join("")}</ul></div>` : ""}
+      </div>
+      <div style="display:grid;gap:10px;align-content:start"><h3 style="margin:0">Why these parts</h3><ul class="bl-why">${why(b, d.use).map(([k, t]) => `<li><b>${k}</b><span>${esc(t)}</span></li>`).join("")}</ul></div>
+    </section>` : ""}
+
+    ${d.bulk.on ? bulkHTML(d, pc) : ""}
+
+    <section class="panel" id="bl-saved" style="display:grid;gap:10px">
+      <h2 style="margin:0">Saved builds</h2>
+      ${d.saved.length ? `<div class="bl-saved">${d.saved.map((s, i) => `<div><span><b>${esc(s.name)}</b><br><span class="muted" style="font-size:.85rem">${esc((USE[s.use] || u).n)} · ${money(cost(s.build))} today${s.bulk && s.bulk.on ? ` · ${s.bulk.qty} PCs` : ""} · saved ${new Date(s.date).toLocaleDateString()}</span></span><span class="row" style="gap:6px"><button class="btn small" data-blload="${i}">Load</button><button class="btn small ghost" data-bldel="${i}" aria-label="Delete ${esc(s.name)}">Delete</button></span></div>`).join("")}</div>` : `<p class="muted" style="margin:0">Nothing saved yet. Saved builds are re-priced with the current prices each time you open them.</p>`}
+    </section>
+
+    <section class="panel bl-src" style="display:grid;gap:6px">
+      <b style="color:var(--ink)">About the prices</b>
+      <span>Typical US street prices checked in ${esc(BL.asOf)}. Prices marked “est.” had no current listing and are estimates. Memory, SSD and graphics card prices have risen sharply in 2026 and change week to week: tap “Check prices” on any part for today's price, then type it in.</span>
+      <span>Sources: ${BL.sources.map(([t, h]) => `<a href="${h}" target="_blank" rel="noopener">${esc(t)}</a>`).join(" · ")}</span>
+    </section>`;
+    bind(v);
+    if (keepScroll) window.scrollTo({top: y});
+  }
+
+  function blBudget(d){
+    if (!(d.bulk.on && d.bulk.basis === "total")) return +d.budget || 0;
+    const k = d.bulk, seats = (+k.qty || 0) + (+k.spares || 0); if (!seats) return 0;
+    const ex = extrasPer(k);
+    return Math.max(0, Math.floor(k.total / ((1 + (+k.tax || 0) / 100) * (1 - (+k.disc || 0) / 100)) / seats - ex));
+  }
+  const extrasPer = k => BL.extraCats.reduce((a, c) => a + price(get(k[c.k])), 0);
+
+  function bulkHTML(d, pc){
+    const k = d.bulk, n = +k.qty || 0, sp = +k.spares || 0, ex = extrasPer(k), b = d.build;
+    const lines = [[`PC build × ${n + sp}${sp ? ` (${n} + ${sp} spare${sp > 1 ? "s" : ""})` : ""}`, money2(pc), money2(pc * (n + sp))]];
+    BL.extraCats.forEach(c => { const x = get(k[c.k]); if (x && price(x)) lines.push([`${x.n} × ${n}`, money2(price(x)), money2(price(x) * n)]); });
+    const sub = pc * (n + sp) + ex * n, disc = sub * (+k.disc || 0) / 100, tax = (sub - disc) * (+k.tax || 0) / 100, total = sub - disc + tax;
+    const mine = BL.cats.filter(c => own(b, c.k)).map(c => c.n);
+    const sel = (cat, label) => `<label>${label}<select data-blbulk="${cat}"><option value="">None / already have</option>${P[cat].map(x => `<option value="${x.id}"${k[cat] === x.id ? " selected" : ""}>${esc(x.n)} (${money(price(x))})</option>`).join("")}</select></label>`;
+    return `<section class="panel" style="display:grid;gap:14px">
+      <h2 style="margin:0">4. Bulk order: classroom or office</h2>
+      <div class="bl-bulk">
+        <label>Number of PCs<input type="number" min="1" step="1" value="${k.qty}" data-blbulk="qty"></label>
+        <label>Spare PCs<input type="number" min="0" step="1" value="${k.spares}" data-blbulk="spares"></label>
+        <label>Budget is…<select data-blbulk="basis"><option value="seat"${k.basis === "seat" ? " selected" : ""}>Per PC (set above)</option><option value="total"${k.basis === "total" ? " selected" : ""}>A total for the whole order</option></select></label>
+        ${k.basis === "total" ? `<label>Total budget ($)<input type="number" min="0" step="500" value="${k.total}" data-blbulk="total"></label>` : ""}
+        ${sel("os", "Operating system")}${sel("mon", "Monitor (each)")}${sel("kbm", "Keyboard & mouse (each)")}${sel("ups", "UPS (each)")}
+        <label>Volume discount (%)<input type="number" min="0" max="50" step="0.5" value="${k.disc}" data-blbulk="disc"></label>
+        <label>Sales tax (%)<input type="number" min="0" max="15" step="0.125" value="${k.tax}" data-blbulk="tax"></label>
+      </div>
+      ${k.basis === "total" ? `<p class="note" style="margin:0">That works out to <b>${money(blBudget(d))}</b> per PC for the parts after extras, discount and tax. “Build it for me” uses this amount.</p>` : ""}
+      <table class="bl-lines"><tbody>${lines.map(l => `<tr><td>${esc(l[0])}</td><td>${l[1]}</td><td>${l[2]}</td></tr>`).join("")}
+        <tr><td>Subtotal</td><td></td><td>${money2(sub)}</td></tr>
+        ${disc ? `<tr><td>Volume discount (${k.disc}%)</td><td></td><td>−${money2(disc)}</td></tr>` : ""}
+        ${tax ? `<tr><td>Sales tax (${k.tax}%)</td><td></td><td>${money2(tax)}</td></tr>` : ""}
+        <tr class="sum"><td>Order total</td><td></td><td>${money2(total)}</td></tr>
+        <tr><td class="muted">Per workstation, everything included</td><td></td><td class="muted">${n ? money2(total / n) : "—"}</td></tr></tbody></table>
+      ${mine.length ? `<p class="note" style="margin:0"><b>Not in this order (supplied separately):</b> ${esc(mine.join(", "))} for each PC.</p>` : ""}
+      ${k.basis === "total" && total > k.total + 1 ? `<div class="bl-status err"><b>${money(total - k.total)} over the total budget.</b> Tap “Build it for me” to fit the budget. If it still doesn't fit, lower the extras or the number of PCs, supply some parts separately, or ask vendors for a volume discount.</div>` : ""}
+      <details><summary><b>Bulk ordering checklist</b></summary><ul class="bl-tips" style="margin-top:8px">
+        <li><b>Identical parts.</b> Buy the same models for every PC so one disk image deploys to all of them and spares fit any machine. Check each store has enough in stock before you order.</li>
+        <li><b>Licenses.</b> Windows 11 Pro is needed to join a domain and use Group Policy and BitLocker. Schools and businesses can use volume licensing instead of buying retail copies.</li>
+        <li><b>Get a quote.</b> Vendors and system builders often discount large orders, and business accounts may be tax-exempt. Ask before buying retail.</li>
+        <li><b>Spares.</b> Keep about one spare PC (or spare parts) per 10–20 seats so a failure doesn't stop a class.</li>
+        <li><b>Power and safety.</b> Many PCs on one circuit can trip a breaker. Check the circuit load and use surge protectors or UPS units.</li>
+        <li><b>Asset tracking.</b> Label each PC with an asset tag and record serial numbers, warranty dates and the parts list in your inventory.</li>
+        <li><b>Prebuilt option.</b> For large orders, compare against business desktops from Dell, HP or Lenovo, which come with on-site warranties and imaging tools.</li></ul></details>
+    </section>`;
+  }
+
+  // ---------- part picker ----------
+  function pickHTML(cat, i){
+    const d = st(), b = d.build, c = BL.cats.find(x => x.k === cat), pk = d.pick || {};
+    const q = (pk.q || "").toLowerCase(), sort = pk.sort || "price", only = pk.only !== false;
+    let list = P[cat].map(x => {
+      const tb = JSON.parse(JSON.stringify(b));
+      if (cat === "sto") { tb.sto[i == null ? tb.sto.length : i] = x.id; } else tb[cat] = x.id;
+      const before = new Set(check(b).filter(z => z[0] === "err").map(z => z[1]));
+      const errs = check(tb).filter(z => z[0] === "err" && !before.has(z[1]));
+      return {x, errs, perf: perf(x, d.use), pr: price(x)};
+    }).filter(r => !q || r.x.n.toLowerCase().includes(q) || spec(r.x).toLowerCase().includes(q));
+    const nBad = list.filter(r => r.errs.length).length;
+    if (only) list = list.filter(r => !r.errs.length);
+    const val = r => r.pr ? r.perf / r.pr : 0;
+    list.sort((a, z) => sort === "price" ? a.pr - z.pr : sort === "price-d" ? z.pr - a.pr : sort === "perf" ? z.perf - a.perf || a.pr - z.pr : sort === "value" ? val(z) - val(a) : a.x.n.localeCompare(z.x.n));
+    const curId = cat === "sto" ? b.sto[i] : b[cat];
+    const cpu = get(b.cpu);
+    const stock = cat === "cooler" && cpu && cpu.box ? `<div class="bl-item${b.cooler === "stock" ? " cur" : ""}"><div><div class="bl-name">Use the included cooler</div><div class="bl-spec">The basic cooler that comes in the ${esc(cpu.n)} box</div></div><div class="bl-side"><span class="mono">$0</span><button class="btn small primary" data-blchoose="stock">${b.cooler === "stock" ? "Chosen" : "Add"}</button></div></div>` : "";
+    const none = cat === "gpu" && cpu && cpu.igpu ? `<div class="bl-item${!b.gpu && lock(b, "gpu") ? " cur" : ""}"><div><div class="bl-name">No graphics card</div><div class="bl-spec">Use the ${esc(cpu.n)}'s built-in graphics</div></div><div class="bl-side"><span class="mono">$0</span><button class="btn small primary" data-blchoose="none">${!b.gpu && lock(b, "gpu") ? "Chosen" : "Choose"}</button></div></div>` : "";
+    const pl = perfLbl(cat, d.use);
+    return `<div class="spread"><span class="eyebrow">PC Build Lab · choose a ${esc(c.one)}</span><button class="btn small" data-act="close">Close</button></div>
+      <h2 style="margin:6px 0 0">${esc(c.n)}</h2>
+      ${own(b, cat) ? `<p class="note" style="margin:6px 0 0">You're supplying this part, so it won't be added to the price. Picking your model lets the lab check that it fits.</p>` : `<p class="muted" style="margin:6px 0 0;font-size:.85rem">Parts you choose here are kept (🔒) when you tap “Build it for me”.</p>`}
+      <div class="bl-pick-tools">
+        <input type="search" placeholder="Search ${esc(c.n.toLowerCase())}…" value="${esc(pk.q || "")}" data-blpk="q" aria-label="Search">
+        <select data-blpk="sort" aria-label="Sort by">${[["price", "Price: low to high"], ["price-d", "Price: high to low"], ["perf", pl ? "Performance (" + pl + ")" : "Performance"], ["value", "Value (performance per $)"], ["name", "Name"]].filter(o => o[0] !== "perf" && o[0] !== "value" || pl).map(([k, l]) => `<option value="${k}"${sort === k ? " selected" : ""}>${l}</option>`).join("")}</select>
+        <label style="display:flex;gap:6px;align-items:center;font-size:.9rem"><input type="checkbox" data-blpk="only"${only ? " checked" : ""}> Compatible only${nBad ? ` <span class="muted">(${nBad} hidden)</span>` : ""}</label>
+      </div>
+      <div class="bl-list">${stock}${none}${list.map(r => `<div class="bl-item${r.x.id === curId ? " cur" : ""}${r.errs.length ? " bad" : ""}">
+        <div style="display:grid;gap:3px"><div class="bl-name">${esc(r.x.n)}</div><div class="bl-spec">${esc(spec(r.x))}</div>
+          ${pl ? `<div class="bl-nums">${cat === "cpu" ? "" : `<span>${pl}: <b>${cat === "sto" ? gbTxt(r.x.gb) : cat === "ram" ? r.x.gb : Math.round(r.perf)}</b></span>`}${r.pr && cat !== "sto" ? `<span>Value: <b>${(r.perf / r.pr * 100).toFixed(1)}</b> per $100</span>` : ""}${cat === "cpu" ? `<span>Multi: <b>${r.x.mt}</b></span><span>Gaming: <b>${r.x.g}</b></span>` : ""}</div>` : ""}
+          ${r.errs.length ? `<div class="bl-why-not">✕ ${esc(r.errs[0][1])}</div>` : ""}</div>
+        <div class="bl-side"><span class="mono">${money(r.pr)}${r.x.est && S0().bl.prices[r.x.id] == null ? ` <span class="bl-est">est.</span>` : ""}</span><button class="btn small${r.errs.length ? "" : " primary"}" data-blchoose="${r.x.id}">${r.x.id === curId ? "Chosen" : "Add"}</button></div></div>`).join("") || `<p class="muted">No parts match. Clear the search or turn off “Compatible only”.</p>`}</div>`;
+  }
+  function openPick(cat, i){
+    const d = st(); d.pick = {cat, i: i == null ? null : +i, q: "", sort: (d.pick && d.pick.sort) || "price", only: true};
+    drawPick(); $("#modal").hidden = false;
+  }
+  function drawPick(){
+    const d = st(), pk = d.pick, sh = $("#sheet");
+    sh.innerHTML = pickHTML(pk.cat, pk.i); sh.dataset.key = "buildlab";
+    const qi = sh.querySelector('[data-blpk="q"]');
+    if (qi && pk.focus) { qi.focus(); qi.setSelectionRange(qi.value.length, qi.value.length); }
+    sh.querySelectorAll("[data-blpk]").forEach(el => el.addEventListener(el.type === "search" ? "input" : "change", () => {
+      const k = el.dataset.blpk; pk[k] = el.type === "checkbox" ? el.checked : el.value; pk.focus = k === "q"; drawPick();
+    }));
+    sh.querySelectorAll("[data-blchoose]").forEach(el => el.addEventListener("click", () => {
+      const prevB = clone(d.build); snap(d); const id = el.dataset.blchoose, b = d.build;
+      if (pk.cat === "sto") { if (pk.i == null || pk.i >= b.sto.length) b.sto.push(id); else b.sto[pk.i] = id; }
+      else b[pk.cat] = id === "none" ? null : id;
+      b.lock[pk.cat] = true;
+      if (pk.cat === "cpu") { const cpu = get(id); if (b.cooler === "stock" && !cpu.box) b.cooler = null; if (!b.cooler && cpu.box && !own(b, "cooler")) b.cooler = "stock"; }
+      d.autoMsg = ""; d.chg = diff(prevB, d.build); save(); closeModal(); render(true);
+    }));
+  }
+
+  // ---------- events ----------
+  function runAuto(d){
+    const r = autoBuild({use: d.use, budget: blBudget(d), brand: d.brand, wifi: d.wifi, sff: d.sff, mode: d.mode, req: d.req, base: d.build});
+    const kept = BL.cats.filter(c => lock(d.build, c.k) && !own(d.build, c.k)).map(c => c.n), mine = BL.cats.filter(c => own(d.build, c.k)).map(c => c.n);
+    const extra = (kept.length ? ` Kept: ${esc(kept.join(", "))}.` : "") + (mine.length ? ` Left out (you're supplying): ${esc(mine.join(", "))}.` : "");
+    if (r && r.needModel) { d.autoMsg = `<b>Pick the ${CAT[r.needModel].one} you have first</b> (in the parts list), so the other parts can be matched to it.`; return; }
+    if (!r) { d.autoMsg = "No combination of parts in the catalog meets all of these needs. Loosen one: turn off Wi-Fi or the small case, change the memory type, or unlock (🔒) a part that may not fit the others." + extra; return; }
+    d.build = r.b;
+    d.autoMsg = (r.over ? `<b>The budget is too low for these needs.</b> The cheapest build that meets them costs <b>${money(r.cost)}</b> (${money(r.cost - blBudget(d))} over). Try fewer or smaller parts in “Customize the requirements”, or supply some parts yourself.` :
+      `<b>Built for ${money(blBudget(d))}:</b> ${r.valueMode ? "best value. Spending more wouldn't make it noticeably better for this use" : "the most performance for this use that fits the budget"}.`) + extra;
+  }
+
+  // ---------- adjusting a build after the results ----------
+  const DEPS = {cpu:["mobo", "ram", "cooler"], gpu:["psu", "case"], mobo:["ram", "case", "cooler"], cooler:["case"], ram:[], sto:[], case:["psu"], psu:[]};
+  const clone = x => JSON.parse(JSON.stringify(x));
+  function snap(d){ d.hist = (d.hist || []).slice(-14); d.hist.push(clone({build: d.build, req: d.req, use: d.use, budget: d.budget, brand: d.brand, wifi: d.wifi, sff: d.sff, mode: d.mode, bulk: d.bulk})); }
+  function undo(d){ const h = (d.hist || []).pop(); if (!h) return false; Object.assign(d, h); d.chg = {lines: ["Undid the last change."]}; return true; }
+  const nameOf = (k, b) => { if (k === "sto") return (b.sto || []).map(id => get(id) ? get(id).n : "").join(" + ") || null; if (k === "cooler" && b.cooler === "stock") return "Included cooler"; const x = get(b[k]); return x ? x.n : null; };
+  function diff(a, b, note){
+    const lines = [];
+    BL.cats.forEach(c => {
+      const x = nameOf(c.k, a), y = nameOf(c.k, b), ox = own(a, c.k), oy = own(b, c.k);
+      if (x !== y) lines.push(`${c.n}: ${x || "none"} → ${y || "none"}`);
+      if (ox !== oy) lines.push(`${c.n}: ${oy ? "now supplied by you (left out of the price)" : "back in the order"}`);
+    });
+    const ca = cost(a), cb = cost(b);
+    return {lines: (note ? [note] : []).concat(lines.length ? lines : ["No parts changed."]), delta: cb - ca, total: cb};
+  }
+  // re-pick only the listed categories (and anything empty), keeping every other part as it is
+  function fixRest(d, cats, opts){
+    const base = clone(d.build), userLock = clone(d.build.lock || {});
+    base.lock = {};
+    BL.cats.forEach(c => { if (!cats.includes(c.k) && hasModel(base, c.k)) base.lock[c.k] = true; });
+    if (userLock.gpu && !base.gpu && !cats.includes("gpu")) base.lock.gpu = true;
+    cats.forEach(k => { if (!own(base, k) || !hasModel(base, k)) { if (k === "sto") base.sto = []; else base[k] = null; } });
+    const r = autoBuild(Object.assign({use: d.use, budget: 1e9, brand: d.brand, wifi: d.wifi, sff: d.sff, mode: "value", req: d.req, base}, opts || {}));
+    if (!r || r.needModel) return false;
+    r.b.lock = userLock; d.build = r.b; return true;
+  }
+  function stepPart(d, k, dir){
+    const b = d.build, cpu = get(b.cpu), cur = k === "sto" ? get(b.sto[0]) : k === "cooler" && b.cooler === "stock" ? "stock" : get(b[k]);
+    if (!cur) return "Choose a part first, then step it up or down.";
+    const pv = x => x === "stock" ? 120 : perf(x, d.use) + (k === "cpu" ? (x.mt + x.g) / 1000 : 0);
+    const before = new Set(check(b).filter(z => z[0] === "err").map(z => z[1]));
+    const cands = (k === "cooler" && cpu && cpu.box ? ["stock"] : []).concat(P[k]).filter(x => x !== cur && (k !== "cpu" || d.brand === "any" || x.b === d.brand) && (k !== "sto" || (cur.type === "hdd") === (x.type === "hdd"))).map(x => {
+      const tb = clone(b); if (k === "sto") tb.sto[0] = x.id; else tb[k] = x === "stock" ? "stock" : x.id;
+      return {x, tb, bad: check(tb).filter(z => z[0] === "err" && !before.has(z[1])).length, v: pv(x), pr: price(x)};
+    });
+    const cv = pv(cur), loose = k === "cpu" || k === "gpu" || k === "mobo";
+    const pickFrom = list => dir === "up" ? list.filter(c => c.v > cv + 1e-6).sort((a, z) => a.v - z.v || a.pr - z.pr)[0]
+      : (list.filter(c => c.v < cv - 1e-6).sort((a, z) => z.v - a.v || a.pr - z.pr)[0] || list.filter(c => Math.abs(c.v - cv) < 1e-6 && c.pr < price(cur)).sort((a, z) => a.pr - z.pr)[0]);
+    const same = c => k !== "sto" || c.x.type === cur.type;
+    const ch = pickFrom(cands.filter(c => !c.bad && same(c))) || pickFrom(cands.filter(c => !c.bad)) || (loose ? pickFrom(cands) : null);
+    if (!ch) return `There's no ${dir === "up" ? "better" : "cheaper"} ${CAT[k].one} in the catalog that works with the other parts.`;
+    d.build = ch.tb; d.build.lock[k] = true;
+    if (ch.bad) fixRest(d, DEPS[k], {cheapest: true, minFit: scores(ch.tb, d.use).fit - 3});
+    return null;
+  }
+  function cheaper(d){
+    const now = cost(d.build);
+    for (const tgt of [Math.floor(now * 0.88), now - 1]) {
+      const r = autoBuild({use: d.use, budget: tgt, brand: d.brand, wifi: d.wifi, sff: d.sff, mode: "value", req: d.req, base: d.build});
+      if (r && !r.needModel && !r.over && r.cost < now) { d.build = r.b; return null; }
+    }
+    if (Object.keys(d.build.lock || {}).some(k => d.build.lock[k])) {
+      const base = clone(d.build); base.lock = {};
+      const r = autoBuild({use: d.use, budget: Math.floor(now * 0.88), brand: d.brand, wifi: d.wifi, sff: d.sff, mode: "value", req: d.req, base});
+      if (r && !r.needModel && !r.over && r.cost < now) { r.b.lock = {}; d.build = r.b; return {note: "To get cheaper it had to change some kept (🔒) parts."}; }
+    }
+    return "It can't get cheaper with these requirements and kept (🔒) parts. Try one memory stick, a smaller or SATA drive, no graphics card, unlocking a part, or supplying a part yourself.";
+  }
+  function faster(d){
+    const now = cost(d.build), fit = scores(d.build, d.use).fit;
+    for (const tgt of [now + Math.max(150, now * 0.15), now * 1.4, now * 2.5]) {
+      const r = autoBuild({use: d.use, budget: tgt, brand: d.brand, wifi: d.wifi, sff: d.sff, mode: "perf", req: d.req, base: d.build});
+      if (r && !r.needModel && !r.over && r.fit > fit) { d.build = r.b; return null; }
+    }
+    if (Object.keys(d.build.lock || {}).some(k => d.build.lock[k])) {
+      const base = clone(d.build); base.lock = {};
+      for (const tgt of [now + Math.max(150, now * 0.15), now * 1.4]) {
+        const r = autoBuild({use: d.use, budget: tgt, brand: d.brand, wifi: d.wifi, sff: d.sff, mode: "perf", req: d.req, base});
+        if (r && !r.needModel && !r.over && r.fit > fit) { r.b.lock = {}; d.build = r.b; return {note: "To get faster it had to change some kept (🔒) parts."}; }
+      }
+    }
+    return fit >= 100 ? "It already scores 100 for this use. More expensive parts wouldn't make it noticeably faster for this kind of work." : "No faster build fits the requirements and kept (🔒) parts. Try unlocking a part or changing the requirements.";
+  }
+  // follow-up instructions typed after the results: "use 2x8GB instead", "drop the graphics card", "cheaper SSD"
+  function refine(d, text){
+    const t = " " + text.toLowerCase() + " ", said = [], before = clone({req: d.req, use: d.use, budget: d.budget, brand: d.brand, wifi: d.wifi, sff: d.sff, bulk: d.bulk}), mode0 = d.mode;
+    const PART = [[/\bcpu cooler\b|\bcooler\b/, "cooler"], [/\bcpu\b|processor/, "cpu"], [/graphics card|\bgraphics\b|\bgpu\b|video card/, "gpu"], [/\bram\b|memory/, "ram"], [/\bssd\b|\bdrive\b|storage|\bnvme\b/, "sto"], [/\bpsu\b|power supply/, "psu"], [/\bcase\b|\btower\b/, "case"], [/motherboard|\bmobo\b/, "mobo"]];
+    const partIn = s => { for (const [re, k] of PART) if (re.test(s)) return k; return null; };
+    const steps = [];
+    const sre = /\b(upgrade|better|faster|bigger|more|increase|improve|downgrade|cheaper|smaller|less|lower|reduce|weaker)\s+(?:the\s+|my\s+|a\s+)?((?:cpu cooler|cpu|processor|graphics card|graphics|gpu|video card|ram|memory|ssd|drive|storage|nvme|psu|power supply|cooler|case|motherboard)\b)/g; let m;
+    while ((m = sre.exec(t))) { const k = partIn(m[2]); if (k) steps.push([k, /upgrade|better|faster|bigger|more|increase|improve/.test(m[1]) ? "up" : "down"]); }
+    const dre = /\b(?:remove|drop|without|delete|take out|leave out|skip|no)\s+(?:the\s+|a\s+|my\s+)?(power supply|psu|case|cpu cooler|cooler|ssd|drive|storage|ram|memory|monitors?|keyboards?|ups|windows)\b/g;
+    while ((m = dre.exec(t))) {
+      const w = m[1];
+      if (/monitor/.test(w)) { d.bulk.mon = ""; said.push("No monitors"); }
+      else if (/keyboard/.test(w)) { d.bulk.kbm = ""; said.push("No keyboards and mice"); }
+      else if (/ups/.test(w)) { d.bulk.ups = ""; said.push("No UPS"); }
+      else if (/windows/.test(w)) { d.bulk.os = "volume"; said.push("No Windows license in the order"); }
+      else { const k = partIn(w); if (k) { d.build.own[k] = true; delete d.build.lock[k]; said.push(`Left out of the price: ${CAT[k].n}`); } }
+    }
+    const are = /\b(?:add|include|put back|buy|add back)\s+(?:a\s+|the\s+)?(power supply|psu|case|cpu cooler|cooler|graphics card|gpu|video card|ssd|drive|ram|memory)\b/g;
+    while ((m = are.exec(t))) { const k = partIn(m[1]); if (!k) continue; d.build.own[k] = false; if (k === "gpu") { d.req.gpu = d.req.gpu === "none" ? "auto" : d.req.gpu; delete d.build.lock.gpu; if (!d.build.gpu && !USE[d.use].gpu) d.req.gpu = "entry"; } said.push(`Added back: ${CAT[k].n}`); }
+    const parsed = parseNeeds(text, d); d.mode = mode0;
+    said.push(...parsed.filter(x => !/^Goal:/.test(x)));
+    const generic = !steps.length && /\bcheaper|less expensive|lower (?:the )?(?:cost|price)|save (?:some )?money|cut (?:the )?cost|under budget/.test(t) ? "cheaper" :
+      !steps.length && /\bfaster|more powerful|better performance|more performance|upgrade it|make it better/.test(t) ? "faster" : null;
+    // what changed in the settings decides what gets re-picked
+    const rc = k => String(before.req[k]) !== String(d.req[k]);
+    const un = new Set();
+    if (rc("ram") || rc("sticks")) un.add("ram");
+    if (rc("mem")) ["cpu", "mobo", "ram", "cooler"].forEach(k => un.add(k));
+    if (rc("sto") || rc("stoType") || rc("hdd")) un.add("sto");
+    if (rc("gpu") || rc("gpuBrand")) ["gpu", "psu", "case"].forEach(k => un.add(k));
+    if (before.brand !== d.brand) ["cpu", "mobo", "ram", "cooler"].forEach(k => un.add(k));
+    if (before.wifi !== d.wifi || before.sff !== d.sff) ["mobo", "case", "cooler", "psu"].forEach(k => un.add(k));
+    if (rc("gpu") && d.req.gpu === "none") { d.build.gpu = null; d.build.lock.gpu = true; }
+    else if (rc("gpu")) delete d.build.lock.gpu;
+    un.forEach(k => { if (k !== "gpu" || d.req.gpu !== "none") delete d.build.lock[k]; });
+    let err = null;
+    if (before.use !== d.use || before.budget !== d.budget) { runAuto(d); return {said, note: "Rebuilt for the new use or budget, keeping your 🔒 parts."}; }
+    if (un.size && !fixRest(d, [...un])) err = "No parts in the catalog meet that change together with the other kept parts. Try unlocking (🔒) a part.";
+    steps.forEach(([k, dir]) => { const e = stepPart(d, k, dir); if (e) err = e; });
+    if (generic === "cheaper") err = cheaper(d) || err;
+    if (generic === "faster") err = faster(d) || err;
+    if (!said.length && !steps.length && !generic) err = "I couldn't tell what to change. Try “use 2x8GB instead”, “cheaper graphics card”, “bigger SSD”, “drop the power supply”, “make it cheaper” or “add a graphics card”.";
+    if (steps.length) said.push(...steps.map(([k, dir]) => `${dir === "up" ? "Upgrade" : "Downgrade"} the ${CAT[k].one}`));
+    if (generic) said.push(generic === "cheaper" ? "Make it cheaper" : "Make it faster");
+    return {said, err};
+  }
+  function bind(v){
+    const d = st();
+    v.querySelectorAll("[data-blset]").forEach(el => el.addEventListener("change", () => {
+      const k = el.dataset.blset;
+      if (k === "bulk") { d.bulk.on = el.checked; if (el.checked && d.use === "g1440") d.use = "classroom"; }
+      else if (el.type === "checkbox") d[k] = el.checked;
+      else d[k] = k === "budget" ? Math.max(0, +el.value || 0) : el.value;
+      save(); render(true);
+    }));
+    v.querySelectorAll("[data-blreq]").forEach(el => el.addEventListener("change", () => {
+      const k = el.dataset.blreq; d.req[k] = /^-?\d+$/.test(el.value) ? +el.value : el.value; save(); render(true);
+    }));
+    v.querySelectorAll("[data-blbulk]").forEach(el => el.addEventListener("change", () => {
+      const k = el.dataset.blbulk; d.bulk[k] = el.type === "number" ? Math.max(0, +el.value || 0) : el.value; save(); render(true);
+    }));
+    v.querySelectorAll("[data-blprice]").forEach(el => el.addEventListener("change", () => {
+      const x = get(el.dataset.blprice); const n = +el.value;
+      if (el.value === "" || isNaN(n) || n === x.p) delete d.prices[x.id]; else d.prices[x.id] = Math.max(0, n);
+      save(); render(true);
+    }));
+    v.querySelectorAll("[data-blreset]").forEach(el => el.addEventListener("click", () => { delete d.prices[el.dataset.blreset]; save(); render(true); }));
+    v.querySelectorAll("[data-blpick]").forEach(el => el.addEventListener("click", () => openPick(el.dataset.blpick, el.dataset.i)));
+    v.querySelectorAll("[data-bllock]").forEach(el => el.addEventListener("click", () => { const k = el.dataset.bllock; d.build.lock[k] = !d.build.lock[k]; save(); render(true); }));
+    const setOwn = (k, on) => { d.build.own[k] = on; if (on) delete d.build.lock[k]; save(); render(true); };
+    v.querySelectorAll("[data-blown]").forEach(el => el.addEventListener("click", () => setOwn(el.dataset.blown, !own(d.build, el.dataset.blown))));
+    v.querySelectorAll("[data-blownbox]").forEach(el => el.addEventListener("change", () => setOwn(el.dataset.blownbox, el.checked)));
+    v.querySelectorAll("[data-blclear]").forEach(el => el.addEventListener("click", () => {
+      const k = el.dataset.blclear;
+      if (k === "sto") { d.build.sto.splice(+el.dataset.i, 1); if (!d.build.sto.length) delete d.build.lock.sto; }
+      else { d.build[k] = null; if (k === "gpu") d.build.lock.gpu = true; else delete d.build.lock[k]; }
+      save(); render(true);
+    }));
+    v.querySelectorAll("[data-blload]").forEach(el => el.addEventListener("click", () => {
+      const s = d.saved[+el.dataset.blload]; d.build = JSON.parse(JSON.stringify(s.build)); d.use = s.use || d.use; if (s.req) d.req = Object.assign({}, REQ0, s.req);
+      if (s.bulk) d.bulk = Object.assign({}, d.bulk, s.bulk); d.autoMsg = `Loaded “${esc(s.name)}”, priced with today's prices.`; save(); render(false);
+    }));
+    v.querySelectorAll("[data-bldel]").forEach(el => el.addEventListener("click", () => { d.saved.splice(+el.dataset.bldel, 1); save(); render(true); }));
+    const nl = v.querySelector("[data-blnl]"); if (nl) nl.addEventListener("input", () => { d.nlText = nl.value; });
+    const track = (fn, note) => { const prev = clone(d.build), key = () => JSON.stringify([d.build, d.req, d.bulk, d.use, d.budget, d.brand]), k0 = key(); snap(d); const r = fn(); if (key() === k0) d.hist.pop(); const res = typeof r === "object" && r ? r : {err: r || null}; d.chg = Object.assign(diff(prev, d.build, note), {said: res.said, err: res.err}); if (res.note) d.chg.lines.unshift(res.note); save(); render(true); };
+    v.querySelectorAll("[data-blstep]").forEach(el => el.addEventListener("click", () => track(() => stepPart(d, el.dataset.blstep, el.dataset.dir))));
+    const rf = v.querySelector("[data-blrefine]");
+    if (rf) { rf.addEventListener("input", () => { d.refText = rf.value; }); rf.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); v.querySelector('[data-blact="refine"]').click(); } }); }
+    v.querySelectorAll("[data-blact]").forEach(el => el.addEventListener("click", () => {
+      const a = el.dataset.blact;
+      if (a === "cheaper") return track(() => cheaper(d));
+      if (a === "faster") return track(() => faster(d));
+      if (a === "fix") return track(() => { const errs0 = check(d.build).filter(z => z[0] === "err"); const n0 = errs0.length;
+        const involved = BL.cats.map(c => c.k).filter(k => { if (!hasModel(d.build, k)) return false; const tb = clone(d.build); if (k === "sto") tb.sto = []; else tb[k] = null; return check(tb).filter(z => z[0] === "err").length < n0; });
+        let ks = involved.filter(k => !lock(d.build, k) && !own(d.build, k)); if (!ks.length) ks = involved.filter(k => !own(d.build, k));
+        if (ks.includes("cpu") && ks.includes("mobo")) ks = ks.filter(k => k !== "cpu");
+        if (ks.includes("mobo") && !ks.includes("ram") && !lock(d.build, "ram") && !own(d.build, "ram")) ks.push("ram");
+        ks = [...new Set(ks.concat(...ks.map(k => k === "cpu" ? ["cooler"] : k === "gpu" ? ["psu"] : [])))];
+        ks.forEach(k => delete d.build.lock[k]);
+        const tb0 = clone(d.build); if (tb0.cpu && ks.includes("mobo")) { /* score as if fixed: keep the CPU */ }
+        return fixRest(d, ks, {cheapest: true, minFit: scores(tb0, d.use).fit - 5}) ? null : `Couldn't find parts that fit around the kept (🔒) ones. Unlock a part and try again. (${errs0.length} problem${errs0.length === 1 ? "" : "s"} left.)`; }, "Swapped only the parts that didn't fit, choosing the cheapest that work.");
+      if (a === "undo") { if (undo(d)) { save(); render(true); } return; }
+      if (a === "refine") { const txt = (rf && rf.value || "").trim(); if (!txt) { toast("Type what you'd like to change."); return; } d.refText = ""; return track(() => refine(d, txt)); }
+      if (a === "nl") {
+        const txt = (nl && nl.value || "").trim(); d.nlText = txt;
+        if (!txt) { toast("Type what you need first."); return; }
+        snap(d); d.chg = null; d.req = Object.assign({}, REQ0); d.build.own = {}; d.build.lock = {};
+        d.nlSaid = parseNeeds(txt, d);
+        if (d.nlSaid.length) runAuto(d); else d.autoMsg = "";
+        save(); render(true);
+      }
+      if (a === "auto") { snap(d); d.chg = null; runAuto(d); save(); render(true); }
+      if (a === "reqreset") { d.req = Object.assign({}, REQ0); d.build.own = {}; save(); render(true); }
+      if (a === "clear") { snap(d); d.chg = null; d.build = {sto: [], lock: {}, own: {}}; d.autoMsg = ""; d.nlSaid = null; save(); render(true); }
+      if (a === "savebox") { const bx = $("#bl-savebox"); bx.hidden = !bx.hidden; if (!bx.hidden) bx.querySelector("input").select(); }
+      if (a === "save") {
+        const nm = ($("#bl-savebox input").value || "My build").trim();
+        d.saved.unshift({name: nm, date: Date.now(), use: d.use, req: Object.assign({}, d.req), build: JSON.parse(JSON.stringify(d.build)), bulk: d.bulk.on ? Object.assign({}, d.bulk) : null});
+        d.saved = d.saved.slice(0, 30); save(); toast("Build saved."); render(true);
+      }
+      if (a === "copy") {
+        const b = d.build, p = parts(b), L = [`PC build: ${USE[d.use].n} (prices as of ${BL.asOf})`];
+        const line = (c, x) => L.push(`${c.n}: ${x ? x.n : "(own part)"} — ${own(b, c.k) ? "supplied separately" : money(price(x))}`);
+        BL.cats.forEach(c => {
+          if (c.k === "sto") { if (p.sto.length) p.sto.forEach(x => line(c, x)); else if (own(b, "sto")) line(c, null); }
+          else if (c.k === "cooler" && p.cooler === "stock") L.push(`${c.n}: included with the CPU — $0`);
+          else { const x = c.k === "case" ? p.cs : p[c.k]; if (x || own(b, c.k)) line(c, x); }
+        });
+        L.push(`Total: ${money(cost(b))}${ownValue(b) ? " (not counting parts supplied separately)" : ""} · about ${watts(b)} W`);
+        if (d.bulk.on) L.push(`Quantity: ${d.bulk.qty} PCs + ${d.bulk.spares} spares`);
+        try { navigator.clipboard.writeText(L.join("\n")).then(() => toast("Parts list copied."), () => toast("Couldn't copy on this device.")); } catch(e) { toast("Couldn't copy on this device."); }
+      }
+    }));
+  }
+  return {init: h => { H = h; }, render, autoBuild, check, scores, cost, watts, parts, parseNeeds, st, refine, stepPart, cheaper, faster, fixRest};
+})();
+
 </script>
 <script>
 (function(){
@@ -28279,7 +29395,7 @@ function save(){ try { localStorage.setItem(STORE, JSON.stringify(S)); } catch(e
 // ---------- preferences (Settings page) ----------
 const QUICK = {
   warm:{label:"Start a 10-question warm-up", act:"quick"}, practice:{label:"Practice by topic", go:"practice"}, exam:{label:"Exam simulator", go:"exam"},
-  chapters:{label:"Chapter reviews", go:"chapters"}, flash:{label:"Flashcards", go:"flash"}, labs:{label:"Virtual labs", go:"labs"},
+  chapters:{label:"Chapter reviews", go:"chapters"}, flash:{label:"Flashcards", go:"flash"}, labs:{label:"Virtual labs", go:"labs"}, buildlab:{label:"PC Build Lab", go:"buildlab"},
   study:{label:"Search a topic", go:"study"}, lessons:{label:"Chapter lessons", go:"lessons"}, platforms:{label:"Chipsets & CPUs", go:"platforms"}, netsheet:{label:"Networking cheat sheet", go:"netsheet"},
   videos:{label:"Watch the video course", go:"videos"}, pictures:{label:"Pictures", go:"pictures"}, figures:{label:"Figure finder", go:"figures"},
   review:{label:"Review my weak spots", go:"review"}, tutor:{label:"Ask the AI tutor", act:"tutorchat", ai:true}, tour:{label:"App tour", go:"tour"}};
@@ -28786,7 +29902,7 @@ function domainStats(ex){
 const NAV = [
   {label:"Home", items:[["home","Home (Dashboard)"],["tour","App tour"]]},
   {label:"Study", items:[["study","Study & search"],["lessons","Chapter lessons"],["chapters","Chapter review"],["flash","Flashcards"],["platforms","Chipsets & CPUs"],["netsheet","Networking cheat sheet"]]},
-  {label:"Practice & exams", items:[["practice","Practice"],["exam","Exam simulator"],["labs","Labs"],["review","Review"]]},
+  {label:"Practice & exams", items:[["practice","Practice"],["exam","Exam simulator"],["labs","Labs"],["buildlab","PC Build Lab"],["review","Review"]]},
   {label:"Media", items:[["explainers","Video explainers"],["videos","Videos"],["pictures","Pictures"],["figures","Figures"]]},
   {label:"Settings", items:[["settings","Settings"]], acts:[["notebook","Notebook"]]}];
 const navKey = r => r==="sim" ? "labs" : r==="watch" ? "explainers" : r==="book" ? "chapters" : r;
@@ -29382,12 +30498,15 @@ function labHTML(l){
     <div class="row"><label class="chip"><input type="checkbox" data-labdone="${esc(l.id)}" ${st.done?"checked":""}><span>Lab complete</span></label>${KBMAP[l.t]?`<button class="btn small ghost" data-act="note" data-id="${l.t}">Study note: ${esc(KBMAP[l.t].title)}</button>`:""}</div>
    </div></details>`;
 }
+VIEWS.buildlab = function(){ BLX.render(false); };
+BLX.init({S: () => S, save, toast: m => toast(m), closeModal: () => closeModal()});
 VIEWS.labs = function(arg){
   const v = $("#view"); const done = LABS.filter(l => (S.labs[l.id]||{}).done).length;
   const chs = [...new Set(LABS.map(l=>l.ch))].sort((a,b)=>a-b);
   const simCards = SIMS.filter(sm => !arg || (sm.ch||[]).includes(+arg));
   v.innerHTML = `<section class="hero"><span class="eyebrow">Virtual labs</span><h1>Labs</h1>
     <p>Interactive simulations let you practice hands-on tasks: take a PC apart and rebuild it, configure firmware, make and test cables, and troubleshoot. Below them are ${LABS.length} lab guides, one for each Hands-On Project in your book. ${done} of ${LABS.length} guides done.</p></section>
+    <section class="classlink"><span class="eyebrow">New</span><span><b>PC Build Lab:</b> build a PC to a budget and a need (gaming, office, video editing, a classroom of 20…), check that the parts work together, and total a bulk order.</span><button class="btn small teal" data-go="buildlab">Open the Build Lab</button></section>
     ${simCards.length?`<section class="rgroup"><h2>Interactive simulations</h2><div class="simgrid">${simCards.map(simCard).join("")}</div></section>`:""}
     <section class="hero" style="padding-top:8px"><span class="eyebrow">Lab guides · from the Hands-On Projects</span>
     <div class="chips">${`<button class="btn small${!arg?" primary":""}" data-go="labs">All chapters</button>`}${chs.map(c=>`<button class="btn small${String(arg)===String(c)?" primary":""}" data-go="labs" data-arg="${c}">CH ${c}</button>`).join("")}</div></section>
