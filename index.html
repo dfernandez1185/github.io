@@ -698,6 +698,18 @@ details.setgrp .sgbody{display:grid;gap:12px;padding:14px 18px 18px}
 .tp-intro{margin:0;font-size:.92rem}
 .tfirst{display:grid;gap:8px}
 .tfirst textarea{min-height:76px;resize:vertical}
+.tfollow.tfollow-att{display:grid;gap:6px}.tfrow{display:flex;gap:6px}.tfrow input{flex:1;min-width:0}
+.tatt{display:grid;gap:6px;white-space:normal}.tatt-btns{display:flex;flex-wrap:wrap;gap:6px}
+.tatt-chips{display:flex;flex-wrap:wrap;gap:6px}.tatt-chips:empty{display:none}
+.tchip{display:inline-flex;align-items:center;gap:6px;padding:3px 4px 3px 3px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:.8rem;max-width:100%}
+.tchip img{width:40px;height:40px;object-fit:cover;border-radius:7px;display:block}.tchip .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.tchip .x{border:0;background:none;color:var(--muted);cursor:pointer;font-size:.9rem;padding:4px 6px;border-radius:6px}.tchip .x:hover{color:var(--ink);background:var(--line)}
+.tatt-quick{display:flex;flex-wrap:wrap;gap:6px}.tatt-quick[hidden]{display:none}
+.tatt-quick .chip{font-size:.8rem;padding:5px 10px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink);cursor:pointer}.tatt-quick .chip:hover{border-color:var(--teal)}
+.tatt-note,.tatt-off{font-size:.78rem;color:var(--muted);margin:0;line-height:1.45}.tatt-off{margin-top:8px}
+.tthumbs{display:flex;flex-wrap:wrap;align-items:flex-start;gap:6px;margin:2px 0 4px}.tthumbs img{max-width:150px;max-height:120px;border-radius:8px;display:block;border:1px solid rgba(255,255,255,.35)}
+.tthumbs .tdoc{font-size:.8rem;padding:3px 8px;border-radius:8px;background:rgba(255,255,255,.15)}
+#tpanel.dropping .tp-body{outline:3px dashed var(--teal);outline-offset:-6px}
 .tpanel .tfollow{position:sticky;bottom:-24px;background:var(--surface);padding:8px 0 4px}
 body.tp-open .tutorfab{display:none!important}
 @media (min-width:1000px){body.tp-pinned{padding-right:400px}body.tp-pinned .modal{right:400px}body.tp-pinned .tpanel{box-shadow:none}}
@@ -833,8 +845,11 @@ svg .xaccentt{fill:var(--teal);font-family:var(--f-body)} svg .xwarnt{fill:var(-
 
 <script>
 // App version and update history (newest first). Bump APP_VERSION and add an entry for every release.
-const APP_VERSION = "1.23 beta 3";
+const APP_VERSION = "1.23 beta 4";
 const CHANGELOG = [
+  {v:"1.23 beta 4", date:"Oct 2026", items:[
+    "Ask the AI tutor about a picture: take a photo with your phone's camera, pick a screenshot, paste one (Ctrl+V) or drop a file into the tutor panel, then ask about it. The tutor says what it sees (model numbers, error codes, readings), answers for the A+ exams, names the objective area and links the matching lesson and study note. Quick buttons: What is this?, Explain this error, What's wrong?, Read this for me, Quiz me on this.",
+    "Works with pictures inside Claude and with your own AI key (all four providers); with your own key you can also attach PDFs, and text files such as logs, scripts and config files work too. Follow-up questions keep the picture in the conversation. Photos are shrunk on your device before sending, and only small thumbnails are kept in the chat history."]},
   {v:"1.23 beta 3", date:"Oct 2026", items:[
     "PC Build Lab: adjust a build after you get results. Each part has ▲ ▼ to step it up or down (and the lab swaps anything that stops fitting), plus “Make it cheaper”, “Make it faster”, “Fix compatibility” and “Undo”. Every change lists exactly which parts changed and how the total moved",
     "Type follow-up changes in plain words: “use 2x8GB instead”, “cheaper graphics card”, “bigger SSD”, “drop the power supply”, “switch to AMD”, “no graphics card” or “add back the power supply”. The parts list also fits small phone screens better"]},
@@ -29493,6 +29508,7 @@ function record(qid, ok){ const a = S.att[qid] || {c:0,w:0}; ok ? a.c++ : a.w++;
 
 // ---------- AI tutor (optional runtime capability) ----------
 let sampleFn = null;
+let CLAUDE_IMG = null; // inside Claude: image limits for this view, when it can send pictures
 let TUTOR_MODE = "none"; // "claude" (inside Claude), "key" (own API key, any provider), "handoff" (open the question in a chat app)
 const TUTOR_STORE = "aplus-tutor-v1";
 // In-app providers (bring your own key). Model names can be edited in settings when providers release new ones.
@@ -29537,13 +29553,16 @@ function keySample(cfg){
   const P = cfg.provider, model = cfg.model || (PROVIDERS[P]||{}).model;
   const f = async function(prompt, opts){
     opts = opts || {}; const max = opts.maxTokens || 1500, stream = !opts.noStream; let url, headers, body;
+    const atts = (opts.attachments || []).filter(a => a && a.data && (a.kind === "image" || a.kind === "pdf"));
     if (P === "anthropic") { url = "https://api.anthropic.com/v1/messages"; headers = {"content-type":"application/json","x-api-key":cfg.key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"};
-      body = {model: opts.model || model, max_tokens: max, stream, messages:[{role:"user", content: prompt}]}; }
+      const content = atts.length ? atts.map(a => a.kind === "image" ? {type:"image", source:{type:"base64", media_type:a.mime, data:a.data}} : {type:"document", source:{type:"base64", media_type:"application/pdf", data:a.data}}).concat([{type:"text", text: prompt}]) : prompt;
+      body = {model: opts.model || model, max_tokens: max, stream, messages:[{role:"user", content}]}; }
     else if (P === "openai" || P === "openrouter") { url = P === "openai" ? "https://api.openai.com/v1/chat/completions" : "https://openrouter.ai/api/v1/chat/completions";
       headers = {"content-type":"application/json","authorization":"Bearer " + cfg.key}; if (P === "openrouter") headers["X-Title"] = "A+ Study Bench";
-      body = {model, stream, messages:[{role:"user", content: prompt}]}; if (P === "openrouter") body.max_tokens = max; else body.max_completion_tokens = Math.max(max, 4000); }
+      const content = atts.length ? [{type:"text", text: prompt}].concat(atts.map(a => a.kind === "image" ? {type:"image_url", image_url:{url:"data:" + a.mime + ";base64," + a.data}} : {type:"file", file:{filename: a.name || "document.pdf", file_data:"data:application/pdf;base64," + a.data}})) : prompt;
+      body = {model, stream, messages:[{role:"user", content}]}; if (P === "openrouter") body.max_tokens = max; else body.max_completion_tokens = Math.max(max, 4000); }
     else if (P === "gemini") { url = "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(model) + ":" + (stream ? "streamGenerateContent?alt=sse" : "generateContent");
-      headers = {"content-type":"application/json","x-goog-api-key":cfg.key}; body = {contents:[{role:"user", parts:[{text: prompt}]}]}; }
+      headers = {"content-type":"application/json","x-goog-api-key":cfg.key}; body = {contents:[{role:"user", parts: atts.map(a => ({inline_data:{mime_type:a.mime, data:a.data}})).concat([{text: prompt}])}]}; }
     else throw tutErr("no_provider");
     let res;
     try { res = await fetch(url, {method:"POST", signal: opts.signal, headers, body: JSON.stringify(body)}); }
@@ -29611,7 +29630,8 @@ if (STANDALONE && location.protocol.startsWith("http")) {
   fetch("tutor.json", {cache:"no-store"}).then(r => r.ok ? r.json() : null).then(j => { if (j && /^https:\/\//.test(j.proxy||"")) { TUTOR_PROXY = j.proxy; setupTutor(); } }).catch(() => {});
 }
 if (window.claude && typeof window.claude.use === "function") {
-  window.claude.use("sample").then(f => { if (f) { sampleFn = f; TUTOR_MODE = "claude"; document.body.classList.add("has-ai"); } else setupTutor(); }).catch(() => setupTutor());
+  window.claude.use("sample").then(f => { if (f) { sampleFn = f; TUTOR_MODE = "claude"; document.body.classList.add("has-ai");
+    if (typeof f.limits === "function") f.limits().then(l => { CLAUDE_IMG = (l && l.images) || null; if (TP.open && !tpConv().turns.length && !(($("#gq") || {}).value)) tpBody(); }).catch(() => {}); } else setupTutor(); }).catch(() => setupTutor());
 } else setupTutor();
 function aiErr(e){
   const c = e && e.code;
@@ -29629,6 +29649,8 @@ function aiErr(e){
     if (c === "api_error") return provName() + " returned an error" + (e.message && e.message !== "api_error" ? ": " + e.message : ".");
   }
   if (["not_granted","sampling_disabled","not_declared","capability_disabled","capability_removed"].includes(c)) { sampleFn = null; document.body.classList.remove("has-ai"); return "The tutor isn't available in this view. Use the study notes and search instead."; }
+  if (c === "images_unavailable") { CLAUDE_IMG = null; return "Pictures can't be sent to the tutor in this view. Describe what you see in words, or add your own AI key in ⚙ Settings to ask about pictures."; }
+  if (c === "image_rejected") return "The tutor couldn't open that picture. Try a screenshot or a JPEG/PNG photo.";
   if (c === "rate_limited") return "Too many tutor requests right now. Wait a minute and try again.";
   if (c === "session_expired") return "Your Claude session expired. Sign in again to use the tutor.";
   if (c === "refused") return "The tutor couldn't answer that. Try rephrasing the question.";
@@ -29643,13 +29665,14 @@ function handoffHTML(prompt){
     <div class="row"><button type="button" class="btn small ghost" data-act="copyprompt">Copy the question</button><button type="button" class="btn small ghost" data-act="tutorsetup">Tutor settings</button></div></div>`;
 }
 let LAST_PROMPT = "";
-async function runTutor(prompt, outEl, stopBtn){
+async function runTutor(prompt, outEl, stopBtn, atts){
   LAST_PROMPT = prompt;
   if (TUTOR_MODE === "handoff") { outEl.innerHTML = handoffHTML(prompt); return; }
   if (!sampleFn) return;
   const qi = prompt.lastIndexOf("Student's question: ");
   const ask = qi >= 0 ? prompt.slice(qi + 20).trim() : "";
   outEl._conv = {context: prompt, turns: ask ? [{r:"you", t: ask}] : [], stopBtn};
+  if (atts && atts.length && outEl._conv.turns[0]) { const t0 = outEl._conv.turns[0]; t0.att = attMeta(atts); t0._a = atts; }
   return tutorTurn(outEl);
 }
 function tutorLinkify(text){
@@ -29659,7 +29682,9 @@ function tutorLinkify(text){
 }
 function tutorRelHTML(c, i){
   const t = c.turns[i]; if (!t || /^Thinking…$/.test(t.t) || /couldn't|isn't available|Stopped\.$/.test(t.t.slice(-40)) && t.t.length < 160) return "";
-  if (!t.rel) { const q = (c.turns.slice(0, i).reverse().find(x => x.r === "you") || {t:""}).t; const r = q ? search(q) : {kb:[]};
+  if (!t.rel) { const yt = c.turns.slice(0, i).reverse().find(x => x.r === "you") || {t:""}; let q = yt.t;
+    if (yt.att && yt.att.length) { const seen = (t.t.match(/What I see:\s*([^\n]{3,240})/i) || [])[1]; if (seen) q = seen; }
+    const r = q ? search(q) : {kb:[]};
     const notes = r.kb.slice(0, 2).map(x => x.k); const ref = notes.length ? refsFor(notes[0].id)[0] : null; const l = ref ? lessonLoc(ref[0], ref[1], ref[2]) : null;
     t.rel = {notes: notes.map(k => [k.id, k.title]), lesson: l ? [locArg(l), modLabel(l.ch) + (ref ? " › " + ref[1] : "")] : null}; }
   const R = t.rel; if (!R.notes.length && !R.lesson) return "";
@@ -29667,8 +29692,10 @@ function tutorRelHTML(c, i){
 }
 function chatRender(box){
   const c = box._conv; if (!c) return;
-  box.innerHTML = `<div class="tchat">${c.turns.map((t,i) => `<div class="tmsg ${t.r}"><span class="who">${t.r==="you"?"You":"Tutor"}${t.r==="tutor" && SPEECH.ok && !c.busy ? ` <button type="button" class="spk" data-speak-i="${i}" aria-label="Read this reply aloud" title="Read aloud">🔊</button>` : ""}</span><div class="txt">${t.r === "tutor" ? tutorLinkify(t.t) : esc(t.t)}</div>${t.r === "tutor" && !c.busy ? tutorRelHTML(c, i) : ""}</div>`).join("")}</div>`
-    + (c.busy ? "" : `<form class="tfollow"><input type="text" placeholder="Reply to the tutor or ask a follow-up…" aria-label="Reply to the tutor"><button class="btn small teal" type="submit">Send</button></form>`);
+  box.innerHTML = `<div class="tchat">${c.turns.map((t,i) => `<div class="tmsg ${t.r}"><span class="who">${t.r==="you"?"You":"Tutor"}${t.r==="tutor" && SPEECH.ok && !c.busy ? ` <button type="button" class="spk" data-speak-i="${i}" aria-label="Read this reply aloud" title="Read aloud">🔊</button>` : ""}</span>${t.r === "you" && t.att && t.att.length ? attThumbs(t.att) : ""}<div class="txt">${t.r === "tutor" ? tutorLinkify(t.t) : esc(t.t)}</div>${t.r === "tutor" && !c.busy ? tutorRelHTML(c, i) : ""}</div>`).join("")}</div>`
+    + (c.busy ? "" : box.id === "tpout" && attOK().any ? `<form class="tfollow tfollow-att"><div class="tfrow"><input type="text" placeholder="Reply, ask a follow-up, or add a picture…" aria-label="Reply to the tutor"><button class="btn small teal" type="submit">Send</button></div>${attBarHTML(true)}</form>`
+      : `<form class="tfollow"><input type="text" placeholder="Reply to the tutor or ask a follow-up…" aria-label="Reply to the tutor"><button class="btn small teal" type="submit">Send</button></form>`);
+  if (box.id === "tpout") attChips();
 }
 async function tutorTurn(box){
   const c = box._conv; if (c.busy) return;
@@ -29677,11 +29704,24 @@ async function tutorTurn(box){
   const reply = {r:"tutor", t:"Thinking…"}; c.turns.push(reply); c.busy = true; chatRender(box);
   const el = () => { const a = box.querySelectorAll(".tmsg.tutor .txt"); return a[a.length-1]; };
   const hist = c.turns.slice(0, -1);
-  const prompt = hist.filter(t => t.r==="tutor").length === 0 ? c.context
-    : c.context + "\n\nConversation so far:\n" + hist.map(t => (t.r==="you" ? "Student: " : "Tutor: ") + t.t).join("\n\n") + "\n\nReply to the student's latest message as their tutor: plain text, under 200 words, no markdown headings. If they challenge an answer, weigh their point honestly, say where they're right, and explain what the exam expects.";
+  const lastYou = hist.slice().reverse().find(t => t.r === "you");
+  // Files to send: with your own key every turn re-sends the pictures (the AI has no memory); inside Claude only the newest turn's pictures go
+  let send = [];
+  if (TUTOR_MODE === "key") send = hist.filter(t => t._a).flatMap(t => t._a).filter(a => a.kind !== "text").slice(-4);
+  else if (TUTOR_MODE === "claude" && lastYou && lastYou._a) send = lastYou._a.filter(a => a.kind === "image");
+  const sentNow = new Set(send);
+  const older = hist.some(t => t.att && t.att.some(m => m.kind !== "text") && !(t._a && t._a.some(a => sentNow.has(a))));
+  const histLine = t => (t.r==="you" ? "Student: " : "Tutor: ") + (t.att && t.att.length ? "[attached " + t.att.map(m => (m.kind === "image" ? "picture" : m.kind === "pdf" ? "PDF" : "file") + " \"" + m.name + "\"").join(", ") + "] " : "") + t.t;
+  const prompt = hist.filter(t => t.r==="tutor").length === 0 ? c.context + (send.length && lastYou && lastYou.att ? "\n\n" + attNote(lastYou.att) : "")
+    : c.context + "\n\nConversation so far:\n" + hist.map(histLine).join("\n\n")
+      + (send.length && lastYou && lastYou._a ? "\n\n" + attNote(lastYou.att) : "")
+      + (older ? "\n\nEarlier pictures or PDFs from this chat are not attached this time: rely on what you said about them before, and ask the student to attach the picture again if you need to look at it." : "")
+      + "\n\nReply to the student's latest message as their tutor: plain text, under 200 words, no markdown headings. If they challenge an answer, weigh their point honestly, say where they're right, and explain what the exam expects.";
   if (c.stopBtn) { c.stopBtn.hidden = false; c.stopBtn.onclick = () => ctl.abort(); }
   try {
-    const r = await sampleFn(prompt, {signal: ctl.signal, onText: ({text}) => { reply.t = text; const e = el(); if (e) e.textContent = text; }});
+    const so = {signal: ctl.signal, onText: ({text}) => { reply.t = text; const e = el(); if (e) e.textContent = text; }};
+    if (send.length) { if (TUTOR_MODE === "claude") so.images = send.map(a => a.blob); else so.attachments = send; so.maxTokens = 1800; }
+    const r = await sampleFn(prompt, so);
     reply.t = (r && r.text) || reply.t; if (r && r.truncated) reply.t += "\n\n(Answer cut short. Ask a narrower question.)";
   } catch(e) {
     if (e && e.code === "cancelled") reply.t = (e.text || reply.t.replace(/^Thinking…$/, "")) + (e.text ? "" : "Stopped.");
@@ -29691,26 +29731,34 @@ async function tutorTurn(box){
 }
 document.addEventListener("submit", e => {
   const f = e.target.closest && e.target.closest(".tfollow"); if (!f) return;
-  e.preventDefault(); const box = f.parentElement; const inp = f.querySelector("input"); const v = (inp.value||"").trim();
-  if (!v || !box._conv) return; box._conv.turns.push({r:"you", t:v}); if (box.id === "tpout") tpSaveConv(box); tutorTurn(box);
+  e.preventDefault(); const box = f.parentElement; const inp = f.querySelector("input"); let v = (inp.value||"").trim();
+  const atts = box.id === "tpout" ? TATT.splice(0) : [];
+  if ((!v && !atts.length) || !box._conv) return; if (!v) v = ATT_DEFAULT_Q;
+  const turn = {r:"you", t:v}; if (atts.length) { turn.att = attMeta(atts); turn._a = atts; attDocs(box._conv, atts); }
+  box._conv.turns.push(turn); if (box.id === "tpout") tpSaveConv(box); tutorTurn(box);
 });
 // ---------- tutor side panel (any page): pin it to keep it open while you move around; the chat is kept until "New chat" ----------
 const TP = {open:false, pinned:!!S.pref.tutorPin};
 function tpConv(){ if (!S.tchat || !Array.isArray(S.tchat.turns)) S.tchat = {context:"", turns:[]}; return S.tchat; }
-function tpSaveConv(box){ if (!box || !box._conv) return; S.tchat = {context: box._conv.context, turns: box._conv.turns.filter(t => !(t.r === "tutor" && /^Thinking…$/.test(t.t))).map(t => ({r:t.r, t:t.t}))}; save(); }
+function tpSaveConv(box){ if (!box || !box._conv) return; S.tchat = {context: box._conv.context, turns: box._conv.turns.filter(t => !(t.r === "tutor" && /^Thinking…$/.test(t.t))).map(t => t.att ? {r:t.r, t:t.t, att:t.att} : {r:t.r, t:t.t})}; save(); }
 function tpScroll(){ const b = document.querySelector("#tpanel .tp-body"); if (b) b.scrollTop = b.scrollHeight; }
 function tpBody(){
   const pn = $("#tpanel"); const body = pn.querySelector(".tp-body"); const c = tpConv();
   const intro = `<p class="muted tp-intro">Ask anything about the A+ exams or your book. The tutor uses the app's study notes and points you to the chapter and page.${TP.pinned ? "" : " Tap 📌 to keep this panel open while you move around the app."}</p>`;
-  if (TUTOR_MODE === "handoff") { body.innerHTML = intro + `<div class="out" id="tpout">${handoffHTML("Hi! I'm studying for CompTIA A+ 220-1201/220-1202 with the textbook CompTIA A+ Guide to IT Technical Support, 12th ed. Please be my tutor.")}</div>`; return; }
+  if (TUTOR_MODE === "handoff") { body.innerHTML = intro + `<div class="out" id="tpout">${handoffHTML("Hi! I'm studying for CompTIA A+ 220-1201/220-1202 with the textbook CompTIA A+ Guide to IT Technical Support, 12th ed. Please be my tutor.")}</div><p class="tatt-off">📷 <b>Have a photo or screenshot?</b> Open one of the AI apps above and attach it there. To ask about pictures right here in the app, add your own AI key in ⚙ Settings (Google Gemini has a free tier).</p>`; return; }
   if (!c.turns.length) {
-    body.innerHTML = intro + `<form class="tfirst"><label class="sr-only" for="gq">Your question</label><textarea id="gq" rows="3" placeholder="e.g., Why is a port replicator different from a docking station?"></textarea><button class="btn small teal" type="submit">Ask</button></form><div class="out tutor-out" id="tpout"></div>`;
+    const ok = attOK();
+    body.innerHTML = intro + `<form class="tfirst"><label class="sr-only" for="gq">Your question</label><textarea id="gq" rows="3" placeholder="${ok.any ? "Ask a question, or add a photo or screenshot and ask about it…" : "e.g., Why is a port replicator different from a docking station?"}"></textarea>${ok.any ? attBarHTML(false) : ""}<button class="btn small teal" type="submit">Ask</button>${ok.any ? "" : TUTOR_MODE === "shared" ? `<p class="tatt-off">📷 To ask about photos and screenshots, add your own AI key in ⚙ Settings (Google Gemini has a free tier).</p>` : ""}</form><div class="out tutor-out" id="tpout"></div>`;
+    attChips();
     const f = body.querySelector(".tfirst"), ta = body.querySelector("#gq");
     ta.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); f.requestSubmit ? f.requestSubmit() : f.dispatchEvent(new Event("submit", {cancelable:true})); } });
-    f.addEventListener("submit", e => { e.preventDefault(); const q = (ta.value || "").trim(); if (!q) return; f.remove(); const intro2 = body.querySelector(".tp-intro"); if (intro2) intro2.remove(); const r = search(q); runTutor(tutorPrompt(q, r.kb.map(x => x.k)), $("#tpout")); });
+    f.addEventListener("submit", e => { e.preventDefault(); let q = (ta.value || "").trim(); const atts = TATT.slice(); if (!q && !atts.length) return; if (!q) q = ATT_DEFAULT_Q;
+      TATT.length = 0; f.remove(); const intro2 = body.querySelector(".tp-intro"); if (intro2) intro2.remove(); const r = search(q);
+      const docs = atts.filter(a => a.kind === "text").map(docBlock).join("\n\n");
+      runTutor(tutorPrompt(q, r.kb.map(x => x.k), docs || ""), $("#tpout"), null, atts); });
   } else {
     body.innerHTML = `<div class="out tutor-out" id="tpout"></div>`; const box = $("#tpout");
-    box._conv = {context: c.context, turns: c.turns.map(t => ({r:t.r, t:t.t})), stopBtn:null}; chatRender(box);
+    box._conv = {context: c.context, turns: c.turns.map(t => t.att ? {r:t.r, t:t.t, att:t.att} : {r:t.r, t:t.t}), stopBtn:null}; chatRender(box);
   }
   const box = $("#tpout"); if (box && !box._mo) { box._mo = new MutationObserver(() => { const b = pn.querySelector(".tp-body"); if (b && b.scrollHeight - b.scrollTop - b.clientHeight < 160) tpScroll(); }); box._mo.observe(box, {childList:true, subtree:true, characterData:true}); }
   setTimeout(tpScroll, 0);
@@ -29761,6 +29809,110 @@ function tpClose(){ if (!TP.open) return; TP.open = false; const pn = $("#tpanel
   });
   $("#tpscrim").addEventListener("click", tpClose);
   document.addEventListener("keydown", e => { if (e.key === "Escape" && TP.open && !TP.pinned && !NB.open && $("#modal").hidden) { tpClose(); } });
+})();
+// ---------- pictures, screenshots and documents for the tutor (camera, gallery, paste, drag and drop) ----------
+const TATT = []; // files waiting to be sent with the next question in the tutor panel
+const ATT_MAX = 4;
+const ATT_DEFAULT_Q = "What am I looking at? Explain it and how it relates to the A+ exams.";
+const ATT_TEXT = /\.(txt|log|csv|json|xml|md|ini|cfg|conf|ps1|bat|cmd|sh|py|reg|html?|yaml|yml)$/i;
+const ATT_QUICK = [
+  ["🔍 What is this?", "What is this part, port, cable or connector? Tell me how to identify it and what the A+ exam asks about it."],
+  ["⚠️ Explain this error", "Explain this error or screen in plain English: what it means, the likely causes, and what I'd check first."],
+  ["🛠 What's wrong?", "What looks wrong here, and how would I troubleshoot it using the CompTIA troubleshooting steps?"],
+  ["📊 Read this for me", "Walk me through the important numbers and settings shown here and whether they look normal."],
+  ["❓ Quiz me on this", "Give me 3 A+ style multiple-choice questions about what's in this picture, one at a time, and wait for my answer each time."]
+];
+function attOK(){
+  const img = TUTOR_MODE === "key" || (TUTOR_MODE === "claude" && !!CLAUDE_IMG);
+  const pdf = TUTOR_MODE === "key";
+  const text = TUTOR_MODE === "key" || TUTOR_MODE === "claude" || TUTOR_MODE === "shared";
+  return {img, pdf, text, any: img || pdf, max: TUTOR_MODE === "claude" && CLAUDE_IMG ? Math.min(ATT_MAX, CLAUDE_IMG.maxCount || 1) : ATT_MAX};
+}
+function attMeta(atts){ return atts.map(a => ({kind:a.kind, name:a.name, thumb:a.thumb || ""})); }
+function docBlock(a){ return "The student attached a text file named \"" + a.name + "\". Its contents" + (a.cut ? " (first part only)" : "") + ":\n<<<\n" + a.text + "\n>>>"; }
+function attDocs(conv, atts){ const d = atts.filter(a => a.kind === "text").map(docBlock).join("\n\n"); if (d) conv.context += "\n\n" + d; }
+function attNote(meta){
+  const n = meta.filter(m => m.kind !== "text"); if (!n.length) return "";
+  const what = n.map(m => (m.kind === "pdf" ? "a PDF" : "a picture") + " (\"" + m.name + "\")").join(", ");
+  return "The student attached " + what + " with this message: a phone photo or screenshot of something tech related. Look at it carefully. "
+    + "Start your reply with one line \"What I see: …\" naming what it shows and reading the exact details that matter (model numbers, error codes, readings, settings, labels). "
+    + "Then answer the question for an A+ beginner, say which exam objective area it relates to (for example 220-1201 hardware or 220-1202 operating systems), and give one exam tip. "
+    + "If part of it is blurry or cut off, say what you can't read and ask for a closer photo. If it shows a password, ID number or other private details, don't repeat them. If it isn't tech related, say so briefly.";
+}
+function attThumbs(meta){ return `<div class="tthumbs">${meta.map(m => m.kind === "image" && m.thumb ? `<img src="${esc(m.thumb)}" alt="${esc(m.name)}" title="${esc(m.name)}">` : `<span class="tdoc" title="${esc(m.name)}">${m.kind === "pdf" ? "📄" : "📝"} ${esc(m.name.length > 24 ? m.name.slice(0, 23) + "…" : m.name)}</span>`).join("")}</div>`; }
+function attBarHTML(follow){
+  const ok = attOK(); const coarse = window.matchMedia && matchMedia("(pointer: coarse)").matches;
+  const acc = [ok.img ? "image/*" : "", ok.pdf ? "application/pdf,.pdf" : "", ".txt,.log,.csv,.json,.xml,.md,.ini,.cfg,.conf,.ps1,.bat,.sh,.py,.reg"].filter(Boolean).join(",");
+  return `<div class="tatt${follow ? " follow" : ""}"><div class="tatt-chips" aria-live="polite"></div>
+    <div class="tatt-btns">${ok.img && coarse ? `<button type="button" class="btn small ghost" data-attpick="cam">📷 Take a photo</button><input type="file" accept="image/*" capture="environment" hidden data-attin="cam">` : ""}<button type="button" class="btn small ghost" data-attpick="file">${ok.img ? (coarse ? "🖼 Photo or file" : "📎 Add a picture or file") : "📎 Add a file"}</button><input type="file" accept="${acc}" multiple hidden data-attin="file"></div>
+    <div class="tatt-quick" hidden>${ATT_QUICK.map(([l, q], i) => `<button type="button" class="chip" data-attq="${i}">${l}</button>`).join("")}</div>
+    ${follow ? "" : `<p class="tatt-note">${ok.img ? "Snap a photo of a part, port, label or error screen, paste a screenshot (Ctrl+V) or drop a file here" + (ok.pdf ? " (pictures, PDFs and text files)" : " (pictures and text files)") : "Add a text file (log, script, config)"}. Blur or crop out passwords, ID numbers and anyone's private info first.</p>`}</div>`;
+}
+function attChips(){
+  const pn = $("#tpanel"); if (!pn) return; const bar = pn.querySelector(".tatt"); if (!bar) return;
+  bar.querySelector(".tatt-chips").innerHTML = TATT.map((a, i) => `<span class="tchip">${a.kind === "image" ? `<img src="${esc(a.thumb)}" alt="">` : `<span aria-hidden="true">${a.kind === "pdf" ? "📄" : "📝"}</span>`}<span class="nm">${esc(a.name.length > 22 ? a.name.slice(0, 21) + "…" : a.name)}</span><button type="button" class="x" data-attx="${i}" aria-label="Remove ${esc(a.name)}">✕</button></span>`).join("");
+  bar.querySelector(".tatt-quick").hidden = !TATT.some(a => a.kind !== "text");
+  bar.classList.toggle("has", TATT.length > 0);
+}
+function attB64(blob){ return new Promise((ok, no) => { const r = new FileReader(); r.onload = () => ok(String(r.result).split(",")[1] || ""); r.onerror = () => no(r.error); r.readAsDataURL(blob); }); }
+async function attLoadImg(file){
+  if (window.createImageBitmap) { try { return await createImageBitmap(file, {imageOrientation:"from-image"}); } catch(e) {} }
+  return new Promise((ok, no) => { const u = URL.createObjectURL(file); const im = new Image(); im.onload = () => { ok(im); setTimeout(() => URL.revokeObjectURL(u), 1000); }; im.onerror = () => { URL.revokeObjectURL(u); no(new Error("decode")); }; im.src = u; });
+}
+function attDraw(img, maxSide, q){
+  const w0 = img.width || img.naturalWidth, h0 = img.height || img.naturalHeight; const k = Math.min(1, maxSide / Math.max(w0, h0));
+  const cv = document.createElement("canvas"); cv.width = Math.max(1, Math.round(w0 * k)); cv.height = Math.max(1, Math.round(h0 * k));
+  const g = cv.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, cv.width, cv.height); g.drawImage(img, 0, 0, cv.width, cv.height);
+  return {cv, url: () => cv.toDataURL("image/jpeg", q), blob: () => new Promise(ok => cv.toBlob(ok, "image/jpeg", q))};
+}
+async function attPrep(file){
+  const name = (file.name && file.name !== "image.png" ? file.name : "screenshot.png").slice(0, 80); const type = file.type || ""; const ok = attOK();
+  if (/^image\//.test(type) || /\.(jpe?g|png|webp|gif|bmp|heic|heif)$/i.test(name)) {
+    if (!ok.img) throw new Error(TUTOR_MODE === "claude" ? "Pictures can't be sent to the tutor in this view." : "To ask about pictures, add your own AI key in ⚙ Settings.");
+    if (file.size > 30e6) throw new Error("That picture is too big (over 30 MB).");
+    let img; try { img = await attLoadImg(file); } catch(e) { throw new Error("Couldn't open \"" + name + "\". Try a screenshot or a JPEG/PNG photo" + (/heic|heif/i.test(name + type) ? " (iPhone HEIC photos: set Camera › Formats › Most Compatible, or take a screenshot of the photo)" : "") + "."); }
+    const big = attDraw(img, 1600, 0.85), blob = await big.blob(); if (!blob) throw new Error("Couldn't prepare that picture.");
+    const thumb = attDraw(img, 160, 0.7).url(); if (img.close) img.close();
+    return {kind:"image", mime:"image/jpeg", name: name.replace(/\.(png|webp|gif|bmp|heic|heif)$/i, ".jpg"), blob, data: await attB64(blob), thumb};
+  }
+  if (type === "application/pdf" || /\.pdf$/i.test(name)) {
+    if (!ok.pdf) throw new Error(TUTOR_MODE === "claude" ? "PDFs can't be sent here. Take a screenshot of the page instead." : "To ask about PDFs, add your own AI key in ⚙ Settings, or take a screenshot of the page.");
+    if (file.size > 15e6) throw new Error("That PDF is too big (over 15 MB). Screenshot the pages you need instead.");
+    return {kind:"pdf", mime:"application/pdf", name, data: await attB64(file)};
+  }
+  if (/^text\//.test(type) || /json|xml/.test(type) || ATT_TEXT.test(name)) {
+    if (file.size > 2e6) throw new Error("That text file is too big. Copy the part you need into the question instead.");
+    let text = await file.text(); const cut = text.length > 12000; if (cut) text = text.slice(0, 12000);
+    return {kind:"text", name, text, cut};
+  }
+  throw new Error("\"" + name + "\" isn't a picture, PDF or text file the tutor can read.");
+}
+async function attAdd(files){
+  const list = [...(files || [])]; if (!list.length) return; const ok = attOK();
+  if (!ok.any && !ok.text) return toast("Turn on the AI tutor in ⚙ Settings to ask about pictures.");
+  for (const f of list) {
+    if (TATT.length >= ok.max) { toast(ok.max === 1 ? "One picture at a time here: remove it to add another." : "Up to " + ok.max + " files per question."); break; }
+    try { TATT.push(await attPrep(f)); } catch(e) { toast(e.message || "Couldn't add that file."); }
+  }
+  attChips();
+  const pn = $("#tpanel"); const i = pn && (pn.querySelector("#gq") || pn.querySelector(".tfollow input")); if (i && TATT.length) i.focus();
+}
+(function(){
+  const pn = $("#tpanel"); if (!pn) return;
+  pn.addEventListener("click", e => {
+    const p = e.target.closest("[data-attpick]"); if (p) { const inp = p.parentElement.querySelector(`[data-attin="${p.dataset.attpick}"]`); if (inp) { inp.value = ""; inp.click(); } return; }
+    const x = e.target.closest("[data-attx]"); if (x) { TATT.splice(+x.dataset.attx, 1); attChips(); return; }
+    const q = e.target.closest("[data-attq]"); if (q) { const form = q.closest("form"); const inp = form && (form.querySelector("textarea") || form.querySelector("input[type=text]")); if (!inp) return;
+      inp.value = ATT_QUICK[+q.dataset.attq][1]; form.requestSubmit ? form.requestSubmit() : form.dispatchEvent(new Event("submit", {cancelable:true, bubbles:true})); }
+  });
+  pn.addEventListener("change", e => { const inp = e.target.closest && e.target.closest("[data-attin]"); if (inp) attAdd(inp.files); });
+  pn.addEventListener("paste", e => {
+    if (!pn.querySelector(".tatt")) return; const files = [...((e.clipboardData && e.clipboardData.files) || [])];
+    if (files.length) { e.preventDefault(); attAdd(files); }
+  });
+  pn.addEventListener("dragover", e => { if (!pn.querySelector(".tatt") || !e.dataTransfer || ![...e.dataTransfer.types].includes("Files")) return; e.preventDefault(); pn.classList.add("dropping"); });
+  pn.addEventListener("dragleave", e => { if (!pn.contains(e.relatedTarget)) pn.classList.remove("dropping"); });
+  pn.addEventListener("drop", e => { pn.classList.remove("dropping"); if (!pn.querySelector(".tatt") || !e.dataTransfer || !e.dataTransfer.files.length) return; e.preventDefault(); attAdd(e.dataTransfer.files); });
 })();
 function tutorPrompt(question, articles, extra){
   const chs = [...new Set(articles.slice(0,4).map(a=>a.m))].filter(c=>CH_REVIEW[c]).slice(0,2);
