@@ -620,7 +620,7 @@ mark{background:var(--amber-bg);color:inherit;padding:0 2px;border-radius:2px}
 @media (prefers-reduced-motion:reduce){.nbpanel,.nbpanel.open{transition:none}}
 .nb-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px 10px 16px;border-bottom:1px solid var(--line)}
 .nb-h b{font-family:var(--f-display);font-weight:800;color:var(--navy);font-size:1.1rem}
-.nb-body{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:14px 16px calc(28px + env(safe-area-inset-bottom,0px));display:grid;gap:14px;align-content:start}
+.nb-body{flex:1;overflow-y:auto;grid-auto-rows:max-content;overscroll-behavior:contain;padding:14px 16px calc(28px + env(safe-area-inset-bottom,0px));display:grid;gap:14px;align-content:start}
 .nb-ctx{display:grid;gap:6px;justify-items:start}
 .nb-ctxt{font-weight:600;line-height:1.35;overflow-wrap:anywhere}
 #nbbm.on{border-color:var(--amber);color:var(--amber)}
@@ -628,7 +628,7 @@ mark{background:var(--amber-bg);color:inherit;padding:0 2px;border-radius:2px}
 .nb-add textarea,.nbedit{min-height:96px;resize:vertical;line-height:1.45}
 .nbhint{font-size:.78rem}
 .nb-tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
-.nb-tabs button{border:0;background:none;padding:9px 10px 7px;font:inherit;font-size:.88rem;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap}
+.nb-tabs button{border:0;background:none;padding:9px 8px 7px;font:inherit;font-size:.86rem;flex:1 0 auto;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap}
 .nb-tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--teal)}
 .nblist{list-style:none;margin:0;padding:0;display:grid;gap:10px}
 .nbitem{border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:grid;gap:6px;background:var(--surface)}
@@ -698,6 +698,22 @@ details.setgrp .sgbody{display:grid;gap:12px;padding:14px 18px 18px}
 .tp-intro{margin:0;font-size:.92rem}
 .tfirst{display:grid;gap:8px}
 .tfirst textarea{min-height:76px;resize:vertical}
+.bkbody{display:grid;gap:12px}.bkbody fieldset{display:grid;gap:8px}.bkbody textarea{width:100%;box-sizing:border-box;font:.8rem var(--f-mono)}
+.bkprev{display:grid;gap:8px;margin-top:4px;border-left:4px solid var(--teal)}.bkprev p{margin:0}
+.nbtags,.nbtagbar,.nbsug{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.nbtag{border:1px solid var(--line);background:var(--teal-bg);color:var(--ink);border-radius:999px;padding:2px 9px;font:500 .78rem var(--f-mono);cursor:pointer;line-height:1.5}
+.nbtag small{opacity:.65;font-size:.72rem}.nbtag.on{background:var(--teal);border-color:var(--teal);color:#fff}.nbtag.add{background:var(--surface);font-family:inherit}
+.nbtag:hover{border-color:var(--teal)}
+.nbtagbtn{border:0;background:none;color:var(--muted);font-size:.78rem;cursor:pointer;padding:2px 4px;border-radius:6px}.nbtagbtn:hover{color:var(--ink);background:var(--line)}
+.nbtagedit{display:grid;gap:7px;padding:8px;border:1px dashed var(--line);border-radius:10px}.nbtagedit input{width:100%;box-sizing:border-box}
+.nbsug .muted{font-size:.78rem;margin-right:2px}
+.nbfilter{display:grid;gap:6px;padding:8px 0 4px}
+.nbtagact{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-size:.85rem}.nbren{display:flex;gap:6px;align-items:center}.nbren input{width:150px}
+.nbtagsin{width:100%;box-sizing:border-box}
+.nbcount{margin:0;font-size:.82rem}.nbother{margin:4px 0 0;font-size:.88rem}
+.nbtext.clip{max-height:none}.nbtext mark,.nblabel mark{background:var(--amber-bg);color:inherit;border-radius:3px;padding:0 1px}
+.nbitem.chat .nbtext{font-size:.88rem;color:var(--muted)}
+.nb-bk{margin:14px 0 4px;font-size:.85rem}
 .tfollow.tfollow-att{display:grid;gap:6px}.tfrow{display:flex;gap:6px}.tfrow input{flex:1;min-width:0}
 .tatt{display:grid;gap:6px;white-space:normal}.tatt-btns{display:flex;flex-wrap:wrap;gap:6px}
 .tatt-chips{display:flex;flex-wrap:wrap;gap:6px}.tatt-chips:empty{display:none}
@@ -750,11 +766,20 @@ body.xvfullon{overflow:hidden}
 .xvbig:hover{opacity:1;transform:translate(-50%,-50%) scale(1.05)}
 .xvbig[hidden]{display:none}
 .xvstage.paused .xvsvg{filter:saturate(.85)}
-.xvscn{position:absolute;left:10px;top:8px;font:600 .74rem var(--f-mono);color:var(--muted);background:var(--surface);padding:2px 8px;border-radius:999px;border:1px solid var(--line);max-width:calc(100% - 20px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.xvscn{display:block;font:600 .78rem var(--f-mono);color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;padding:0 2px}
+.xvseekrow{display:flex;align-items:center;gap:10px;min-width:0}
+.xvseek{position:relative;flex:1;min-width:0;padding:9px 0;margin:0 6px;touch-action:none}
+.xvscrub{position:absolute;left:0;right:0;top:0;bottom:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer;-webkit-appearance:none;appearance:none}
+.xvknob{position:absolute;top:50%;left:0;width:18px;height:18px;border-radius:50%;background:var(--teal);border:3px solid var(--surface);box-shadow:0 1px 5px rgba(0,0,0,.35);transform:translate(-50%,-50%);pointer-events:none;transition:left .35s}
+.xvseek:hover .xvknob,.xvscrub:focus-visible + .xvknob{transform:translate(-50%,-50%) scale(1.15)}
+.xvseek:has(.xvscrub:focus-visible){outline:2px solid var(--focus);outline-offset:3px;border-radius:6px}
+.xvbubble{position:absolute;bottom:100%;transform:translateX(-50%);margin-bottom:6px;background:var(--ink);color:var(--surface);font:600 .74rem var(--f-mono);padding:4px 8px;border-radius:6px;white-space:nowrap;pointer-events:none;max-width:70vw;overflow:hidden;text-overflow:ellipsis;z-index:3}
+.xvbubble[hidden]{display:none}
+.xvtime{font-size:.78rem;color:var(--muted);white-space:nowrap}
 .xvbar{display:flex;gap:4px}
-.xvseg{flex:1;height:10px;border:0;padding:0;border-radius:5px;background:var(--line);cursor:pointer;overflow:hidden;position:relative}
+.xvseg{flex:1 1 0;height:8px;border-radius:4px;background:var(--line);overflow:hidden;position:relative;display:block;min-width:4px}
 .xvseg i{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--teal);transition:width .5s}
-.xvseg.cur{outline:2px solid var(--teal);outline-offset:1px}
+.xvseg.cur{background:color-mix(in srgb,var(--teal) 25%,var(--line))}
 .xvctl{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .xvctl .xvsp{flex:1}
 .xvctl .xvplay{min-width:96px}
@@ -845,8 +870,14 @@ svg .xaccentt{fill:var(--teal);font-family:var(--f-body)} svg .xwarnt{fill:var(-
 
 <script>
 // App version and update history (newest first). Bump APP_VERSION and add an entry for every release.
-const APP_VERSION = "1.23 beta 4";
+const APP_VERSION = "1.23 beta 6";
 const CHANGELOG = [
+  {v:"1.23 beta 6", date:"Oct 2026", items:[
+    "Tutor chat history and 🏷️ tags: every chat in the tutor panel is now saved automatically to the notebook's new Chats list, where you can tag it, search it and tap “Continue this chat” to pick up where you left off. Notes get tags too: type them when you save (or write #words in the note), tap a tag to see every note with it, and rename or remove a tag everywhere at once. Search finds words and #tags in notes and chats and highlights the matches; tag suggestions come from the acronyms in each note.",
+    "Video explainers: drag (or tap) the seek bar to jump to any point without restarting the scene, with a time readout and a preview of where you'll land; arrow keys step one line at a time. The scene name now sits above the picture instead of covering the top of it on phones, and laptop SODIMMs are drawn at their real shape (shorter and squarer than desktop DIMMs, four chips, a latch notch on each end)."]},
+  {v:"1.23 beta 5", date:"Oct 2026", items:[
+    "Back up and restore (Settings → Backup and restore, or “Back up or restore” in the notebook): save one backup file with your notes, bookmarks, highlights, saved and open tutor chats, answer history, flags, exam scores, saved PC builds and settings. Download it, share it to Drive, iCloud or email on a phone, or copy it as text. Your AI key is never included.",
+    "Restore on any phone, computer or browser, including between the Claude version and the website version: open the file or paste the text, see what's in it, then “Combine with this device” (keeps everything and adds the backup, no duplicates) or “Replace this device's data”. Settings shows when you last made a backup."]},
   {v:"1.23 beta 4", date:"Oct 2026", items:[
     "Ask the AI tutor about a picture: take a photo with your phone's camera, pick a screenshot, paste one (Ctrl+V) or drop a file into the tutor panel, then ask about it. The tutor says what it sees (model numbers, error codes, readings), answers for the A+ exams, names the objective area and links the matching lesson and study note. Quick buttons: What is this?, Explain this error, What's wrong?, Read this for me, Quiz me on this.",
     "Works with pictures inside Claude and with your own AI key (all four providers); with your own key you can also attach PDFs, and text files such as logs, scripts and config files work too. Follow-up questions keep the picture in the conversation. Photos are shrunk on your device before sending, and only small thumbnails are kept in the chat history."]},
@@ -2605,12 +2636,16 @@ const XA = (() => {
   // DIMM module, front view. type: ddr3 | ddr4 | ddr5 | so4 | so5 | so3
   const NOTCH = {ddr3: 0.6, ddr4: 0.545, ddr5: 0.5, so3: 0.4, so4: 0.42, so5: 0.44};
   const dimm = (x, y, w, type = "ddr4", o = {}) => {
-    const h = o.h || w * 0.2, n = o.chips || (o.ecc ? 9 : 8), nf = NOTCH[type] || 0.5;
+    // SODIMMs are about half as long as desktop DIMMs and much squarer (67.6 x 30 mm), with fewer, larger chips and a half-round latch notch on each short edge
+    const so = /^so/.test(type);
+    const h = o.h || w * (so ? 0.44 : 0.2), n = o.chips || (so ? 4 : o.ecc ? 9 : 8), nf = NOTCH[type] || 0.5;
     let s = R(x, y, w, h, {f: o.pcb || "#2c7a4b", rx: 3});
-    const cw = (w - 16) / n * 0.78, gap = (w - 16) / n;
-    for (let i = 0; i < n; i++) s += R(x + 8 + i * gap + (gap - cw) / 2, y + h * 0.14, cw, h * 0.5, {f: o.ecc && i === n - 1 ? "#7a1f1f" : "#1b1c1f", rx: 2});
-    s += R(x + 4, y + h * 0.78, w - 8, h * 0.16, {f: "#d4a72c", rx: 1});
-    s += R(x + w * nf - 3, y + h * 0.72, 6, h * 0.3, {c: "xcutfill", rx: 1});
+    const cw = (w - 16) / n * (so ? 0.82 : 0.78), gap = (w - 16) / n;
+    for (let i = 0; i < n; i++) s += R(x + 8 + i * gap + (gap - cw) / 2, y + h * (so ? 0.12 : 0.14), cw, h * (so ? 0.46 : 0.5), {f: o.ecc && i === n - 1 ? "#7a1f1f" : "#1b1c1f", rx: 2});
+    s += R(x + 4, y + h * (so ? 0.82 : 0.78), w - 8, h * (so ? 0.12 : 0.16), {f: "#d4a72c", rx: 1});
+    s += R(x + w * nf - 3, y + h * (so ? 0.78 : 0.72), 6, h * (so ? 0.24 : 0.3), {c: "xcutfill", rx: 1});
+    if (so) { const r = Math.max(2.5, h * 0.09), cy = y + h * 0.66;
+      s += `<path d="M${x} ${cy - r} a${r} ${r} 0 0 1 0 ${2 * r} z" class="xcutfill"/><path d="M${x + w} ${cy - r} a${r} ${r} 0 0 0 0 ${2 * r} z" class="xcutfill"/>`; }
     if (o.label) s += R(x + w * 0.3, y + h * 0.2, w * 0.4, h * 0.36, {f: "#f4f1e8", rx: 2}) + T(x + w / 2, y + h * 0.43, o.label, {a: "middle", fs: o.lfs || 10, w: 700, fill: "#222"});
     return s;
   };
@@ -2958,7 +2993,7 @@ EXPLAINERS[1] = (() => {
       R(20, 30, 300, 250, {f: "#3a3d44", rx: 14}) + T(170, 54, "bottom of the laptop", {a: "middle", fs: 11, fill: "#d7dade"}) +
       B(1, R(40, 210, 260, 50, {f: "#22252a", rx: 6}) + T(170, 240, "battery", {a: "middle", fs: 12, w: 700, fill: "#9aa0a8"})) +
       B(2, R(40, 70, 110, 60, {f: "#6b7280", rx: 4}) + T(95, 104, "hard drive", {a: "middle", fs: 11, w: 700, fill: "#fff"})) +
-      B(3, dimm(170, 76, 120, "so4", {h: 24}) + dimm(170, 106, 120, "so4", {h: 24})) +
+      B(3, dimm(184, 84, 104, "so4") + dimm(172, 70, 104, "so4")) +
       B(4, R(170, 144, 60, 42, {f: "#1d4ed8", rx: 3}) + T(200, 170, "Wi-Fi", {a: "middle", fs: 10, w: 700, fill: "#fff"}) + `<path d="M230 150 l40 -10 M230 160 l40 0" class="xcable2"/>`) +
       [["Remove or disable the battery", "(\"Ship Mode\" for built-in ones)"], ["Hard drive", "bottom cover, screws, cable"], ["Memory", "release both latches: it pops up"], ["Wireless card", "two antenna wires, one screw"], ["Optical drive", "usually one screw"], ["Crack the case", "spudger along the seam"], ["Keyboard bezel", "keyboard + touch pad cables"]]
         .map(([a, b], i) => B(i < 4 ? i + 1 : 5, row(340, 14 + i * 47, 280, i + 1, a, b, {fs: 12}))).join("") +
@@ -2972,7 +3007,7 @@ EXPLAINERS[1] = (() => {
         "Then the optical drive, usually one screw. Then crack the case by running a spudger along the seam, and remove the keyboard bezel after disconnecting the keyboard and touch pad cables."]},
     {t: "Inside an all-in-one", svg: svg(
       R(30, 30, 300, 200, {f: "#2a2e35", rx: 10}) + R(40, 40, 280, 160, {f: "#111827", rx: 4}) + R(150, 230, 60, 60, {f: "#3a3d44", rx: 4}) + R(110, 290, 140, 14, {f: "#3a3d44", rx: 6}) +
-      B(1, R(60, 60, 90, 54, {f: "#6b7280", rx: 3}) + T(105, 92, "3.5\" drive", {a: "middle", fs: 11, w: 700, fill: "#fff"}) + dimm(170, 62, 110, "so4", {h: 22}) + R(60, 128, 70, 56, {f: "#1f5a3d", rx: 3}) + T(95, 160, "CPU", {a: "middle", fs: 11, w: 700, fill: "#e9f5ee"})) +
+      B(1, R(60, 60, 90, 54, {f: "#6b7280", rx: 3}) + T(105, 92, "3.5\" drive", {a: "middle", fs: 11, w: 700, fill: "#fff"}) + dimm(170, 58, 96, "so4") + R(60, 128, 70, 56, {f: "#1f5a3d", rx: 3}) + T(95, 160, "CPU", {a: "middle", fs: 11, w: 700, fill: "#e9f5ee"})) +
       B(1, card(360, 30, 260, 110, "A hybrid", ["desktop-size hard drive, but laptop", "SODIMM memory and a laptop-style", "fan on a desktop CPU socket"], {fs: 15, sfs: 12})) +
       B(2, card(360, 152, 260, 80, "Easy swaps", ["wireless card and SODIMMs;", "CMOS battery on the board"], {fs: 15, sfs: 12})) +
       B(3, card(360, 244, 260, 82, "Anything more", ["needs the service manual; board and", "PSU are proprietary: buy from the maker"], {fs: 15, sfs: 11, c: "xblk"})),
@@ -3695,7 +3730,7 @@ EXPLAINERS[3] = (() => {
         T(395, 228, "DDR5", {fs: 17, w: 700}) + T(395, 248, "288 pins · notch nearer center", {fs: 13, c: "dm"}) + T(395, 266, "fastest, lowest voltage", {fs: 13, c: "dm"})) +
       dot(3, 30 + 340 * 0.6, 84, 15) + dot(4, 30 + 340 * 0.545, 172, 15) + dot(4, 30 + 340 * 0.5, 260, 15) +
       B(2, tag(395, 92, "Dual = pins on both sides", {w: 200}) + tag(395, 178, "64-bit data path", {w: 140})) + ring(2, 24, 106, 352, 80) +
-      B(5, dimm(30, 288, 175, "so5") + T(220, 310, "SODIMM (laptops)", {fs: 14, w: 700}) + T(220, 328, "same DDR generations", {fs: 12, c: "dm"})) +
+      B(5, dimm(70, 290, 120, "so5") + T(220, 310, "SODIMM (laptops)", {fs: 14, w: 700}) + T(220, 328, "same DDR generations", {fs: 12, c: "dm"})) +
       B(1, tag(380, 300, "RAM = DRAM, refreshed constantly", {w: 210})),
       "DDR3, DDR4 and DDR5 memory modules with their notch positions, and a smaller SODIMM"),
       beats: [
@@ -3785,12 +3820,12 @@ EXPLAINERS[3] = (() => {
         "On a label, it's the first number in the timing string. In 15-17-17-35, the CAS latency is 15.",
         "So CL30 memory is a bit quicker than CL40, though the CL40 kit may cost less. When selecting memory, use the type the motherboard maker recommends."]},
     {t: "Laptop memory: SODIMMs", svg: svg(
-      B(1, dimm(30, 40, 260, "so5")) + B(1, dimm(30, 130, 260, "so4")) + B(3, dimm(30, 220, 250, "so3")) +
+      B(1, dimm(80, 34, 150, "so5")) + B(1, dimm(80, 124, 150, "so4")) + B(3, dimm(84, 216, 142, "so3")) +
       B(2, T(320, 62, "DDR5 SODIMM · 262 pins", {fs: 16, w: 700}) + T(320, 82, "high-performance & gaming laptops", {fs: 13, c: "dm"}) +
         T(320, 152, "DDR4 SODIMM · 260 pins", {fs: 16, w: 700}) + T(320, 172, "mainstream laptops", {fs: 13, c: "dm"})) +
       B(3, T(320, 242, "DDR3 SODIMM · 204 pins", {fs: 16, w: 700}) + T(320, 262, "older or refurbished laptops", {fs: 13, c: "dm"})) +
       B(4, tag(30, 312, "A laptop takes only its own type: pins and notch prevent mistakes", {w: 440})) +
-      dot(4, 30 + 260 * 0.44, 82, 13) + dot(4, 30 + 260 * 0.42, 172, 13) + dot(4, 30 + 250 * 0.4, 262, 13),
+      dot(4, 80 + 150 * 0.44, 108, 13) + dot(4, 80 + 150 * 0.42, 198, 13) + dot(4, 84 + 142 * 0.4, 286, 13),
       "DDR5, DDR4 and DDR3 SODIMMs with pin counts"),
       beats: [
         "Laptops use SODIMMs: small outline DIMMs, pronounced sew-dims. They come in the same DDR generations as desktop memory.",
@@ -3908,7 +3943,7 @@ EXPLAINERS[3] = (() => {
     {t: "Upgrade laptop memory", svg: svg(
       R(25, 30, 360, 300, {f: "#3a3d44", rx: 18}) + [0, 1, 2, 3, 4, 5].map(i => R(50 + i * 20, 60, 10, 50, {f: "#2b2e34", rx: 4})).join("") +
       R(110, 150, 200, 140, {f: "#22252a", rx: 6}) +
-      dimm(130, 170, 160, "so4", {h: 40}) + dimm(130, 230, 160, "so4", {h: 40}) +
+      dimm(140, 160, 140, "so4") + dimm(140, 226, 140, "so4") +
       X(2, R(106, 146, 208, 148, {f: "#4b4f57", rx: 8}) + C(118, 158, 4, {f: "#9aa0a8"}) + C(302, 158, 4, {f: "#9aa0a8"}) + C(118, 282, 4, {f: "#9aa0a8"}) + C(302, 282, 4, {f: "#9aa0a8"}) + T(210, 226, "RAM cover", {a: "middle", fs: 13, fill: "#d7dade"})) +
       B(1, card(405, 22, 215, 72, "Check the warranty", ["use memory the maker approves", "for that exact model"], {fs: 14, sfs: 11})) +
       B(2, tag(405, 106, "Unplug, remove battery", {w: 180})) +
@@ -29740,7 +29775,24 @@ document.addEventListener("submit", e => {
 // ---------- tutor side panel (any page): pin it to keep it open while you move around; the chat is kept until "New chat" ----------
 const TP = {open:false, pinned:!!S.pref.tutorPin};
 function tpConv(){ if (!S.tchat || !Array.isArray(S.tchat.turns)) S.tchat = {context:"", turns:[]}; return S.tchat; }
-function tpSaveConv(box){ if (!box || !box._conv) return; S.tchat = {context: box._conv.context, turns: box._conv.turns.filter(t => !(t.r === "tutor" && /^Thinking…$/.test(t.t))).map(t => t.att ? {r:t.r, t:t.t, att:t.att} : {r:t.r, t:t.t})}; save(); }
+function tpSaveConv(box){ if (!box || !box._conv) return; const c = box._conv;
+  S.tchat = {context: c.context, turns: c.turns.filter(t => !(t.r === "tutor" && /^Thinking…$/.test(t.t))).map(t => t.att ? {r:t.r, t:t.t, att:t.att} : {r:t.r, t:t.t})};
+  if (c.nid) S.tchat.nid = c.nid; if (c.t0) S.tchat.t0 = c.t0; if (c.off) S.tchat.off = 1;
+  chatArchive(S.tchat); c.nid = S.tchat.nid; c.t0 = S.tchat.t0; save(); }
+// Every tutor chat in the side panel is kept in the notebook's Chats list automatically (one entry per chat, updated as it grows)
+function chatArchive(tc){
+  if (!tc || tc.off || !Array.isArray(tc.turns)) return;
+  const turns = tc.turns.filter(t => !(t.r === "tutor" && /^Thinking…$/.test(t.t)));
+  if (!turns.some(t => t.r === "tutor" && t.t && t.t.trim())) return;
+  if (!tc.nid) { tc.nid = "c" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5); tc.t0 = Date.now(); }
+  let n = S.nb.notes.find(x => x.id === tc.nid);
+  if (!n) { n = {id: tc.nid, k: "tutor:" + (tc.t0 || Date.now()), chat: 1, r: null, a: null, note: null, q: null, t: tc.t0 || Date.now(), tags: []}; S.nb.notes.push(n); }
+  const first = (turns.find(t => t.r === "you") || {t: "Tutor chat"}).t;
+  n.label = "Tutor chat: " + (first.length > 70 ? first.slice(0, 69) + "…" : first);
+  n.text = turns.map(t => (t.r === "you" ? "You: " : "Tutor: ") + (t.att && t.att.length ? "[" + t.att.map(a => a.name).join(", ") + "] " : "") + t.t).join("\n\n");
+  n.turns = turns.map(t => t.att ? {r:t.r, t:t.t, att:t.att} : {r:t.r, t:t.t}); n.u = Date.now();
+  if (NB.open) nbRender();
+}
 function tpScroll(){ const b = document.querySelector("#tpanel .tp-body"); if (b) b.scrollTop = b.scrollHeight; }
 function tpBody(){
   const pn = $("#tpanel"); const body = pn.querySelector(".tp-body"); const c = tpConv();
@@ -29758,7 +29810,7 @@ function tpBody(){
       runTutor(tutorPrompt(q, r.kb.map(x => x.k), docs || ""), $("#tpout"), null, atts); });
   } else {
     body.innerHTML = `<div class="out tutor-out" id="tpout"></div>`; const box = $("#tpout");
-    box._conv = {context: c.context, turns: c.turns.map(t => t.att ? {r:t.r, t:t.t, att:t.att} : {r:t.r, t:t.t}), stopBtn:null}; chatRender(box);
+    box._conv = {context: c.context, turns: c.turns.map(t => t.att ? {r:t.r, t:t.t, att:t.att} : {r:t.r, t:t.t}), stopBtn:null, nid: c.nid, t0: c.t0, off: c.off}; chatRender(box);
   }
   const box = $("#tpout"); if (box && !box._mo) { box._mo = new MutationObserver(() => { const b = pn.querySelector(".tp-body"); if (b && b.scrollHeight - b.scrollTop - b.clientHeight < 160) tpScroll(); }); box._mo.observe(box, {childList:true, subtree:true, characterData:true}); }
   setTimeout(tpScroll, 0);
@@ -29766,7 +29818,7 @@ function tpBody(){
 function tpBuild(){
   const pn = $("#tpanel");
   pn.innerHTML = `<div class="nb-h tp-h"><b><span aria-hidden="true">💬</span> AI tutor</b><div class="row" style="gap:4px"><button type="button" class="iconbtn tpmin" data-tp="min" aria-label="Minimize the tutor" title="Minimize"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" class="iconbtn tppin" data-tp="pin" aria-pressed="${TP.pinned}" title="${TP.pinned ? "Unpin" : "Pin: keep the tutor open while you move around"}" aria-label="${TP.pinned ? "Unpin the tutor panel" : "Pin the tutor panel open"}">📌</button><button type="button" class="iconbtn" data-tp="close" aria-label="Close the tutor (your chat is kept)" title="Close (your chat is kept)"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button></div></div>
-    <div class="tp-tools"><button type="button" class="btn small ghost" data-tp="save">💾 Save to notes</button><button type="button" class="btn small ghost" data-tp="new">＋ New chat</button><button type="button" class="btn small ghost" data-act="tutorsetup">⚙ Settings</button>${xvChs().length ? `<button type="button" class="btn small ghost" data-tp="xv">🎬 Explainers</button>` : ""}</div>
+    <div class="tp-tools"><button type="button" class="btn small ghost" data-tp="hist" title="Every chat is saved automatically">📓 Chat history</button><button type="button" class="btn small ghost" data-tp="new">＋ New chat</button><button type="button" class="btn small ghost" data-act="tutorsetup">⚙ Settings</button>${xvChs().length ? `<button type="button" class="btn small ghost" data-tp="xv">🎬 Explainers</button>` : ""}</div>
     <div class="tp-body"></div>`;
   tpBody();
 }
@@ -29795,7 +29847,8 @@ function tpClose(){ if (!TP.open) return; TP.open = false; const pn = $("#tpanel
     if (a === "close") return tpClose();
     if (a === "min") { const m = !pn.classList.contains("min"); pn.classList.toggle("min", m); document.body.classList.toggle("tp-min", m); b.setAttribute("aria-label", m ? "Expand the tutor" : "Minimize the tutor"); b.title = m ? "Expand" : "Minimize"; if (!m) setTimeout(tpScroll, 0); return; }
     if (a === "pin") { TP.pinned = !TP.pinned; S.pref.tutorPin = TP.pinned; save(); tpLayout(); const it = pn.querySelector(".tp-intro"); if (it) tpBody(); return toast(TP.pinned ? "Pinned: the tutor stays open while you move around the app." : "Unpinned: the tutor closes when you tap outside it. Your chat is kept."); }
-    if (a === "new") { const box = $("#tpout"); if (box && box._conv && box._conv.busy && tutorCtl) tutorCtl.abort(); S.tchat = {context:"", turns:[]}; save(); tpBody(); const i = pn.querySelector("#gq"); if (i) i.focus(); return; }
+    if (a === "new") { const box = $("#tpout"); if (box && box._conv && box._conv.busy && tutorCtl) tutorCtl.abort(); const had = !!(S.tchat && S.tchat.nid && !S.tchat.off && S.nb.notes.some(n => n.id === S.tchat.nid)); S.tchat = {context:"", turns:[]}; save(); tpBody(); const i = pn.querySelector("#gq"); if (i) i.focus(); if (had) toast("Your last chat is saved in 📓 Chat history."); return; }
+    if (a === "hist") { if (!TP.pinned) tpClose(); NB.tags = []; NB.q = ""; return nbOpen("chats"); }
     if (a === "xv") { if (!TP.pinned) tpClose(); return go("explainers"); }
     if (a === "save") {
       const box = $("#tpout"); if (box && box._conv) tpSaveConv(box);
@@ -31138,6 +31191,130 @@ document.addEventListener("change", e => {
 });
 
 // ---------- review ----------
+// ---------- backup and restore (move notes, progress and tutor chats to another device or browser) ----------
+const BK_KIND = "aplus-study-bench-backup";
+function bkCounts(D){
+  D = D || {}; const nb = D.nb || {}; const notes = Array.isArray(nb.notes) ? nb.notes : [];
+  const tchat = D.tchat && Array.isArray(D.tchat.turns) ? D.tchat.turns.length : 0;
+  return {notes: notes.filter(n => !/^tutor:/.test(n.k || "")).length, chats: notes.filter(n => /^tutor:/.test(n.k || "")).length + (tchat ? 1 : 0),
+    bms: Array.isArray(nb.bms) ? nb.bms.length : 0, hl: Array.isArray(D.hl) ? D.hl.length : 0, answered: Object.keys(D.att || {}).length,
+    flags: Object.keys(D.flag || {}).length, exams: Array.isArray(D.exams) ? D.exams.length : 0, builds: D.bl && Array.isArray(D.bl.saved) ? D.bl.saved.length : 0};
+}
+function bkSummary(c){
+  const parts = [[c.notes,"note"],[c.chats,"tutor chat"],[c.bms,"bookmark"],[c.hl,"highlight"],[c.answered,"answered question"],[c.flags,"flagged question"],[c.exams,"exam score"],[c.builds,"saved PC build"]]
+    .filter(([n]) => n).map(([n, w]) => n + " " + w + (n === 1 ? "" : "s"));
+  return parts.length ? parts.join(" · ") : "nothing saved yet";
+}
+function bkMake(){
+  const data = JSON.parse(JSON.stringify(S)); delete data.lastBackup;
+  return {kind: BK_KIND, v: 1, app: "A+ Study Bench", appVersion: APP_VERSION, made: new Date().toISOString(),
+    tutor: {provider: TUTOR.provider || "", model: TUTOR.model || "", handoff: TUTOR.handoff || ""}, data}; // never includes your AI key
+}
+function bkName(){ const d = new Date(); const p = n => String(n).padStart(2, "0"); return "aplus-backup-" + d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()) + ".json"; }
+function bkDone(){ S.lastBackup = Date.now(); save(); bkPanel(); }
+async function bkDownload(){
+  const text = JSON.stringify(bkMake()), name = bkName();
+  if (window.claude && typeof window.claude.use === "function") {
+    const dl = await window.claude.use("downloads").catch(() => null);
+    if (dl) { try { await dl.save({filename: name, data: text}); bkDone(); toast("Backup saved: " + name); return; }
+      catch(e) { if (e && e.code === "declined") return; } }
+  }
+  try { const u = URL.createObjectURL(new Blob([text], {type: "application/json"})); const a = document.createElement("a"); a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000); bkDone(); toast("Backup downloaded: " + name + " (check your Downloads folder)."); }
+  catch(e) { toast("This view can't download files. Use “Copy backup as text” instead."); }
+}
+async function bkShare(){
+  const name = bkName(); const file = new File([JSON.stringify(bkMake())], name, {type: "application/json"});
+  try { await navigator.share({files: [file], title: "A+ Study Bench backup"}); bkDone(); }
+  catch(e) { if (e && e.name !== "AbortError") toast("Sharing didn't work here. Use Download or Copy instead."); }
+}
+async function bkCopy(){
+  const text = JSON.stringify(bkMake());
+  try { await navigator.clipboard.writeText(text); bkDone(); toast("Backup copied. Paste it somewhere safe (an email or note to yourself), then paste it into “Restore” on the other device."); }
+  catch(e) { const ta = document.querySelector("#bkout"); if (ta) { ta.hidden = false; ta.value = text; ta.select(); toast("Select all of the text in the box and copy it."); bkDone(); } }
+}
+function bkParse(text){
+  let j; try { j = JSON.parse(String(text || "").trim().replace(/^﻿/, "")); } catch(e) { throw new Error("That isn't an A+ Study Bench backup (the text couldn't be read). Make sure you copied all of it."); }
+  if (!j || j.kind !== BK_KIND || !j.data || typeof j.data !== "object") throw new Error("That file isn't an A+ Study Bench backup.");
+  return j;
+}
+const BK = {pending: null};
+function bkPreview(j){
+  BK.pending = j; const box = document.querySelector("#bkprev"); if (!box) return;
+  const when = new Date(j.made); const c = bkCounts(j.data);
+  box.hidden = false;
+  box.innerHTML = `<p><b>Backup from ${esc(isNaN(when) ? "an unknown date" : when.toLocaleString())}</b>${j.appVersion ? ` <span class="muted">(version ${esc(j.appVersion)})</span>` : ""}</p>
+    <p class="muted" style="margin:0">It has: ${esc(bkSummary(c))}.</p><p class="muted" style="margin:0">On this device now: ${esc(bkSummary(bkCounts(S)))}.</p>
+    <div class="row"><button class="btn small primary" data-bk="merge">Combine with this device</button><button class="btn small" data-bk="replace" style="border-color:var(--bad);color:var(--bad)">Replace this device's data</button><button class="btn small ghost" data-bk="cancel">Cancel</button></div>
+    <p class="muted" style="margin:0;font-size:.85rem">Combine keeps everything on this device and adds what's in the backup (best for moving notes between devices). Replace makes this device an exact copy of the backup.</p>`;
+}
+function bkMergeList(a, b, key){ const out = (a || []).slice(); const seen = new Map(out.map((x, i) => [key(x), i]));
+  (b || []).forEach(x => { const k = key(x); if (!seen.has(k)) { seen.set(k, out.length); out.push(x); } else { const i = seen.get(k); if ((x.u || x.t || x.date || 0) > (out[i].u || out[i].t || out[i].date || 0)) out[i] = x; } }); return out; }
+function bkMerge(L, B){
+  const R = Object.assign({}, B, L); // this device's settings win
+  const nbL = L.nb || {notes:[], bms:[]}, nbB = B.nb || {notes:[], bms:[]};
+  R.nb = Object.assign({}, nbB, nbL, {notes: bkMergeList(nbL.notes, nbB.notes, x => x.id || (x.k + "|" + x.t)), bms: bkMergeList(nbL.bms, nbB.bms, x => x.k || x.id)});
+  R.hl = bkMergeList(L.hl, B.hl, x => x.id);
+  R.exams = bkMergeList(L.exams, B.exams, x => x.ex + "|" + x.date).sort((x, y) => (x.date || 0) - (y.date || 0));
+  R.att = Object.assign({}, B.att || {}); Object.entries(L.att || {}).forEach(([k, v]) => { const o = R.att[k]; if (!o || (v.t || 0) >= (o.t || 0)) R.att[k] = v; });
+  ["flag","watched","fc","labs","sims"].forEach(k => { R[k] = Object.assign({}, B[k] || {}, L[k] || {}); });
+  if (B.bl || L.bl) { R.bl = Object.assign({}, B.bl || {}, L.bl || {}); R.bl.saved = bkMergeList((L.bl || {}).saved, (B.bl || {}).saved, x => x.name + "|" + x.date).slice(0, 30); }
+  // the open tutor chat: keep this device's; save the backup's open chat to the notebook so nothing is lost
+  const tB = B.tchat && Array.isArray(B.tchat.turns) && B.tchat.turns.length ? B.tchat : null, tL = L.tchat && Array.isArray(L.tchat.turns) && L.tchat.turns.length ? L.tchat : null;
+  if (tB && !tL) R.tchat = tB;
+  else if (tB && tL && JSON.stringify(tB.turns.map(t => t.t)) !== JSON.stringify(tL.turns.map(t => t.t))) {
+    const first = (tB.turns.find(t => t.r === "you") || {t: "Tutor chat"}).t;
+    const id = "nbk" + first.length + "_" + tB.turns.length;
+    if (!R.nb.notes.some(n => n.id === id)) R.nb.notes.push({id, k: "tutor:" + Date.now(), label: "Tutor chat (from backup): " + (first.length > 60 ? first.slice(0, 59) + "…" : first), r: null, a: null, note: null, q: null, text: tB.turns.map(t => (t.r === "you" ? "You: " : "Tutor: ") + t.t).join("\n\n"), t: Date.now()});
+  }
+  return R;
+}
+function bkApply(mode){
+  const j = BK.pending; if (!j) return;
+  const B = JSON.parse(JSON.stringify(j.data));
+  const next = mode === "replace" ? B : bkMerge(JSON.parse(JSON.stringify(S)), B);
+  next.lastBackup = S.lastBackup;
+  try { localStorage.setItem(STORE, JSON.stringify(next)); } catch(e) { return toast("Couldn't save the restored data in this browser (storage may be full or blocked)."); }
+  if (j.tutor && !TUTOR.provider && j.tutor.provider) { TUTOR.provider = j.tutor.provider; TUTOR.model = j.tutor.model || ""; saveTutor(); }
+  try { sessionStorage.setItem("aplus-restored", mode); } catch(e) {}
+  S = next; toast(mode === "replace" ? "Restored. Reloading…" : "Combined. Reloading…");
+  setTimeout(() => location.reload(), 700);
+}
+function bkPanelHTML(){
+  const last = S.lastBackup ? new Date(S.lastBackup) : null; const days = last ? Math.floor((Date.now() - last) / 864e5) : null;
+  const canShare = !!(navigator.canShare && window.File && (() => { try { return navigator.canShare({files: [new File(["{}"], "a.json", {type: "application/json"})]}); } catch(e) { return false; } })());
+  return `<p class="muted" style="margin:0">Your notes, bookmarks, highlights, saved and open tutor chats, progress, exam scores, saved PC builds and settings live only in this browser. Make a backup file to keep them safe or to move them to another phone, computer or browser (including between the Claude version and the website version of this app). Your AI key is never included.</p>
+    <p style="margin:0">On this device: <b>${esc(bkSummary(bkCounts(S)))}</b>.<br><span class="${days != null && days < 14 ? "muted" : ""}" style="${days == null || days >= 14 ? "color:var(--amber)" : ""}">${last ? "Last backup: " + esc(last.toLocaleDateString()) + (days === 0 ? " (today)" : days === 1 ? " (yesterday)" : " (" + days + " days ago)") : "No backup made on this device yet."}</span></p>
+    <fieldset><legend>Back up</legend><div class="row"><button class="btn small primary" data-bk="down">⬇ Download backup file</button>${canShare ? `<button class="btn small" data-bk="share">📤 Share or save to…</button>` : ""}<button class="btn small ghost" data-bk="copy">📋 Copy backup as text</button></div>
+      <textarea id="bkout" rows="3" readonly hidden aria-label="Backup text"></textarea></fieldset>
+    <fieldset><legend>Restore</legend><div class="row"><button class="btn small" data-bk="file">📂 Open a backup file</button><button class="btn small ghost" data-bk="paste">📋 Paste backup text</button><input type="file" id="bkfile" accept=".json,application/json,text/plain" hidden></div>
+      <div id="bkpastebox" hidden><textarea id="bkin" rows="4" placeholder="Paste the backup text here" aria-label="Paste the backup text"></textarea><div class="row"><button class="btn small primary" data-bk="readpaste">Check this backup</button></div></div>
+      <div id="bkprev" class="panel bkprev" hidden></div></fieldset>
+    <p class="muted" style="margin:0;font-size:.85rem">Tip: email the file to yourself or save it to Google Drive, iCloud or OneDrive, then open this page on the other device and choose “Open a backup file”.</p>`;
+}
+function bkPanel(){ const b = document.querySelector("#bkbody"); if (b) b.innerHTML = bkPanelHTML(); }
+function bkBind(root){
+  const b = root.querySelector("#bkbody"); if (!b || b._bound) return; b._bound = true;
+  b.addEventListener("click", e => {
+    const t = e.target.closest("[data-bk]"); if (!t) return; const a = t.dataset.bk;
+    if (a === "down") return bkDownload();
+    if (a === "share") return bkShare();
+    if (a === "copy") return bkCopy();
+    if (a === "file") { const i = b.querySelector("#bkfile"); i.value = ""; return i.click(); }
+    if (a === "paste") { const p = b.querySelector("#bkpastebox"); p.hidden = !p.hidden; if (!p.hidden) b.querySelector("#bkin").focus(); return; }
+    if (a === "readpaste") { try { bkPreview(bkParse(b.querySelector("#bkin").value)); } catch(err) { toast(err.message); } return; }
+    if (a === "cancel") { BK.pending = null; const p = b.querySelector("#bkprev"); p.hidden = true; p.innerHTML = ""; return; }
+    if (a === "merge" || a === "replace") {
+      if (a === "replace" && t.dataset.sure !== "1") { t.dataset.sure = "1"; t.textContent = "Tap again to replace everything"; return; }
+      return bkApply(a);
+    }
+  });
+  b.addEventListener("change", async e => {
+    if (e.target.id !== "bkfile" || !e.target.files.length) return; const f = e.target.files[0];
+    if (f.size > 25e6) return toast("That file is too big to be a backup.");
+    try { bkPreview(bkParse(await f.text())); } catch(err) { toast(err.message); }
+  });
+}
+try { const r = sessionStorage.getItem("aplus-restored"); if (r) { sessionStorage.removeItem("aplus-restored"); setTimeout(() => toast(r === "replace" ? "Backup restored." : "Backup combined with this device: " + bkSummary(bkCounts(S)) + "."), 900); } } catch(e) {}
 const SET_OPEN = new Set();
 function setCollapse(html){
   return html.replace(/<section class="panel setgrp"><h2>([^<]+)<\/h2>([\s\S]*?)<\/section>/g, (m, t, body) =>
@@ -31175,11 +31352,13 @@ VIEWS.settings = function(){
       <fieldset><legend>Voice</legend><div class="row"><select id="voicesel" aria-label="Voice"></select><button type="button" class="btn small" data-voicetest>▶ Hear a sample</button></div></fieldset>
       <fieldset><legend>Speed</legend><div class="shade"><span class="muted">Slower</span><input type="range" id="voicerate" min="0.7" max="1.4" step="0.05" value="${+P0.rate||1}" aria-label="Speaking speed"><span class="muted">Faster</span><span class="mono" id="ratev">${(+P0.rate||1).toFixed(2)}×</span></div></fieldset>
       <fieldset><legend>Read aloud automatically</legend><div class="chips"><label class="chip"><input type="checkbox" data-vpref="voiceExplain" ${P0.voiceExplain?"checked":""}><span>Explanations (Explain button)</span></label><label class="chip"><input type="checkbox" data-vpref="voiceChat" ${P0.voiceChat?"checked":""}><span>Tutor chat replies</span></label></div></fieldset>` : `<p class="muted" style="margin:0">This browser doesn't support reading text aloud. Explanations will still appear as text.</p>`}</section>
+    <section class="panel setgrp"><h2>Backup and restore</h2><div id="bkbody" class="bkbody">${bkPanelHTML()}</div></section>
     <section class="panel setgrp"><h2>Progress</h2><p class="muted" style="margin:0">Reset clears answer history, flags, flashcard and lab progress, and simulator scores in this browser. Your settings stay.</p>
       <div class="row" id="resetrow"><button class="btn small" data-act="reset1">Reset progress…</button></div></section>
     <section class="panel setgrp"><h2>About</h2><p class="muted" style="margin:0">A+ Study Bench · <b style="color:var(--ink)">Version ${esc(APP_VERSION)}</b>${(CHANGELOG[0]||{}).date ? " · " + esc(CHANGELOG[0].date) : ""}</p>
       <div class="row"><button class="btn small" data-act="whatsnew">What's new</button><button class="btn small ghost" data-go="tour">App tour</button></div></section>`);
   v.querySelectorAll("details.setgrp").forEach(d => d.addEventListener("toggle", () => { const k = d.dataset.sg; if (d.open) SET_OPEN.add(k); else SET_OPEN.delete(k); }));
+  bkBind(v); if (BK.focus) { BK.focus = false; const d = v.querySelector('details[data-sg="Backup and restore"]'); if (d) { d.open = true; SET_OPEN.add("Backup and restore"); setTimeout(() => d.scrollIntoView({block:"start"}), 50); } }
   const bind = (name, fn) => v.querySelectorAll(`input[name=${name}]`).forEach(i => i.addEventListener("change", () => { fn(i.value); save(); }));
   bind("theme", x => { S.pref.theme = x; if (BG_MAP[S.pref.bgTheme]) { S.pref.bgTheme = "default"; toast("Background set back to the app default so the color mode can apply."); } applyPrefs(); const y = window.scrollY; VIEWS.settings(); window.scrollTo({top:y}); });
   bind("accent", x => { S.pref.accent = x; applyPrefs(); });
@@ -31209,7 +31388,7 @@ VIEWS.review = function(){
     <section class="rgroup"><h2>Missed last time (${missed.length})</h2>${missed.length?missed.map(missedItem).join(""):`<div class="empty">Nothing missed yet.</div>`}</section>
     <section class="rgroup"><h2>Flagged (${flagged.length})</h2>${flagged.length?flagged.map(missedItem).join(""):`<div class="empty">Flag questions during practice to collect them here.</div>`}</section>
     <section class="rgroup"><h2>Your highlights (${S.hl.length})</h2>${S.hl.length ? `<div class="hllist">${S.hl.slice().reverse().map(h => `<div class="hlitem"><mark class="hl hl-${h.c}">${esc(h.q.length > 220 ? h.q.slice(0, 217) + "…" : h.q)}</mark><div class="row"><span class="muted" style="font-size:.85rem">${esc(h.label || "")}</span>${h.note ? `<button class="btn small ghost" data-act="note" data-id="${esc(h.note)}">Open</button>` : (h.r && !/-run$/.test(h.r) ? `<button class="btn small ghost" data-go="${esc(h.r)}" ${h.a != null ? `data-arg="${esc(h.a)}"` : ""}>Open</button>` : "")}<button class="btn small ghost" data-hldel="${h.id}">Remove</button></div></div>`).join("")}</div>` : `<div class="empty">Select text anywhere in the app and tap 🖍 Highlight to save it here.</div>`}</section>
-    <section class="rgroup"><h2>Your notebook</h2><div class="panel nbsum"><span>${S.nb.notes.length} note${S.nb.notes.length===1?"":"s"} · ${S.nb.bms.length} bookmark${S.nb.bms.length===1?"":"s"}</span><span class="muted" style="font-size:.88rem">Write notes about any page and bookmark pages to come back to. Tap 📓 at the top right of any page.</span><div class="row"><button class="btn small primary" data-act="notebook" data-tab="all">Open the notebook</button>${S.nb.bms.length?`<button class="btn small" data-act="notebook" data-tab="bms">Bookmarks</button>`:""}</div></div></section>
+    <section class="rgroup"><h2>Your notebook</h2><div class="panel nbsum"><span>${S.nb.notes.length} note${S.nb.notes.length===1?"":"s"} · ${S.nb.bms.length} bookmark${S.nb.bms.length===1?"":"s"}</span><span class="muted" style="font-size:.88rem">Write notes about any page and bookmark pages to come back to. Tap 📓 at the top right of any page.</span><div class="row"><button class="btn small primary" data-act="notebook" data-tab="all">Open the notebook</button>${S.nb.bms.length?`<button class="btn small" data-act="notebook" data-tab="bms">Bookmarks</button>`:""}<button class="btn small ghost" data-act="backup">⇅ Back up or restore</button></div></div></section>
     <p class="muted">AI tutor options and resetting your progress are in <button class="lk-link" data-go="settings">Settings</button>.</p>`;
 };
 
@@ -31505,9 +31684,10 @@ function xvApply(){
   box.querySelectorAll("[data-x]").forEach(el => el.classList.toggle("off", b >= +el.dataset.x));
   box.querySelectorAll("[data-m]").forEach(el => el.classList.toggle("go", b >= +el.dataset.m));
   box.querySelectorAll("[data-h]").forEach(el => el.classList.toggle("hl", el.dataset.h.split(" ").includes(String(b))));
-  XV.root.querySelectorAll("[data-xvseg]").forEach(seg => { const i = +seg.dataset.xvseg; const f = XV.ended || i < XV.pi ? 100 : i > XV.pi ? 0 : Math.round(b / s.beats.length * 100);
+  XV.root.querySelectorAll("[data-xvseg]").forEach(seg => { const i = +seg.dataset.xvseg; const sd = XV.tl && XV.tl.scene[i]; const f = XV.ended || i < XV.pi ? 100 : i > XV.pi ? 0 : sd && b ? Math.round(Math.min(1, (xvNow() - sd.t0) / sd.d) * 100) : 0;
     seg.querySelector("i").style.width = f + "%"; seg.classList.toggle("cur", i === XV.pi && !XV.ended); });
   const scn = xvQ(".xvscn"); if (scn) scn.textContent = `Scene ${XV.sc + 1} of ${XV.x.scenes.length} · ${s.t}`;
+  if (!XV.scrub) xvSeekUI(xvNow());
   const cap = xvQ(".xvcap");
   if (cap) { cap.classList.toggle("off", !XV.cc); cap.classList.toggle("idle", !b);
     cap.textContent = XV.ended ? (XV.seq.length < XV.x.scenes.length ? "That's the end of this part." : "That's the end of this explainer.") : b ? s.beats[b - 1] : (XV.playing ? s.t : `${s.t}: press Play to start.`); }
@@ -31553,17 +31733,43 @@ function xvScene(pi){
   if (pi < 0 || pi >= XV.seq.length) return;
   XV.ended = false; xvClear(); xvGoPos(pi, 500);
 }
+function xvSetFlex(){ const bar = xvQ(".xvbar"); if (bar && XV.tl) bar.querySelectorAll("[data-xvseg]").forEach(seg => { const sc = XV.tl.scene[+seg.dataset.xvseg]; if (sc) seg.style.flexGrow = sc.d.toFixed(2); }); }
 function xvSetSeq(seq, startPi){
   XV.seq = seq; const bar = xvQ(".xvbar");
-  if (bar) bar.innerHTML = seq.map((sc, i) => `<button type="button" class="xvseg" data-xvseg="${i}" title="${esc(XV.x.scenes[sc].t)}" aria-label="Scene ${sc + 1}: ${esc(XV.x.scenes[sc].t)}"><i></i></button>`).join("");
+  xvTimeline();
+  if (bar) bar.innerHTML = seq.map((sc, i) => `<span class="xvseg" data-xvseg="${i}" style="flex-grow:${XV.tl.scene[i].d.toFixed(2)}" title="${esc(XV.x.scenes[sc].t)}"><i></i></span>`).join("");
   const more = xvQ("[data-xv=more]"); if (more) more.hidden = seq.length >= XV.x.scenes.length || seq[seq.length - 1] >= XV.x.scenes.length - 1;
   XV.ended = false; XV.pi = startPi || 0; XV.sc = seq[XV.pi]; XV.b = 0;
+}
+// Estimated timeline (narration length from word count) so the seek bar can jump to any step of any scene
+function xvTimeline(){
+  const rate = +S.pref.rate || 1, T = [], scene = []; let t = 0;
+  XV.seq.forEach((sc, pi) => { const s = XV.x.scenes[sc], st = t; t += 0.9;
+    s.beats.forEach((txt, i) => { const d = Math.max(2.8, xvWords(txt) * 0.4 / rate) + 0.45; T.push({pi, b: i + 1, t0: t, d}); t += d; });
+    scene.push({t0: st, d: t - st}); });
+  XV.tl = {T, scene, total: Math.max(1, t)};
+}
+const xvClock = sec => { sec = Math.max(0, Math.round(sec)); return Math.floor(sec / 60) + ":" + String(sec % 60).padStart(2, "0"); };
+function xvNow(){ const tl = XV.tl; if (!tl) return 0; if (XV.ended) return tl.total;
+  if (!XV.b) return (tl.scene[XV.pi] || {t0: 0}).t0; const e = tl.T.find(x => x.pi === XV.pi && x.b === XV.b); return e ? e.t0 : 0; }
+function xvAt(sec){ const T = XV.tl.T; let e = T[0]; for (const x of T) { if (x.t0 - (x.b === 1 ? 0.9 : 0) <= sec) e = x; else break; } return e; }
+function xvSeekUI(sec){
+  const tl = XV.tl; if (!tl) return; const f = Math.min(1, sec / tl.total);
+  const k = xvQ(".xvknob"); if (k) k.style.left = (f * 100) + "%";
+  const r = xvQ(".xvscrub"); if (r && !XV.scrub) { r.value = Math.round(f * 1000); }
+  if (r) r.setAttribute("aria-valuetext", xvClock(sec) + " of " + xvClock(tl.total) + ", scene " + (XV.sc + 1) + ": " + XV.x.scenes[XV.sc].t);
+  const tm = xvQ(".xvtime"); if (tm) tm.textContent = xvClock(sec) + " / " + xvClock(tl.total);
+}
+function xvSeekTo(e, resume){
+  XV.ended = false; XV.pi = e.pi; XV.sc = XV.seq[e.pi]; XV.b = e.b; xvRender();
+  if (resume) { XV.playing = true; xvBeat(); }
 }
 function xvPlayerHTML(x, o){
   return `<div class="xvplayer${o.inline ? " inline" : ""}" aria-label="Explainer player">
     ${o.inline ? `<div class="xvhead"><span class="xvhead-t"><span class="eyebrow">🎬 Video explainer · beta</span><b>${esc(o.label || x.title)}</b></span><button type="button" class="btn small ghost" data-xv="close" aria-label="Close the video">✕ Close</button></div>` : ""}
-    <div class="xvstage paused"><div class="xvsvg"></div><button type="button" class="xvbig" aria-label="Play">▶</button><span class="xvscn"></span></div>
-    <div class="xvbar" role="group" aria-label="Scenes"></div>
+    <span class="xvscn"></span>
+    <div class="xvstage paused"><div class="xvsvg"></div><button type="button" class="xvbig" aria-label="Play">▶</button></div>
+    <div class="xvseekrow"><div class="xvseek"><div class="xvbar" aria-hidden="true"></div><div class="xvknob"></div><input type="range" class="xvscrub" min="0" max="1000" step="1" value="0" aria-label="Seek: drag to any point in the video"><span class="xvbubble" hidden></span></div><span class="xvtime mono">0:00 / 0:00</span></div>
     <div class="xvctl">
       <button type="button" class="btn small ghost" data-xv="prev" aria-label="Previous scene">⏮</button>
       <button type="button" class="btn small primary xvplay" data-xv="play" aria-label="Play">▶ Play</button>
@@ -31603,7 +31809,25 @@ function xvMount(host, ch, si, o = {}){
     if (k === "fs") return xvFull(!root.classList.contains("xvfull"));
     if (k === "close") { e.stopPropagation(); return xvUnmount(); }
   });
-  root.querySelector(".xvratesel").addEventListener("change", e => { S.pref.rate = +e.target.value; save(); if (XV.playing) xvBeat(); });
+  root.querySelector(".xvratesel").addEventListener("change", e => { S.pref.rate = +e.target.value; save(); xvTimeline(); xvSetFlex(); xvApply(); if (XV.playing) xvBeat(); });
+  // Seek bar: drag (or tap) anywhere; the picture follows while you drag, and playback carries on from that step when you let go
+  const rng = root.querySelector(".xvscrub"), bub = root.querySelector(".xvbubble");
+  const scrubMove = () => { if (!XV.scrub) { XV.scrub = {was: XV.playing}; XV.playing = false; xvClear(); }
+    const sec = rng.value / 1000 * XV.tl.total, e = xvAt(sec); if (!e) return;
+    if (e.pi !== XV.pi || e.b !== XV.b || XV.ended) { XV.ended = false; XV.pi = e.pi; XV.sc = XV.seq[e.pi]; XV.b = e.b; xvRender(); }
+    xvSeekUI(sec); bub.hidden = false; bub.textContent = xvClock(sec) + " · Scene " + (XV.sc + 1) + ": " + XV.x.scenes[XV.sc].t;
+    const W = rng.offsetWidth, bw = bub.offsetWidth; bub.style.left = Math.min(W - bw / 2, Math.max(bw / 2, rng.value / 1000 * W)) + "px"; };
+  const scrubEnd = () => { if (!XV.scrub) return; const was = XV.scrub.was; XV.scrub = null; bub.hidden = true;
+    const e = xvAt(rng.value / 1000 * XV.tl.total); if (e) xvSeekTo(e, was); };
+  rng.addEventListener("input", scrubMove);
+  rng.addEventListener("change", scrubEnd);
+  rng.addEventListener("pointerup", () => setTimeout(scrubEnd, 0));
+  rng.addEventListener("blur", scrubEnd);
+  rng.addEventListener("keydown", e => { // arrow keys step one narration line back or forward
+    const map = {ArrowLeft: -1, ArrowDown: -1, ArrowRight: 1, ArrowUp: 1}; if (!(e.key in map) && e.key !== "Home" && e.key !== "End") return; e.preventDefault();
+    const T = XV.tl.T; let i = T.findIndex(x => x.pi === XV.pi && x.b === Math.max(1, XV.b));
+    i = e.key === "Home" ? 0 : e.key === "End" ? T.length - 1 : Math.min(T.length - 1, Math.max(0, i + map[e.key]));
+    const was = XV.playing; xvClear(); XV.playing = false; xvSeekTo(T[i], was); });
   xvRender();
   if (o.autoplay) xvPlay();
   return true;
@@ -31706,7 +31930,7 @@ document.addEventListener("keydown", e => {
 });
 
 // ---------- Notebook (right-side panel): notes and bookmarks per page ----------
-const NB = {open:false, tab:"page", ctx:null, editing:null, q:"", t:null};
+const NB = {open:false, tab:"page", ctx:null, editing:null, q:"", t:null, tags:[], tagging:null, exp:{}, renaming:false};
 function nbCtx(){
   const m = $("#modal"), sh = $("#sheet");
   if (!m.hidden && sh.dataset.key) { const k = sh.dataset.key; const h2 = sh.querySelector("h2");
@@ -31720,23 +31944,98 @@ function nbCtx(){
 }
 const nbWhen = t => { try { return new Date(t).toLocaleString([], {month:"short", day:"numeric", year:"numeric", hour:"numeric", minute:"2-digit"}); } catch(e) { return ""; } };
 const nbCanOpen = x => !!(x.note || (x.k || "").startsWith("chrev:") || (x.q && QMAP[x.q]) || x.r);
-function nbItemHTML(x, kind){
+const isChat = x => /^tutor:/.test(x.k || "");
+// ---- tags ----
+const tagNorm = t => String(t || "").replace(/^#+/, "").replace(/\s+/g, " ").trim().toLowerCase().slice(0, 30);
+function tagsParse(str){ return [...new Set(String(str || "").split(/[,;\n]/).map(tagNorm).filter(Boolean))].slice(0, 12); }
+function tagsFromText(text){ const out = []; String(text || "").replace(/(^|[\s(])#([a-z][\w-]{1,29})/gi, (m, a, t) => { out.push(tagNorm(t)); return m; }); return out; }
+function tagCounts(list){ const m = {}; (list || S.nb.notes).forEach(n => (n.tags || []).forEach(t => { m[t] = (m[t] || 0) + 1; })); return Object.entries(m).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])); }
+let TAG_TERMS = null;
+function tagSuggest(n){
+  if (!TAG_TERMS) { const g = (typeof GLOSSARY !== "undefined" ? GLOSSARY : []).concat(typeof GLOSSARY_EXTRA !== "undefined" ? GLOSSARY_EXTRA : []);
+    TAG_TERMS = [...new Set(g.map(x => x[0]).filter(a => /^[A-Z][A-Z0-9-]{1,7}$/.test(a)))]; }
+  const have = new Set(n.tags || []); const text = (n.text || "") + " " + (n.label || ""); const out = [];
+  for (const a of TAG_TERMS) { if (out.length >= 5) break; const t = a.toLowerCase(); if (have.has(t)) continue; if (new RegExp("\\b" + a.replace(/[-]/g, "\\-") + "\\b").test(text)) out.push(t); }
+  const ch = (n.label || "").match(/Chapter (\d{1,2})\b/); if (ch && !have.has("chapter " + ch[1])) out.unshift("chapter " + ch[1]);
+  tagCounts().slice(0, 12).forEach(([t]) => { if (out.length < 9 && !have.has(t) && !out.includes(t) && text.toLowerCase().includes(t)) out.push(t); });
+  return out.slice(0, 8);
+}
+function tagChip(t, on){ return `<button type="button" class="nbtag${on ? " on" : ""}" data-nbtagf="${esc(t)}" aria-pressed="${on ? "true" : "false"}" title="Show notes tagged ${esc(t)}">#${esc(t)}</button>`; }
+// ---- search ----
+function nbQuery(){ const raw = String(NB.q || "").trim(); const toks = raw.split(/\s+/).filter(Boolean);
+  return {tags: toks.filter(t => /^#./.test(t)).map(tagNorm), words: toks.filter(t => !/^#/.test(t)).map(t => norm(t))}; }
+function nbMatch(x, Q){
+  const tags = x.tags || []; const want = NB.tags.concat(Q.tags);
+  if (want.some(t => !tags.includes(t))) return false;
+  if (!Q.words.length) return true; const hay = norm((x.text || "") + " " + (x.label || "") + " " + tags.join(" "));
+  return Q.words.every(w => hay.includes(w));
+}
+function nbMark(text, words){
+  let h = esc(text); if (!words.length) return h;
+  const re = new RegExp("(" + words.map(w => esc(w).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|") + ")", "gi");
+  return h.replace(/(<[^>]*>)|([^<]+)/g, (m, tag, txt) => tag ? tag : txt.replace(re, "<mark>$1</mark>"));
+}
+function nbTextHTML(x, words){
+  const t = x.text || ""; const LONG = 420;
+  if (t.length <= LONG || NB.exp[x.id]) return `<div class="nbtext">${nbMark(t, words)}</div>` + (t.length > LONG ? `<button type="button" class="lk-link" data-nb="exp" data-id="${esc(x.id)}">Show less</button>` : "");
+  let a = 0; if (words.length) { const i = norm(t).indexOf(words[0]); if (i > 200) a = t.lastIndexOf(" ", i - 120) + 1; }
+  const snip = (a ? "…" : "") + t.slice(a, a + 340).replace(/\s+\S*$/, "") + "…";
+  return `<div class="nbtext clip">${nbMark(snip, words)}</div><button type="button" class="lk-link" data-nb="exp" data-id="${esc(x.id)}">Show all</button>`;
+}
+function nbTagRow(x){
+  if (NB.tagging === x.id) {
+    const sug = tagSuggest(x); const others = tagCounts().map(([t]) => t).filter(t => !(x.tags || []).includes(t) && !sug.includes(t)).slice(0, 8);
+    return `<div class="nbtagedit"><label class="sr-only" for="nbtagin">Tags for this note</label><input type="text" id="nbtagin" value="${esc((x.tags || []).join(", "))}" placeholder="Tags, separated by commas (e.g. ports, chapter 7, exam tip)" autocomplete="off">
+      ${sug.length ? `<div class="nbsug"><span class="muted">Suggested:</span>${sug.map(t => `<button type="button" class="nbtag add" data-nbtagadd="${esc(t)}">+ ${esc(t)}</button>`).join("")}</div>` : ""}
+      ${others.length ? `<div class="nbsug"><span class="muted">Your tags:</span>${others.map(t => `<button type="button" class="nbtag add" data-nbtagadd="${esc(t)}">+ ${esc(t)}</button>`).join("")}</div>` : ""}
+      <div class="row"><button type="button" class="btn small primary" data-nb="tsave" data-id="${esc(x.id)}">Save tags</button><button type="button" class="btn small ghost" data-nb="tcancel">Cancel</button></div></div>`;
+  }
+  return `<div class="nbtags">${(x.tags || []).map(t => tagChip(t, NB.tags.includes(t))).join("")}<button type="button" class="nbtagbtn" data-nb="tag" data-id="${esc(x.id)}" aria-label="${(x.tags || []).length ? "Edit tags" : "Add tags"}">🏷️ ${(x.tags || []).length ? "Edit tags" : "Add tags"}</button></div>`;
+}
+function nbItemHTML(x, kind, words){
+  words = words || [];
   const open = nbCanOpen(x) ? `<button type="button" class="btn small" data-nb="open" data-kind="${kind}" data-id="${esc(x.id)}">Open</button>` : "";
   if (kind === "bm") return `<li class="nbitem"><div class="nblabel">🔖 ${esc(x.label || "Page")}</div><div class="nbmeta">${esc(nbWhen(x.t))}</div><div class="row">${open}<button type="button" class="btn small ghost" data-nb="rmbm" data-id="${esc(x.id)}">Remove</button></div></li>`;
   if (NB.editing === x.id) return `<li class="nbitem editing"><textarea class="nbedit" aria-label="Edit note" rows="4">${esc(x.text)}</textarea><div class="row"><button type="button" class="btn small primary" data-nb="esave" data-id="${esc(x.id)}">Save</button><button type="button" class="btn small ghost" data-nb="ecancel">Cancel</button></div></li>`;
-  return `<li class="nbitem"><div class="nbtext">${esc(x.text)}</div><div class="nbmeta"><span>${esc(x.label || "Page")}</span> · <span>${esc(nbWhen(x.t))}${x.u ? " (edited)" : ""}</span></div><div class="row">${open}<button type="button" class="btn small ghost" data-nb="edit" data-id="${esc(x.id)}">Edit</button><button type="button" class="btn small ghost" data-nb="del" data-id="${esc(x.id)}">Delete</button></div></li>`;
+  if (isChat(x)) {
+    const n = (x.turns || []).filter(t => t.r === "you").length; const pics = (x.turns || []).some(t => t.att && t.att.length);
+    const cur = S.tchat && S.tchat.nid === x.id && (S.tchat.turns || []).length;
+    return `<li class="nbitem chat"><div class="nblabel">💬 ${nbMark((x.label || "Tutor chat").replace(/^Tutor chat(?: \(from backup\))?: /, ""), words)}</div><div class="nbmeta"><span>${esc(nbWhen(x.t))}</span>${n ? ` · <span>${n} question${n === 1 ? "" : "s"}</span>` : ""}${pics ? " · <span>📷 pictures</span>" : ""}${cur ? ` · <span class="tag teal">open now</span>` : ""}</div>${nbTextHTML(x, words)}${nbTagRow(x)}
+      <div class="row">${x.turns && x.turns.length && !cur ? `<button type="button" class="btn small" data-nb="cont" data-id="${esc(x.id)}">Continue this chat</button>` : cur ? `<button type="button" class="btn small" data-act="tutorchat">Go to the chat</button>` : ""}<button type="button" class="btn small ghost" data-nb="del" data-id="${esc(x.id)}">Delete</button></div></li>`;
+  }
+  return `<li class="nbitem">${nbTextHTML(x, words)}<div class="nbmeta"><span>${esc(x.label || "Page")}</span> · <span>${esc(nbWhen(x.t))}${x.u ? " (edited)" : ""}</span></div>${nbTagRow(x)}<div class="row">${open}<button type="button" class="btn small ghost" data-nb="edit" data-id="${esc(x.id)}">Edit</button><button type="button" class="btn small ghost" data-nb="del" data-id="${esc(x.id)}">Delete</button></div></li>`;
+}
+function nbFilterHTML(pool){
+  const counts = tagCounts(pool); if (!counts.length && !NB.tags.length) return "";
+  const shown = NB.allTags ? counts : counts.slice(0, 14);
+  const act = NB.tags.filter(t => !shown.some(([x]) => x === t)).map(t => [t, 0]);
+  let h = `<div class="nbfilter"><span class="eyebrow">🏷️ Tags</span><div class="nbtagbar">${act.concat(shown).map(([t, n]) => tagChip(t, NB.tags.includes(t)).replace(`>#${esc(t)}<`, `>#${esc(t)}${n ? ` <small>${n}</small>` : ""}<`)).join("")}${counts.length > 14 ? `<button type="button" class="lk-link" data-nb="alltags">${NB.allTags ? "Fewer" : "All " + counts.length + " tags"}</button>` : ""}</div>`;
+  if (NB.tags.length) {
+    h += `<div class="nbtagact"><span class="muted">Showing notes tagged ${NB.tags.map(t => "<b>#" + esc(t) + "</b>").join(" and ")}</span><button type="button" class="lk-link" data-nb="tclear">Show all</button>`;
+    if (NB.tags.length === 1) h += NB.renaming ? `<span class="nbren"><input type="text" id="nbrenin" value="${esc(NB.tags[0])}" aria-label="New tag name"><button type="button" class="btn small" data-nb="trenok">Rename</button><button type="button" class="btn small ghost" data-nb="trenx">Cancel</button></span>`
+      : `<button type="button" class="lk-link" data-nb="tren">Rename tag</button><button type="button" class="lk-link" data-nb="tdel">Remove tag from all notes</button>`;
+    h += `</div>`;
+  }
+  return h + `</div>`;
 }
 function nbListHTML(){
-  const ctx = NB.ctx; const notes = S.nb.notes.slice().sort((a, b) => b.t - a.t);
+  const ctx = NB.ctx; const notes = S.nb.notes.slice().sort((a, b) => (isChat(b) ? b.u || b.t : b.t) - (isChat(a) ? a.u || a.t : a.t));
+  const Q = nbQuery();
   if (NB.tab === "page") { const mine = notes.filter(x => x.k === ctx.k);
     return mine.length ? `<ul class="nblist">${mine.map(x => nbItemHTML(x, "note")).join("")}</ul>` : `<p class="nbempty">No notes for this page yet. Write one above.</p>`; }
   if (NB.tab === "bms") { const bms = S.nb.bms.slice().sort((a, b) => b.t - a.t);
     return bms.length ? `<ul class="nblist">${bms.map(x => nbItemHTML(x, "bm")).join("")}</ul>` : `<p class="nbempty">No bookmarks yet. Tap ☆ Bookmark this page on any page.</p>`; }
-  const q = norm(NB.q || "").trim(); const hits = q ? notes.filter(x => norm(x.text + " " + (x.label || "")).includes(q)) : notes;
-  if (!hits.length) return `<p class="nbempty">${q ? "No notes match “" + esc(NB.q) + "”." : "No notes yet. Notes you write on any page are collected here."}</p>`;
+  const chats = NB.tab === "chats"; const pool = notes.filter(x => isChat(x) === chats);
+  const filt = !!(NB.q.trim() || NB.tags.length); const hits = pool.filter(x => nbMatch(x, Q));
+  const other = filt ? notes.filter(x => isChat(x) !== chats && nbMatch(x, Q)).length : 0;
+  const otherLink = other ? `<p class="nbother"><button type="button" class="lk-link" data-nbtab="${chats ? "all" : "chats"}">${other} matching ${chats ? "note" + (other === 1 ? "" : "s") : "tutor chat" + (other === 1 ? "" : "s")} →</button></p>` : "";
+  const head = nbFilterHTML(pool);
+  if (!hits.length) return head + `<p class="nbempty">${filt ? "Nothing matches" + (NB.q.trim() ? " “" + esc(NB.q.trim()) + "”" : "") + (NB.tags.length ? " with " + NB.tags.map(t => "#" + esc(t)).join(" ") : "") + "." : chats ? "No tutor chats yet. Every chat in the 💬 tutor panel is saved here automatically." : "No notes yet. Notes you write on any page are collected here."}</p>` + otherLink;
+  const count = filt ? `<p class="nbcount muted">${hits.length} of ${pool.length} ${chats ? "chat" : "note"}${pool.length === 1 ? "" : "s"}</p>` : "";
+  if (chats) return head + count + `<ul class="nblist">${hits.map(x => nbItemHTML(x, "note", Q.words)).join("")}</ul>` + otherLink;
   const groups = []; const gm = {};
   hits.forEach(x => { if (!gm[x.k]) { gm[x.k] = {k: x.k, label: x.label, items: []}; groups.push(gm[x.k]); } gm[x.k].items.push(x); });
-  return groups.map(g => `<div class="nbgroup"><div class="nbgroup-h">${esc(g.label || "Page")}${g.k === ctx.k ? ` <span class="tag teal">this page</span>` : ""}</div><ul class="nblist">${g.items.map(x => nbItemHTML(x, "note")).join("")}</ul></div>`).join("");
+  return head + count + groups.map(g => `<div class="nbgroup"><div class="nbgroup-h">${esc(g.label || "Page")}${g.k === ctx.k ? ` <span class="tag teal">this page</span>` : ""}</div><ul class="nblist">${g.items.map(x => nbItemHTML(x, "note", Q.words)).join("")}</ul></div>`).join("") + otherLink;
 }
 function nbRender(full){
   const pn = $("#nbpanel"); if (!pn) return;
@@ -31745,28 +32044,37 @@ function nbRender(full){
     pn.innerHTML = `<div class="nb-h"><b><span aria-hidden="true">📓</span> Notebook</b><button type="button" class="iconbtn" data-nb="close" aria-label="Close notebook"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button></div>
       <div class="nb-body"><div class="nb-ctx"><span class="eyebrow">You're on</span><div class="nb-ctxt" id="nbctx"></div><button type="button" class="btn small" data-nb="bm" id="nbbm" aria-pressed="false"></button></div>
         <div class="nb-add"><label class="sr-only" for="nbtext">New note for this page</label><textarea id="nbtext" rows="4" placeholder="Write a note about this page…"></textarea>
-          <div class="row"><button type="button" class="btn small primary" data-nb="save">Save note</button><span class="muted nbhint">Ctrl+Enter saves</span></div></div>
-        <div class="nb-tabs" role="tablist" aria-label="Notebook lists"><button type="button" role="tab" data-nbtab="page"></button><button type="button" role="tab" data-nbtab="all"></button><button type="button" role="tab" data-nbtab="bms"></button></div>
-        <div class="nb-search" hidden><input type="search" id="nbq" placeholder="Search your notes" aria-label="Search your notes"></div>
-        <div id="nblist" role="tabpanel"></div></div>`;
+          <label class="sr-only" for="nbtags">Tags for the new note</label><input type="text" id="nbtags" class="nbtagsin" placeholder="🏷️ Tags (optional), e.g. ports, chapter 7, exam tip" autocomplete="off">
+          <div class="row"><button type="button" class="btn small primary" data-nb="save">Save note</button><span class="muted nbhint">Ctrl+Enter saves · #words in a note become tags</span></div></div>
+        <div class="nb-tabs" role="tablist" aria-label="Notebook lists"><button type="button" role="tab" data-nbtab="page"></button><button type="button" role="tab" data-nbtab="all"></button><button type="button" role="tab" data-nbtab="chats"></button><button type="button" role="tab" data-nbtab="bms"></button></div>
+        <div class="nb-search" hidden><input type="search" id="nbq" placeholder="Search words or #tags" aria-label="Search your notes"></div>
+        <div id="nblist" role="tabpanel"></div><p class="nb-bk"><button type="button" class="lk-link" data-act="backup">⇅ Back up or restore your notes</button><span class="muted"> · move them to another device</span></p></div>`;
     const ta = pn.querySelector("#nbtext");
     ta.addEventListener("keydown", e => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); nbSave(); } });
     pn.querySelector("#nbq").addEventListener("input", e => { NB.q = e.target.value; pn.querySelector("#nblist").innerHTML = nbListHTML(); });
+    pn.querySelector("#nbtags").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); nbSave(); } });
+    pn.addEventListener("keydown", e => { if (e.target.id === "nbtagin" && e.key === "Enter") { e.preventDefault(); const b = pn.querySelector("[data-nb=tsave]"); if (b) b.click(); }
+      if (e.target.id === "nbtagin" && e.key === "Escape") { e.stopPropagation(); NB.tagging = null; nbRender(); }
+      if (e.target.id === "nbrenin" && e.key === "Enter") { e.preventDefault(); const b = pn.querySelector("[data-nb=trenok]"); if (b) b.click(); } });
   }
   pn.querySelector("#nbctx").textContent = ctx.label || "This page";
   const bm = S.nb.bms.some(x => x.k === ctx.k); const bb = pn.querySelector("#nbbm");
   bb.textContent = bm ? "★ Bookmarked" : "☆ Bookmark this page"; bb.setAttribute("aria-pressed", bm ? "true" : "false"); bb.classList.toggle("on", bm);
   const nPage = S.nb.notes.filter(x => x.k === ctx.k).length;
-  const lab = {page: "This page" + (nPage ? " (" + nPage + ")" : ""), all: "All notes (" + S.nb.notes.length + ")", bms: "Bookmarks (" + S.nb.bms.length + ")"};
+  const nChat = S.nb.notes.filter(isChat).length;
+  const lab = {page: "This page" + (nPage ? " " + nPage : ""), all: "Notes " + (S.nb.notes.length - nChat), chats: "Chats " + nChat, bms: "Bookmarks " + S.nb.bms.length};
   pn.querySelectorAll("[data-nbtab]").forEach(b => { const on = b.dataset.nbtab === NB.tab; b.textContent = lab[b.dataset.nbtab]; b.setAttribute("aria-selected", on ? "true" : "false"); b.tabIndex = on ? 0 : -1; });
-  pn.querySelector(".nb-search").hidden = NB.tab !== "all";
+  pn.querySelector(".nb-search").hidden = NB.tab !== "all" && NB.tab !== "chats";
+  const qi = pn.querySelector("#nbq"); if (qi.value !== NB.q) qi.value = NB.q;
   pn.querySelector("#nblist").innerHTML = nbListHTML();
+  const ti = pn.querySelector("#nbtagin"); if (ti) { ti.focus(); ti.setSelectionRange(ti.value.length, ti.value.length); }
+  const ri = pn.querySelector("#nbrenin"); if (ri) { ri.focus(); ri.select(); }
   const ed = pn.querySelector(".nbedit"); if (ed) { ed.focus(); ed.addEventListener("keydown", e => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); pn.querySelector("[data-nb=esave]").click(); } }); }
 }
 function nbOpen(tab){
   const pn = $("#nbpanel"); if (!pn) return;
-  if (tab && ["page", "all", "bms"].includes(tab)) NB.tab = tab;
-  NB.open = true; NB.editing = null; nbRender(!pn.querySelector(".nb-body"));
+  if (tab && ["page", "all", "chats", "bms"].includes(tab)) NB.tab = tab;
+  NB.open = true; NB.editing = null; NB.tagging = null; nbRender(!pn.querySelector(".nb-body"));
   pn.classList.add("open"); pn.removeAttribute("inert"); $("#nbscrim").hidden = false; $("#nbbtn").setAttribute("aria-expanded", "true");
   hideBubble();
   const c = pn.querySelector("[data-nb=close]"); if (c) c.focus();
@@ -31777,9 +32085,11 @@ function nbClose(){
 }
 function nbSave(){
   const ta = $("#nbtext"); const text = (ta.value || "").replace(/\s+$/, "").replace(/^\s*\n/, ""); if (!text.trim()) { toast("Write something first."); ta.focus(); return; }
-  const c = NB.ctx = nbCtx();
-  S.nb.notes.push({id: "n" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), k: c.k, label: c.label, r: c.r, a: c.a, note: c.note, q: c.q, text, t: Date.now()}); save();
-  ta.value = ""; if (NB.tab === "bms") NB.tab = "page"; nbRender(); toast("Note saved.");
+  const c = NB.ctx = nbCtx(); const tin = $("#nbtags");
+  const tags = [...new Set(tagsParse(tin ? tin.value : "").concat(tagsFromText(text)))].slice(0, 12);
+  const n = {id: "n" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), k: c.k, label: c.label, r: c.r, a: c.a, note: c.note, q: c.q, text, t: Date.now()}; if (tags.length) n.tags = tags;
+  S.nb.notes.push(n); save();
+  ta.value = ""; if (tin) tin.value = ""; if (NB.tab === "bms" || NB.tab === "chats") NB.tab = "page"; nbRender(); toast(tags.length ? "Note saved with " + tags.map(t => "#" + t).join(" ") + "." : "Note saved.");
 }
 function nbOpenRec(x){
   nbClose();
@@ -31791,7 +32101,9 @@ function nbOpenRec(x){
 (function(){
   const pn = $("#nbpanel"); if (!pn) return;
   pn.addEventListener("click", e => {
-    const tb = e.target.closest("[data-nbtab]"); if (tb) { NB.tab = tb.dataset.nbtab; NB.editing = null; nbRender(); const nb = pn.querySelector(`[data-nbtab="${NB.tab}"]`); if (nb) nb.focus(); return; }
+    const tf = e.target.closest("[data-nbtagf]"); if (tf) { const t = tf.dataset.nbtagf; const i = NB.tags.indexOf(t); if (i >= 0) NB.tags.splice(i, 1); else { NB.tags.push(t); if (NB.tab === "page" || NB.tab === "bms") { const x = S.nb.notes.find(n => (n.tags || []).includes(t)); NB.tab = x && isChat(x) ? "chats" : "all"; } } NB.renaming = false; NB.tagging = null; return nbRender(); }
+    const ta2 = e.target.closest("[data-nbtagadd]"); if (ta2) { const inp = pn.querySelector("#nbtagin"); if (inp) { const cur = tagsParse(inp.value); if (!cur.includes(ta2.dataset.nbtagadd)) cur.push(ta2.dataset.nbtagadd); inp.value = cur.join(", "); ta2.remove(); inp.focus(); } return; }
+    const tb = e.target.closest("[data-nbtab]"); if (tb) { if (tb.closest(".nbother")) NB.tags = NB.tags.slice(); NB.tab = tb.dataset.nbtab; NB.editing = null; NB.tagging = null; NB.renaming = false; nbRender(); const nb = pn.querySelector(`[data-nbtab="${NB.tab}"]`); if (nb) nb.focus(); return; }
     const b = e.target.closest("[data-nb]"); if (!b) return;
     const a = b.dataset.nb, id = b.dataset.id;
     if (a === "close") return nbClose();
@@ -31805,7 +32117,28 @@ function nbOpenRec(x){
     if (a === "esave") { const x = S.nb.notes.find(n => n.id === id); const ed = pn.querySelector(".nbedit"); const t = ed ? ed.value.replace(/\s+$/, "") : "";
       if (x && t.trim()) { x.text = t; x.u = Date.now(); save(); toast("Note updated."); } else if (x) { toast("A note can't be empty. Use Delete to remove it."); return; }
       NB.editing = null; return nbRender(); }
-    if (a === "del") { S.nb.notes = S.nb.notes.filter(x => x.id !== id); if (NB.editing === id) NB.editing = null; save(); toast("Note deleted."); return nbRender(); }
+    if (a === "del") { const dx = S.nb.notes.find(x => x.id === id); S.nb.notes = S.nb.notes.filter(x => x.id !== id); if (NB.editing === id) NB.editing = null;
+      if (S.tchat && S.tchat.nid === id) { S.tchat.off = 1; const box = $("#tpout"); if (box && box._conv) box._conv.off = 1; }
+      save(); toast(dx && isChat(dx) ? "Chat deleted." : "Note deleted."); return nbRender(); }
+    if (a === "tag") { NB.tagging = id; NB.editing = null; return nbRender(); }
+    if (a === "tcancel") { NB.tagging = null; return nbRender(); }
+    if (a === "tsave") { const x = S.nb.notes.find(n => n.id === id); const inp = pn.querySelector("#nbtagin"); if (x && inp) { const t = tagsParse(inp.value); if (t.length) x.tags = t; else delete x.tags; save(); toast(t.length ? "Tags saved." : "Tags removed."); } NB.tagging = null; return nbRender(); }
+    if (a === "exp") { NB.exp[id] = !NB.exp[id]; return nbRender(); }
+    if (a === "tclear") { NB.tags = []; NB.renaming = false; return nbRender(); }
+    if (a === "alltags") { NB.allTags = !NB.allTags; return nbRender(); }
+    if (a === "tren") { NB.renaming = true; return nbRender(); }
+    if (a === "trenx") { NB.renaming = false; return nbRender(); }
+    if (a === "trenok") { const from = NB.tags[0], to = tagNorm((pn.querySelector("#nbrenin") || {}).value); if (!to) return toast("Type a tag name.");
+      let n = 0; S.nb.notes.forEach(x => { if ((x.tags || []).includes(from)) { x.tags = [...new Set(x.tags.map(t => t === from ? to : t))]; n++; } }); save();
+      NB.tags = [to]; NB.renaming = false; toast("Renamed #" + from + " to #" + to + " on " + n + " note" + (n === 1 ? "" : "s") + "."); return nbRender(); }
+    if (a === "tdel") { const t = NB.tags[0]; if (b.dataset.sure !== "1") { b.dataset.sure = "1"; b.textContent = "Tap again to remove #" + t + " everywhere"; return; }
+      let n = 0; S.nb.notes.forEach(x => { if ((x.tags || []).includes(t)) { x.tags = x.tags.filter(y => y !== t); if (!x.tags.length) delete x.tags; n++; } }); save();
+      NB.tags = []; toast("Removed #" + t + " from " + n + " note" + (n === 1 ? "" : "s") + ". The notes are kept."); return nbRender(); }
+    if (a === "cont") { const x = S.nb.notes.find(n => n.id === id); if (!x || !x.turns) return;
+      const box = $("#tpout"); if (box && box._conv && box._conv.busy && tutorCtl) tutorCtl.abort();
+      const first = (x.turns.find(t => t.r === "you") || {t: ""}).t; const r = search(first);
+      S.tchat = {context: tutorPrompt(first, r.kb.map(k => k.k)), turns: x.turns.map(t => Object.assign({}, t)), nid: x.id, t0: x.t}; save();
+      nbClose(); const pnl = $("#tpanel"); if (pnl.querySelector(".tp-body")) tpBody(); openTutorChat(); return toast("Picked up where you left off. Ask a follow-up."); }
     if (a === "open") { const x = (b.dataset.kind === "bm" ? S.nb.bms : S.nb.notes).find(n => n.id === id); if (x) nbOpenRec(x); return; }
   });
   $("#nbbtn").addEventListener("click", () => NB.open ? nbClose() : nbOpen());
@@ -31903,8 +32236,9 @@ document.addEventListener("click", e => {
     case "tutorclear": TUTOR.key = ""; saveTutor(); if (TUTOR_MODE !== "claude") { sampleFn = null; TUTOR_MODE = "handoff"; } toast("Key removed from this device."); return openTutorSetup();
     case "copyopen": try { navigator.clipboard.writeText(trimPrompt(LAST_PROMPT)); toast("Question copied. Paste it into the chat."); } catch(err) {} return; // link still opens
     case "copyprompt": try { navigator.clipboard.writeText(LAST_PROMPT).then(() => toast("Question copied. Paste it into Claude.")); } catch(e) { toast("Couldn't copy on this device."); } return;
+    case "backup": BK.focus = true; if (NB.open && typeof nbClose === "function") nbClose(); return go("settings");
     case "reset1": $("#resetrow").innerHTML = `<span>Delete all progress in this browser?</span><button class="btn small" data-act="reset2" style="border-color:var(--bad);color:var(--bad)">Yes, reset</button><button class="btn small" data-go="settings">Cancel</button>`; return;
-    case "reset2": S = {att:{}, flag:{}, exams:[], watched:{}, fc:{}, labs:{}, sims:{}, pref:S.pref, ytapp:S.ytapp, vorder:S.vorder, hl:S.hl, nb:S.nb, seenVer:S.seenVer}; save(); S.pref = Object.assign({}, S.pref || {}); toast("Progress cleared."); return go("settings");
+    case "reset2": S = {att:{}, flag:{}, exams:[], watched:{}, fc:{}, labs:{}, sims:{}, pref:S.pref, ytapp:S.ytapp, vorder:S.vorder, hl:S.hl, nb:S.nb, seenVer:S.seenVer, lastBackup:S.lastBackup}; save(); S.pref = Object.assign({}, S.pref || {}); toast("Progress cleared."); return go("settings");
   }
 });
 document.addEventListener("keydown", e => {
