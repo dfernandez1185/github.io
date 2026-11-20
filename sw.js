@@ -1,6 +1,6 @@
 // A+ Study Bench service worker: offline app shell, offline photos, update and daily-study notifications.
-const VERSION = "aplus-v56";
-const APP_VER = "1.25 beta 6";
+const VERSION = "aplus-v58";
+const APP_VER = "1.25 beta 8";
 const SHELL = "aplus-shell-" + VERSION;
 const PHOTOS = "aplus-photos-v1";
 const META = "aplus-meta";
